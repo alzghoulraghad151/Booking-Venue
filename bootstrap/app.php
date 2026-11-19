@@ -20,11 +20,24 @@ return Application::configure(basePath: dirname(__DIR__))
             'owner' => OwnerMiddleware::class,
         ]);
 
+        $middleware->prependToPriorityList(
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            AdminMiddleware::class,
+        );
+
         $middleware->redirectGuestsTo(function (): string {
             abort_unless(Route::has('login'), 401);
 
             return route('login');
         });
+
+    $middleware->redirectUsersTo(function (\Illuminate\Http\Request $request): string {
+    return match ($request->user()?->role) {
+        'venue_owner' => route('owner.venues.index'),
+        'admin' => route('admin.dashboard'),
+        default => route('account.signed-in'),
+    };
+});
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
