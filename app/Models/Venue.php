@@ -19,4 +19,25 @@ class Venue extends Model
     {
         return $this->hasMany(VenueImage::class);
     }
+
+
+
+    public function spaces(): HasMany
+{
+    return $this->hasMany(Space::class);
+}
+
+
+
+
+
+
+
+protected function casts(): array
+{
+    return [
+        'is_active_by_owner' => 'boolean',
+    ];
+}
+
 }
