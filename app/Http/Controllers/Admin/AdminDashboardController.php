@@ -16,13 +16,15 @@ class AdminDashboardController extends Controller
         $totalBookings = DB::table('bookings')->count();
         $totalOwners = User::where('role', 'venue_owner')->count();
         $pendingVenues = Venue::where('status', 'pending')->count();
+        $pendingBookings = DB::table('bookings')->where('status', 'pending')->count();
 
         return view('admin.dashboard', 
         ['totalUsers' => $totalUsers,
         'totalVenues' => $totalVenues,
         'totalBookings' => $totalBookings,
         'totalOwners' => $totalOwners,
-        'pendingVenues' => $pendingVenues]);
+        'pendingVenues' => $pendingVenues,
+        'pendingBookings' => $pendingBookings,]);
 
     }
 }

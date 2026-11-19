@@ -28,6 +28,11 @@
            <h2>Pending Venues</h2>
            <p>{{ $pendingVenues }}</p>
         </article>
+
+        <article>
+          <h2>Pending Bookings</h2>
+          <p>{{ $pendingBookings }}</p>
+        </article>
     </div>
 
 @endsection
