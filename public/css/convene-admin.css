@@ -141,3 +141,32 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
 .event-types-form label { display: block; margin-bottom: 6px; font-weight: 600; }
 .event-types-form :is(select, textarea) { width: 100%; margin-bottom: 12px; }
 .event-types-error, .event-types-delete button.event-types-error { color: #981d1d; }
+
+/* Owner booking calendar */
+.calendar-controls, .calendar-navigation, .calendar-legend { display: flex; flex-wrap: wrap; gap: 8px 12px; }
+.calendar-controls { align-items: end; }
+.calendar-controls label { display: grid; gap: 4px; max-width: 100%; font-weight: 600; }
+.calendar-controls :is(input, select, button) { max-width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid var(--convene-sage); border-radius: 8px; background: var(--convene-white); color: var(--convene-navy); font: inherit; }
+.calendar-controls button { background: var(--convene-warm); border-color: transparent; cursor: pointer; font-weight: 700; }
+.calendar-legend { margin: 0; padding: 0; list-style: none; }
+.calendar-status { padding: 3px 8px; border-radius: 999px; }
+.calendar-days { display: grid; gap: 8px; }
+.calendar-days--week, .calendar-days--month { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.calendar-day { min-width: 0; padding: 8px; border: 1px solid #dedbd5; border-radius: 8px; }
+.calendar-day h3 { margin: 0; font-size: 14px; }
+.calendar-day > p { margin: 6px 0 0; }
+.calendar-event { overflow-wrap: anywhere; margin-top: 8px; padding: 8px; border-radius: 6px; font-size: 13px; }
+.calendar-event p { margin: 0 0 4px; }
+.calendar-event p:last-child { margin-bottom: 0; }
+.calendar-event span { display: block; }
+.calendar-status--pending { color: #74340f; background: #fff0dc; }
+.calendar-status--confirmed { color: #234742; background: #e3edeb; }
+.calendar-status--completed { color: var(--convene-navy); background: #e2ebf2; }
+.calendar-status--cancelled { color: #49515c; background: #eef0f2; }
+.calendar-status--rejected, .calendar-errors { color: #881c24; }
+.calendar-status--rejected { background: #fbeaec; }
+
+@media (max-width: 1150px) {
+    .calendar-days--week, .calendar-days--month { grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
+    .calendar-day-spacer { display: none; }
+}

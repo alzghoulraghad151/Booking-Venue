@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEventTypeController;
+use App\Http\Controllers\Owner\OwnerCalendarController;
 use App\Http\Controllers\Owner\OwnerDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +37,7 @@ Route::delete('/admin/event-types/{eventType}', [AdminEventTypeController::class
 Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index'])
     ->middleware(['auth', 'owner'])
     ->name('owner.dashboard');
+
+Route::get('/owner/calendar', [OwnerCalendarController::class, 'index'])
+    ->middleware(['auth', 'owner'])
+    ->name('owner.calendar.index');
