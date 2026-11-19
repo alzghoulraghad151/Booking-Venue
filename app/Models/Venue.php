@@ -27,14 +27,13 @@ class Venue extends Model
     {
         return $this->hasMany(Space::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'is_active_by_owner' => 'boolean',
+        ];
+    }
 }
 
 
-protected function casts(): array
-{
-    return [
-        'is_active_by_owner' => 'boolean',
-    ];
-}
-
-}
