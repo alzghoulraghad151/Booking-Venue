@@ -1,5 +1,6 @@
 <h1>Space Layouts</h1>
 
+<a href="{{ route('owner.space-layouts.create') }}">Add Layout</a>
 <table>
     <thead>
         <tr>
