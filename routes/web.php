@@ -179,6 +179,7 @@ Route::patch('/owner/space-layouts/{id}', [OwnerSpaceLayoutController::class, 'u
     ->name('owner.space-layouts.update');
 
 require __DIR__ . '/zaid.php';
+require __DIR__ . '/omar.php';
 
     Route::patch('/admin/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])
     ->middleware(['auth', AdminMiddleware::class])
