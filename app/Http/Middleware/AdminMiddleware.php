@@ -12,7 +12,7 @@ class AdminMiddleware
     {
         $user = $request->user();
 
-        abort_unless($user?->role === 'admin' && $user->status === 'active', 403);
+        abort_unless($user?->role === 'admin' && $user->status === 'active', 403, "Permission Denied");
 
         return $next($request);
     }

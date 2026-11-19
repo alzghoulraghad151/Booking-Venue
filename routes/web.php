@@ -4,9 +4,6 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
-
-
-use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Middleware\OwnerMiddleware;
 
 Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
