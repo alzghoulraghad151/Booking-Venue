@@ -79,4 +79,16 @@
     </ul>
 </section>
 
+<section>
+    <h2>Payments Summary</h2>
+    <p>Total Paid: {{ number_format($totalPaid, 2) }} JOD</p>
+
+    <ul>
+    <li>Pending: {{ $paymentCounts['pending'] ?? 0 }}</li>
+    <li>Paid: {{ $paymentCounts['paid'] ?? 0 }}</li>
+    <li>Failed: {{ $paymentCounts['failed'] ?? 0 }}</li>
+    <li>Refunded: {{ $paymentCounts['refunded'] ?? 0 }}</li>
+</ul>
+</section>
+
 @endsection

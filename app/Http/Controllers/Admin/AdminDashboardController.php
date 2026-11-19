@@ -29,6 +29,15 @@ class AdminDashboardController extends Controller
         ->limit(5)
         ->get();
 
+        $totalPaid = DB::table('payments')
+        ->where('status', 'paid')
+        ->sum('amount');
+
+        $paymentCounts = DB::table('payments')
+        ->selectRaw('status, COUNT(*) as total')
+        ->groupBy('status')
+        ->pluck('total', 'status');
+
 
         return view('admin.dashboard', 
         ['totalUsers' => $totalUsers,
@@ -38,7 +47,9 @@ class AdminDashboardController extends Controller
         'pendingVenues' => $pendingVenues,
         'pendingBookings' => $pendingBookings,
         'recentBookings' => $recentBookings,
-        'venuesAwaitingReview' => $venuesAwaitingReview,]);
+        'venuesAwaitingReview' => $venuesAwaitingReview,
+        'totalPaid' => $totalPaid,
+        'paymentCounts' => $paymentCounts,]);
 
     }
 }
