@@ -75,3 +75,44 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
 });
+
+
+Route::get('/admin/venues', [AdminVenueController::class, 'index'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.index');
+
+
+    Route::get('/admin/venues/{venue}', [AdminVenueController::class, 'show'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.show');
+
+
+    Route::patch('/admin/venues/{venue}/approve', [AdminVenueController::class, 'approve'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.approve');
+
+Route::patch('/admin/venues/{venue}/reject', [AdminVenueController::class, 'reject'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.reject');
+
+
+    Route::delete('/owner/venues/{venue}', [OwnerVenueController::class, 'destroy'])
+    ->middleware(['auth', OwnerMiddleware::class])
+    ->name('owner.venues.destroy');
+
+
+
+    Route::get('/owner/space-layouts/{id}/edit', [OwnerSpaceLayoutController::class, 'edit'])
+    ->middleware(OwnerMiddleware::class)
+    ->name('owner.space-layouts.edit');
+
+Route::patch('/owner/space-layouts/{id}', [OwnerSpaceLayoutController::class, 'update'])
+    ->middleware(['auth', OwnerMiddleware::class])
+    ->name('owner.space-layouts.update');
+
+
+    Route::patch('/admin/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.status');
+
+    
