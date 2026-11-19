@@ -24,6 +24,12 @@ class AdminDashboardController extends Controller
         ->limit(5)
         ->get();
 
+        $venuesAwaitingReview = Venue::where('status', 'pending')
+        ->latest()
+        ->limit(5)
+        ->get();
+
+
         return view('admin.dashboard', 
         ['totalUsers' => $totalUsers,
         'totalVenues' => $totalVenues,
@@ -31,7 +37,8 @@ class AdminDashboardController extends Controller
         'totalOwners' => $totalOwners,
         'pendingVenues' => $pendingVenues,
         'pendingBookings' => $pendingBookings,
-        'recentBookings' => $recentBookings,]);
+        'recentBookings' => $recentBookings,
+        'venuesAwaitingReview' => $venuesAwaitingReview,]);
 
     }
 }

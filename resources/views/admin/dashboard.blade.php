@@ -67,5 +67,16 @@
         </table>
     </section>
 
+    <section>
+    <h2>Venues Awaiting Review</h2>
+
+    <ul>
+        @forelse ($venuesAwaitingReview as $venue)
+            <li>{{ $venue->name }}</li>
+        @empty
+            <li>No venues awaiting review.</li>
+        @endforelse
+    </ul>
+</section>
 
 @endsection
