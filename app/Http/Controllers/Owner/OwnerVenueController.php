@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Owner;
 use Illuminate\Support\Facades\DB;
+use App\Actions\Owner\CreateVenue;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Client\HttpClientException;
+use RuntimeException;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -33,7 +36,7 @@ public function show(Venue $venue): View
 {
     Gate::authorize('view', $venue);
 
-    $venue->load('spaces');
+    $venue->load(['spaces', 'images']);
 
     return view('owner.venues.show', ['venue' => $venue]);
 }
@@ -46,9 +49,17 @@ public function show(Venue $venue): View
 }
 
 
-public function store(StoreVenueRequest $request): RedirectResponse
+public function store(StoreVenueRequest $request, CreateVenue $createVenue): RedirectResponse
 {
-    $request->user()->venues()->create($request->validated());
+    try {
+        $createVenue->handle($request->user(), $request->safe()->except('image'), $request->file('image'));
+    } catch (HttpClientException|RuntimeException $exception) {
+        report($exception);
+
+        return back()->withInput($request->safe()->except('image'))->withErrors([
+            'image' => 'The venue and image could not be saved. Please select the image and try again.',
+        ]);
+    }
 
     return redirect()
         ->route('owner.venues.index')

@@ -11,6 +11,25 @@
 
         <h1>{{ $venue->name }}</h1>
 
+        <section>
+            <h2>Venue images</h2>
+
+            @foreach ($venue->images as $image)
+                <img src="{{ $image->image_url }}" alt="{{ $venue->name }}" width="240" loading="lazy">
+            @endforeach
+
+            <form method="POST" action="{{ route('owner.venues.images.store', $venue) }}"
+                  enctype="multipart/form-data">
+                @csrf
+                <label for="image">Add an image (JPEG, PNG or WebP, up to 2 MB)</label>
+                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" required>
+                @error('image')
+                    <p role="alert">{{ $message }}</p>
+                @enderror
+                <button type="submit">Upload image</button>
+            </form>
+        </section>
+
         <dl>
             <dt>Address</dt>
             <dd>{{ $venue->address }}</dd>

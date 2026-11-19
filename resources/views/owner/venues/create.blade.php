@@ -11,7 +11,7 @@
 
 
 
-        <form method="POST" action="{{ route('owner.venues.store') }}">
+        <form method="POST" action="{{ route('owner.venues.store') }}" enctype="multipart/form-data">
     @csrf
 
     <div>
@@ -38,6 +38,15 @@
                   maxlength="5000">{{ old('description') }}</textarea>
         @error('description')
             <p>{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div>
+        <label for="image">Venue image (JPEG, PNG or WebP, up to 2 MB)</label>
+        <input id="image" name="image" type="file"
+               accept="image/jpeg,image/png,image/webp" required>
+        @error('image')
+            <p role="alert">{{ $message }}</p>
         @enderror
     </div>
 
