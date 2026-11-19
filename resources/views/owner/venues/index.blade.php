@@ -15,6 +15,7 @@
 
 
         <a href="{{ route('owner.venues.create') }}">Add Venue</a>
+        <a href="{{ route('owner.spaces.index') }}">My Spaces</a>
 
         <ul>
             @forelse ($venues as $venue)
