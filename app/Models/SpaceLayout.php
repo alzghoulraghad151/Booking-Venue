@@ -11,6 +11,10 @@ class SpaceLayout extends Model
     public function space(){
         return $this->belongsTo(Space::class);
     }
+     public function bookingDetails(): HasMany
+    {
+        return $this->hasMany(BookingDetail::class);
+    }
     public function eventTypes(){
         return $this->belongsToMany(EventTybe::class,'layout_event_types');
     }

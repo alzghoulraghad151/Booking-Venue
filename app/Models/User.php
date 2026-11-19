@@ -49,7 +49,10 @@ class User extends Authenticatable
     }
 
 
-
+public function bookings(): HasMany
+{
+    return $this->hasMany(Booking::class, 'customer_id');
+}
     public function venues(): HasMany
 {
     return $this->hasMany(Venue::class, 'owner_id');

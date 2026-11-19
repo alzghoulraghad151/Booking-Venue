@@ -23,18 +23,15 @@ class Venue extends Model
         return $this->hasMany(VenueImage::class);
     }
 
-
-
     public function spaces(): HasMany
 {
     return $this->hasMany(Space::class);
 }
 
-
-
-
-
-
+  public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
 
 protected function casts(): array
 {

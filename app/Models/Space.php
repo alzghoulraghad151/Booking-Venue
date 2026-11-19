@@ -9,4 +9,12 @@ class Space extends Model
     public function spaceLayout(){
         return $this->hasmany(SpaceLayout::class);
     }
+     public function bookingDetails(): HasMany
+    {
+        return $this->hasMany(BookingDetail::class);
+    }
+      public function venue(): BelongsTo
+    {
+        return $this->belongsTo(Venue::class);
+    }
 }

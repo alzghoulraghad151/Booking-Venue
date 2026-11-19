@@ -11,7 +11,6 @@
         View and monitor all customer bookings.
     </p>
 
-    {{-- Search and Filters --}}
     <div class="booking-card">
 
         <h2 class="booking-section-title">Search & Filters</h2>
@@ -20,10 +19,8 @@
 
             <div class="booking-filters">
 
-                {{-- Search Organizer --}}
                 <div class="booking-field">
                     <label for="organizer">Organizer</label>
-
                     <input
                         type="text"
                         id="organizer"
@@ -32,7 +29,6 @@
                         placeholder="Name or email">
                 </div>
 
-                {{-- Booking Status --}}
                 <div class="booking-field">
                     <label for="status">Booking Status</label>
 
@@ -42,15 +38,13 @@
                         @foreach(['pending', 'confirmed', 'completed', 'cancelled', 'rejected'] as $status)
                             <option
                                 value="{{ $status }}"
-                                {{ request('status') == $status ? 'selected' : '' }}>
+                                @selected(request('status') == $status)>
                                 {{ ucfirst($status) }}
                             </option>
                         @endforeach
-
                     </select>
                 </div>
 
-                {{-- Venue --}}
                 <div class="booking-field">
                     <label for="venue_id">Venue</label>
 
@@ -60,15 +54,13 @@
                         @foreach($venues as $venue)
                             <option
                                 value="{{ $venue->id }}"
-                                {{ request('venue_id') == $venue->id ? 'selected' : '' }}>
+                                @selected(request('venue_id') == $venue->id)>
                                 {{ $venue->name }}
                             </option>
                         @endforeach
-
                     </select>
                 </div>
 
-                {{-- Date --}}
                 <div class="booking-field">
                     <label for="date">Booking Date</label>
 
@@ -79,7 +71,6 @@
                         value="{{ request('date') }}">
                 </div>
 
-                {{-- Buttons --}}
                 <div>
                     <button type="submit" class="booking-btn">
                         Search
@@ -98,8 +89,6 @@
 
     </div>
 
-
-    {{-- Bookings Table --}}
     <div class="booking-card">
 
         <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:18px;">
@@ -120,7 +109,6 @@
 
         </div>
 
-
         <div class="booking-table-wrapper">
 
             <table class="booking-table">
@@ -130,8 +118,11 @@
                         <th>Booking ID</th>
                         <th>Organizer</th>
                         <th>Venue</th>
+                        <th>Event Type</th>
                         <th>Booking Date</th>
                         <th>Spaces</th>
+                        <th>Guests</th>
+                        <th>Total Price</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -141,47 +132,62 @@
 
                     @forelse($bookings as $booking)
 
+                        @php
+                            $firstDetail = $booking->details
+                                ->sortBy('start_at')
+                                ->first();
+
+                            $eventTypes = $booking->details
+                                ->pluck('eventType.name')
+                                ->filter()
+                                ->unique()
+                                ->implode(', ');
+
+                            $totalGuests = $booking->details->sum('guest_count');
+
+                            $totalPrice = $booking->details->sum('total_price');
+                        @endphp
+
                         <tr>
 
-                            {{-- ID --}}
                             <td>
                                 <strong>#{{ $booking->id }}</strong>
                             </td>
 
-                            {{-- Organizer --}}
                             <td>
                                 {{ $booking->customer->name ?? 'N/A' }}
                             </td>
 
-                            {{-- Venue --}}
                             <td>
                                 {{ $booking->venue->name ?? 'N/A' }}
                             </td>
 
-                            {{-- Booking Date --}}
                             <td>
-                                @php
-                                    $firstDetail = $booking->details
-                                        ->sortBy('start_at')
-                                        ->first();
-                                @endphp
+                                {{ $eventTypes ?: 'N/A' }}
+                            </td>
 
+                            <td>
                                 {{ $firstDetail?->start_at?->format('d M Y') ?? 'N/A' }}
                             </td>
 
-                            {{-- Spaces Count --}}
                             <td>
                                 {{ $booking->details->count() }}
                             </td>
 
-                            {{-- Status --}}
+                            <td>
+                                {{ $totalGuests }}
+                            </td>
+
+                            <td>
+                                {{ number_format((float) $totalPrice, 2) }}
+                            </td>
+
                             <td>
                                 <span class="booking-status status-{{ $booking->status }}">
                                     {{ ucfirst($booking->status) }}
                                 </span>
                             </td>
 
-                            {{-- Action --}}
                             <td>
                                 <a
                                     href="{{ route('admin.bookings.show', $booking->id) }}"
@@ -195,7 +201,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="7" class="booking-empty">
+                            <td colspan="10" class="booking-empty">
                                 No bookings found.
                             </td>
                         </tr>
@@ -208,8 +214,6 @@
 
         </div>
 
-
-        {{-- Pagination --}}
         <div class="booking-pagination">
             {{ $bookings->links() }}
         </div>

@@ -7,36 +7,27 @@
 
 <div class="booking-page">
 
-    {{-- Page Header --}}
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
 
         <p class="booking-description">
             Complete information about booking #{{ $booking->id }}.
         </p>
 
-        <a
-            href="{{ route('admin.bookings.index') }}"
-            class="booking-btn">
+        <a href="{{ route('admin.bookings.index') }}" class="booking-btn">
             Back to Bookings
         </a>
 
     </div>
 
-
-    {{-- Booking Information --}}
     <div class="booking-card">
 
-        <h2 class="booking-section-title">
-            Booking Information
-        </h2>
+        <h2 class="booking-section-title">Booking Information</h2>
 
         <div class="booking-info-grid">
 
             <div>
                 <div class="booking-info-label">Booking ID</div>
-                <div class="booking-info-value">
-                    #{{ $booking->id }}
-                </div>
+                <div class="booking-info-value">#{{ $booking->id }}</div>
             </div>
 
             <div>
@@ -65,13 +56,9 @@
 
     </div>
 
-
-    {{-- Customer Information --}}
     <div class="booking-card">
 
-        <h2 class="booking-section-title">
-            Customer Information
-        </h2>
+        <h2 class="booking-section-title">Customer Information</h2>
 
         <div class="booking-info-grid">
 
@@ -93,13 +80,9 @@
 
     </div>
 
-
-    {{-- Booking Details --}}
     <div class="booking-card">
 
-        <h2 class="booking-section-title">
-            Reserved Spaces
-        </h2>
+        <h2 class="booking-section-title">Reserved Spaces</h2>
 
         <div class="booking-table-wrapper">
 
@@ -110,12 +93,14 @@
                         <th>Space</th>
                         <th>Layout</th>
                         <th>Event Type</th>
+                        <th>Pricing Type</th>
                         <th>Package</th>
                         <th>Guests</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Total Price</th>
-                        <th>Commission</th>
+                        <th>Commission Rate</th>
+                        <th>Commission Amount</th>
                     </tr>
                 </thead>
 
@@ -135,6 +120,10 @@
 
                             <td>
                                 {{ $detail->eventType->name ?? 'N/A' }}
+                            </td>
+
+                            <td>
+                                {{ ucfirst($detail->pricing_type ?? 'N/A') }}
                             </td>
 
                             <td>
@@ -158,6 +147,10 @@
                             </td>
 
                             <td>
+                                {{ number_format((float) $detail->commission_rate, 2) }}%
+                            </td>
+
+                            <td>
                                 {{ number_format((float) $detail->commission_amount, 2) }}
                             </td>
 
@@ -166,7 +159,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="9" class="booking-empty">
+                            <td colspan="11" class="booking-empty">
                                 No booking details found.
                             </td>
                         </tr>
@@ -181,20 +174,14 @@
 
     </div>
 
-
-    {{-- Financial Summary --}}
     <div class="booking-card">
 
-        <h2 class="booking-section-title">
-            Financial Summary
-        </h2>
+        <h2 class="booking-section-title">Financial Summary</h2>
 
         <div class="booking-info-grid">
 
             <div>
-                <div class="booking-info-label">
-                    Total Booking Amount
-                </div>
+                <div class="booking-info-label">Total Booking Amount</div>
 
                 <div class="booking-info-value">
                     {{ number_format((float) $booking->details->sum('total_price'), 2) }}
@@ -202,9 +189,7 @@
             </div>
 
             <div>
-                <div class="booking-info-label">
-                    Total Commission
-                </div>
+                <div class="booking-info-label">Total Commission</div>
 
                 <div class="booking-info-value">
                     {{ number_format((float) $booking->details->sum('commission_amount'), 2) }}
@@ -212,9 +197,7 @@
             </div>
 
             <div>
-                <div class="booking-info-label">
-                    Recorded Payments
-                </div>
+                <div class="booking-info-label">Recorded Payments</div>
 
                 <div class="booking-info-value">
                     {{ number_format((float) $booking->payments->sum('amount'), 2) }}
@@ -225,13 +208,9 @@
 
     </div>
 
-
-    {{-- Payments --}}
     <div class="booking-card">
 
-        <h2 class="booking-section-title">
-            Payment Information
-        </h2>
+        <h2 class="booking-section-title">Payment Information</h2>
 
         <div class="booking-table-wrapper">
 
@@ -254,9 +233,7 @@
 
                         <tr>
 
-                            <td>
-                                #{{ $payment->id }}
-                            </td>
+                            <td>#{{ $payment->id }}</td>
 
                             <td>
                                 {{ number_format((float) $payment->amount, 2) }}
@@ -300,22 +277,16 @@
 
     </div>
 
-
-    {{-- Customer Review --}}
     <div class="booking-card">
 
-        <h2 class="booking-section-title">
-            Customer Review
-        </h2>
+        <h2 class="booking-section-title">Customer Review</h2>
 
         @if($booking->review)
 
             <div class="booking-info-grid">
 
                 <div>
-                    <div class="booking-info-label">
-                        Rating
-                    </div>
+                    <div class="booking-info-label">Rating</div>
 
                     <div class="booking-info-value">
                         {{ $booking->review->rating }} / 5
@@ -323,9 +294,7 @@
                 </div>
 
                 <div>
-                    <div class="booking-info-label">
-                        Review Date
-                    </div>
+                    <div class="booking-info-label">Review Date</div>
 
                     <div class="booking-info-value">
                         {{ $booking->review->created_at?->format('d M Y') ?? 'N/A' }}
@@ -336,9 +305,7 @@
 
             <div style="margin-top:20px;">
 
-                <div class="booking-info-label">
-                    Customer Comment
-                </div>
+                <div class="booking-info-label">Customer Comment</div>
 
                 <p>
                     {{ $booking->review->comment ?? 'No comment provided.' }}
