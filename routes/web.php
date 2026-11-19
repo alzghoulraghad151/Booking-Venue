@@ -8,6 +8,8 @@ use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])
+    ->name('admin.users.show');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
