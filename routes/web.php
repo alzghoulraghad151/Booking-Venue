@@ -3,17 +3,20 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Controllers\Owner\OwnerVenueImageController;
-use App\Http\Middleware\OwnerMiddleware;
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Admin\AdminVenueController;
-use App\Http\Middleware\AdminMiddleware;
-
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-
 
 use App\Http\Controllers\Owner\OwnerSpaceController;
+use App\Http\Middleware\OwnerMiddleware;
+use Illuminate\Support\Facades\Route;
+require __DIR__.'/shatha_routes.php';
+use App\Http\Controllers\Admin\AdminVenueController;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\Admin\AdminBookingController;
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+
 
 
 
@@ -184,4 +187,3 @@ require __DIR__ . '/zaid.php';
     ->middleware(['auth', AdminMiddleware::class])
     ->name('admin.venues.status');
 
-    
