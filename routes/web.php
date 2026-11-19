@@ -32,6 +32,7 @@ Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store']
     ->name('owner.space-layouts.store');
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
 
 Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
