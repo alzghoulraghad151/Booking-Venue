@@ -59,8 +59,51 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
     .admin-content > h1 { font-size: 24px; }
 }
 
-.dashboard-stats {
-    display: flex;
-    flex-wrap: wrap;
+.dashboard-stats, .dashboard-summary-grid {
+    display: grid;
     gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 175px), 1fr));
 }
+
+.dashboard-summary-grid {
+    margin-top: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+}
+
+.dashboard-stats article, .dashboard-panel {
+    min-width: 0;
+    padding: 16px;
+    background: var(--convene-white);
+    border: 1px solid #dedbd5;
+    border-radius: 12px;
+}
+
+.dashboard-stats article { border-top: 3px solid var(--convene-warm); }
+.dashboard-stats h2 { margin: 0 0 4px; font-size: 14px; color: var(--convene-sage); }
+.dashboard-stats p { margin: 0; font-size: 28px; font-weight: 700; }
+.dashboard-panel { margin-top: 12px; }
+.dashboard-summary-grid > .dashboard-panel { margin-top: 0; }
+
+.dashboard-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-bottom: 12px;
+}
+
+.dashboard-panel h2 { margin: 0 0 12px; font-size: 18px; }
+.dashboard-panel-header h2, .dashboard-panel-header p { margin: 0; }
+.dashboard-panel a { color: var(--convene-navy); font-weight: 600; text-underline-offset: 3px; }
+.dashboard-table-wrap { overflow-x: auto; }
+.dashboard-table { width: 100%; border-collapse: collapse; text-align: left; }
+.dashboard-table th, .dashboard-table td { padding: 10px 12px; border-bottom: 1px solid var(--convene-cream); vertical-align: top; }
+.dashboard-table thead, .dashboard-badge { background: var(--convene-cream); }
+.dashboard-table td { overflow-wrap: anywhere; }
+.dashboard-badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-weight: 600; }
+.dashboard-review-list, .dashboard-metrics { margin: 0; padding: 0; list-style: none; }
+.dashboard-review-list li, .dashboard-metrics div { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; padding: 8px 0; border-bottom: 1px solid var(--convene-cream); }
+.dashboard-metrics dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dashboard-note { color: var(--convene-sage); font-size: 13px; }
+.dashboard-pagination { justify-content: flex-end; margin: 12px 0 0; }

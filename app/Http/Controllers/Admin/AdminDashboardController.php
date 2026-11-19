@@ -3,53 +3,68 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Booking;
+use App\Models\Review;
 use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Support\Facades\DB;
-use App\Models\Booking;
+use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
 {
-    public function index(){
+    public function index(): View
+    {
         $totalUsers = User::count();
         $totalVenues = Venue::count();
-        $totalBookings = DB::table('bookings')->count();
+        $totalBookings = Booking::count();
         $totalOwners = User::where('role', 'venue_owner')->count();
         $pendingVenues = Venue::where('status', 'pending')->count();
-        $pendingBookings = DB::table('bookings')->where('status', 'pending')->count();
+        $pendingBookings = Booking::where('status', 'pending')->count();
 
         $recentBookings = Booking::with(['customer', 'venue'])
-        ->latest()
-        ->limit(5)
-        ->get();
+            ->latest()
+            ->orderByDesc('id')
+            ->limit(5)
+            ->get();
 
         $venuesAwaitingReview = Venue::where('status', 'pending')
-        ->latest()
-        ->limit(5)
-        ->get();
+            ->latest()
+            ->orderByDesc('id')
+            ->limit(5)
+            ->get();
 
-        $totalPaid = DB::table('payments')
-        ->where('status', 'paid')
-        ->sum('amount');
+        $totalPaid = DB::table('payments')->where('status', 'paid')->sum('amount');
 
         $paymentCounts = DB::table('payments')
-        ->selectRaw('status, COUNT(*) as total')
-        ->groupBy('status')
-        ->pluck('total', 'status');
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
+        $totalCommission = DB::table('booking_details')
+            ->join('bookings', 'bookings.id', '=', 'booking_details.booking_id')
+            ->whereIn('bookings.status', ['confirmed', 'completed'])
+            ->sum('booking_details.commission_amount');
 
-        return view('admin.dashboard', 
-        ['totalUsers' => $totalUsers,
-        'totalVenues' => $totalVenues,
-        'totalBookings' => $totalBookings,
-        'totalOwners' => $totalOwners,
-        'pendingVenues' => $pendingVenues,
-        'pendingBookings' => $pendingBookings,
-        'recentBookings' => $recentBookings,
-        'venuesAwaitingReview' => $venuesAwaitingReview,
-        'totalPaid' => $totalPaid,
-        'paymentCounts' => $paymentCounts,]);
+        $averageRating = Review::avg('rating');
+        $reviews = Review::with(['booking.customer', 'booking.venue'])
+            ->latest()
+            ->orderByDesc('id')
+            ->simplePaginate(5, ['*'], 'reviews_page');
 
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'totalVenues',
+            'totalBookings',
+            'totalOwners',
+            'pendingVenues',
+            'pendingBookings',
+            'recentBookings',
+            'venuesAwaitingReview',
+            'totalPaid',
+            'paymentCounts',
+            'totalCommission',
+            'averageRating',
+            'reviews',
+        ));
     }
 }
