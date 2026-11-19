@@ -53,6 +53,17 @@
     </form>
 @endif
 
+@error('archive')
+    <p role="alert">{{ $message }}</p>
+@enderror
+
+<form method="POST" action="{{ route('owner.venues.destroy', $venue) }}"
+      onsubmit="return confirm('Archive this venue?')">
+    @csrf
+    @method('DELETE')
+
+    <button type="submit">Archive Venue</button>
+</form>
         <h2>Spaces</h2>
 
         <ul>

@@ -68,7 +68,7 @@ Route::patch('/owner/venues/{venue}', [OwnerVenueController::class, 'update'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.venues.availability.update');
 
-    
+
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -94,6 +94,10 @@ Route::patch('/admin/venues/{venue}/reject', [AdminVenueController::class, 'reje
     ->middleware(['auth', AdminMiddleware::class])
     ->name('admin.venues.reject');
 
+
+    Route::delete('/owner/venues/{venue}', [OwnerVenueController::class, 'destroy'])
+    ->middleware(['auth', OwnerMiddleware::class])
+    ->name('owner.venues.destroy');
 
 
 
