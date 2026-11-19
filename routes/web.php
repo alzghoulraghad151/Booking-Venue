@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Owner\OwnerSpaceLayoutController; 
 use App\Http\Controllers\Owner\OwnerVenueController;
+
+
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -19,17 +20,8 @@ Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])
 //     return view('welcome');
 // });
 
-Route::get('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'index'])
-    ->middleware(['auth', 'owner'])
-    ->name('owner.space-layouts.index');
 
-Route::get('/owner/space-layouts/create', [OwnerSpaceLayoutController::class, 'create'])
-    ->middleware(['auth', 'owner'])
-    ->name('owner.space-layouts.create');
-
-Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store'])
-    ->middleware(['auth', 'owner'])
-    ->name('owner.space-layouts.store');
+require __DIR__ . '/yousef.php';
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
@@ -99,16 +91,6 @@ Route::patch('/admin/venues/{venue}/reject', [AdminVenueController::class, 'reje
     Route::delete('/owner/venues/{venue}', [OwnerVenueController::class, 'destroy'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.venues.destroy');
-
-
-
-    Route::get('/owner/space-layouts/{id}/edit', [OwnerSpaceLayoutController::class, 'edit'])
-    ->middleware(OwnerMiddleware::class)
-    ->name('owner.space-layouts.edit');
-
-Route::patch('/owner/space-layouts/{id}', [OwnerSpaceLayoutController::class, 'update'])
-    ->middleware(['auth', OwnerMiddleware::class])
-    ->name('owner.space-layouts.update');
 
 
     Route::patch('/admin/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])

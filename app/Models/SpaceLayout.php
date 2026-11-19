@@ -13,6 +13,6 @@ class SpaceLayout extends Model
         return $this->belongsTo(Space::class);
     }
     public function eventTypes(){
-        return $this->belongsToMany(EventTybe::class,'layout_event_types');
+        return $this->belongsToMany(EventType::class,'layout_event_types');
     }
 }
