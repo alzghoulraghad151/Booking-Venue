@@ -1,8 +1,6 @@
 <?php
-
-use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Owner\OwnerSpaceLayoutController; 
+use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -12,9 +10,6 @@ use App\Http\Middleware\AdminMiddleware;
 
 
 
-Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
-Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])
-    ->name('admin.users.show');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -31,7 +26,6 @@ Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store']
     ->middleware(['auth', 'owner'])
     ->name('owner.space-layouts.store');
 
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
 Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
     ->middleware(['auth', OwnerMiddleware::class])
@@ -70,8 +64,8 @@ Route::patch('/owner/venues/{venue}', [OwnerVenueController::class, 'update'])
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
     Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
     Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
@@ -114,6 +108,7 @@ Route::patch('/owner/space-layouts/{id}', [OwnerSpaceLayoutController::class, 'u
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.space-layouts.update');
 
+require __DIR__ . '/zaid.php';
 
     Route::patch('/admin/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])
     ->middleware(['auth', AdminMiddleware::class])
