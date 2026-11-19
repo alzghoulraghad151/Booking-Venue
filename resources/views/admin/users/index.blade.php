@@ -13,6 +13,10 @@
 
     <a href="{{ route('admin.users.create') }}">Create user</a>
 
+    @if (session('success'))
+        <p role="status">{{ session('success') }}</p>
+    @endif
+
     <form action="{{ route('admin.users.index') }}" method="GET">
 
         <input type="text" name="search" placeholder="Search by name, email, or phone" value="{{ $filters['search'] }}">
@@ -117,6 +121,14 @@
                         <a href="{{ route('admin.users.show', $user->id) }}">
                             View
                         </a>
+                        @unless (auth()->id() === $user->id)
+                            <form action="{{ route('admin.users.status', $user) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="{{ $user->status === 'active' ? 'suspended' : 'active' }}">
+                                <button type="submit">{{ $user->status === 'active' ? 'Suspend' : 'Activate' }}</button>
+                            </form>
+                        @endunless
                     </td>
                 </tr>
             @empty

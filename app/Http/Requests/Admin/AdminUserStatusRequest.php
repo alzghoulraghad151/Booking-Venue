@@ -8,7 +8,8 @@ class AdminUserStatusRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->role === 'admin'
+            && $this->user()?->status === 'active';
     }
 
     public function rules(): array

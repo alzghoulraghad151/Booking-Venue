@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminUserIndexRequest;
+use App\Http\Requests\Admin\AdminUserStatusRequest;
 use App\Http\Requests\Admin\StoreAdminUserRequest;
 use App\Http\Requests\Admin\UpdateAdminUserRequest;
 use App\Models\User;
@@ -150,5 +151,23 @@ class AdminUserController extends Controller
         return redirect()
             ->route('admin.users.index')
             ->with('success', 'User moved to trash successfully.');
+    }
+
+    public function updateStatus(AdminUserStatusRequest $request, User $user): RedirectResponse
+    {
+        $status = $request->validated('status');
+
+        abort_if(
+            auth()->id() === $user->id && $status === 'suspended',
+            403,
+            'You cannot suspend your own account.'
+        );
+
+        $user->status = $status;
+        $user->save();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'User status updated successfully.');
     }
 }
