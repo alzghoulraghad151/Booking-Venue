@@ -7,9 +7,6 @@ use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
-Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])
-    ->name('admin.users.show');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -25,9 +22,6 @@ Route::get('/owner/space-layouts/create', [OwnerSpaceLayoutController::class, 'c
 Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store'])
     ->middleware(['auth', 'owner'])
     ->name('owner.space-layouts.store');
-
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
 
 Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
     ->middleware(['auth', OwnerMiddleware::class])
@@ -57,4 +51,10 @@ Route::patch('/owner/venues/{venue}', [OwnerVenueController::class, 'update'])
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 });
