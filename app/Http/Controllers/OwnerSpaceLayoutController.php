@@ -11,7 +11,7 @@ class OwnerSpaceLayoutController extends Controller
 {
     $layouts = SpaceLayout::with('space')
         ->whereHas('space.venue', function ($query) {
-            $query->where('owner_id', auth()->id());
+            $query->where('owner_id', auth()->guard()->id());
         })
         ->get();
     return view('owner.space-layouts.index', compact('layouts'));
@@ -20,7 +20,7 @@ class OwnerSpaceLayoutController extends Controller
 public function create()
 {
     $spaces = Space::whereHas('venue', function ($query) {
-        $query->where('owner_id', auth()->id());
+        $query->where('owner_id', auth()->guard()->id());
     })->orderBy('name')->get();
 
     return view('owner.space-layouts.create', compact('spaces'));
@@ -34,11 +34,19 @@ public function store(Request $request)
     ]);
 
     Space::whereHas('venue', function ($query) {
-        $query->where('owner_id', auth()->id());
+        $query->where('owner_id', auth()->guard()->id());
     })->findOrFail($data['space_id']);
 
     SpaceLayout::create($data);
 
     return redirect()->route('owner.space-layouts.index');
+}
+public function edit(int $id)
+{
+    $layout = SpaceLayout::whereHas('space.venue', function ($query) {
+        $query->where('owner_id', auth()->guard()->id());
+    })->findOrFail($id);
+
+    return view('owner.space-layouts.edit', compact('layout'));
 }
 }

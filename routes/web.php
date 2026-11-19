@@ -9,14 +9,17 @@ Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.u
 //     return view('welcome');
 // });
 
-Route::get('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'index'])
-    ->middleware(OwnerMiddleware::class)
-    ->name('owner.space-layouts.index');
+Route::middleware([OwnerMiddleware::class])->group(function () {
+    Route::get('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'index'])
+        ->name('owner.space-layouts.index');
 
-Route::get('/owner/space-layouts/create', [OwnerSpaceLayoutController::class, 'create'])
-     ->middleware(OwnerMiddleware::class)
-    ->name('owner.space-layouts.create');
-    
-Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store'])
-    ->middleware(OwnerMiddleware::class)
-    ->name('owner.space-layouts.store');
+    Route::get('/owner/space-layouts/create', [OwnerSpaceLayoutController::class, 'create'])
+        ->name('owner.space-layouts.create');
+
+    Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store'])
+        ->name('owner.space-layouts.store');
+
+    Route::get('/owner/space-layouts/{id}/edit', [OwnerSpaceLayoutController::class, 'edit'])
+        ->whereNumber('id')
+        ->name('owner.space-layouts.edit');
+});
