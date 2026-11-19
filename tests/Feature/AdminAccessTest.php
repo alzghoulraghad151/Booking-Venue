@@ -11,6 +11,7 @@ class AdminAccessTest extends TestCase
     public function test_guests_cannot_access_admin_pages_without_a_login_route(): void
     {
         $this->get('/admin/users')->assertUnauthorized();
+        $this->get('/admin/users/1')->assertUnauthorized();
     }
 
     public function test_guests_are_redirected_when_the_shared_login_route_exists(): void
@@ -34,6 +35,7 @@ class AdminAccessTest extends TestCase
             ]));
 
             $this->get('/admin/users')->assertForbidden();
+            $this->get('/admin/users/1')->assertForbidden();
         }
     }
 
@@ -55,6 +57,7 @@ class AdminAccessTest extends TestCase
             ->assertOk()
             ->assertViewIs('admin.dashboard')
             ->assertSee('Admin Dashboard')
+            ->assertSee('Total Users')
             ->assertSee('aria-current="page"', false);
     }
 }

@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'owner' => OwnerMiddleware::class,
         ]);
 
+        $middleware->prependToPriorityList(
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            AdminMiddleware::class,
+        );
+
         $middleware->redirectGuestsTo(function (): string {
             abort_unless(Route::has('login'), 401);
 

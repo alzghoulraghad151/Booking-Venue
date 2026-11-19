@@ -3,7 +3,6 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Middleware\OwnerMiddleware;
-use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\AdminVenueController;
@@ -11,7 +10,6 @@ use App\Http\Middleware\AdminMiddleware;
 
 
 
-Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -58,9 +56,8 @@ Route::patch('/owner/venues/{venue}', [OwnerVenueController::class, 'update'])
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
 });
 
 
@@ -80,3 +77,5 @@ Route::get('/admin/venues', [AdminVenueController::class, 'index'])
 Route::patch('/owner/space-layouts/{id}', [OwnerSpaceLayoutController::class, 'update'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.space-layouts.update');
+
+require __DIR__ . '/zaid.php';
