@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Venues</title>
+    <style>
+    .venue-status {
+        display: inline-block;
+        padding: 0.25rem 0.6rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .venue-status--pending  { background: #fef3c7; color: #78350f; }
+    .venue-status--approved { background: #dcfce7; color: #14532d; }
+    .venue-status--rejected { background: #fee2e2; color: #7f1d1d; }
+    .venue-status--inactive { background: #e5e7eb; color: #374151; }
+</style>
+</head>
+<body>
+    <main>
+        <h1>Manage Venues</h1>
+
+
+        <form method="GET" action="{{ route('admin.venues.index') }}">
+    <label for="search">Venue or owner name</label>
+    <input id="search" name="search" type="search"
+           value="{{ $search }}" maxlength="100">
+    @error('search')
+        <p>{{ $message }}</p>
+    @enderror
+
+    <label for="status">Status</label>
+    <select id="status" name="status">
+        <option value="">All statuses</option>
+        <option value="pending" @selected($status === 'pending')>Pending</option>
+        <option value="approved" @selected($status === 'approved')>Approved</option>
+        <option value="rejected" @selected($status === 'rejected')>Rejected</option>
+        <option value="inactive" @selected($status === 'inactive')>Inactive</option>
+    </select>
+    @error('status')
+        <p>{{ $message }}</p>
+    @enderror
+
+    <button type="submit">Apply filters</button>
+    <a href="{{ route('admin.venues.index') }}">Clear filters</a>
+</form>
+
+
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Venue</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Registered on</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($venues as $venue)
+                    <tr>
+                        <td>{{ $venue->name }}</td>
+                        <td>{{ $venue->owner?->name ?? 'Unknown owner' }}</td>
+                        <td>{{ $venue->address }}</td>
+                        <td>{{ $venue->created_at?->format('d M Y') ?? '—' }}</td>
+                        <td>
+    <span class="venue-status venue-status--{{ $venue->status }}">
+        {{ ucfirst($venue->status) }}
+    </span>
+</td>
+                        <td>
+    <a href="{{ route('admin.venues.show', $venue) }}">View</a>
+</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6">No venues found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        {{ $venues->links() }}
+    </main>
+</body>
+</html>
