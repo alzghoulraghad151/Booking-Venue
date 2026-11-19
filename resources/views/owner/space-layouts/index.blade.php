@@ -15,10 +15,14 @@
                 <td>{{ $layout->name }}</td>
                 <td>{{ $layout->space->name }}</td>
                 <td>{{ $layout->capacity }}</td>
+                <td><a href="{{ route('owner.space-layouts.edit', ['id' => $layout->id]) }}"> Edit
+                </a></td>
+                   Edit
+                </a>
             </tr>
         @empty
             <tr>
-                <td colspan="3">No space layouts yet.</td>
+                <td colspan="4">No space layouts yet.</td>
             </tr>
         @endforelse
     </tbody>
