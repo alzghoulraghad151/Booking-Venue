@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminUserIndexRequest;
-use App\Services\AdminUserListingService;
-use App\Services\AdminUserShowService;
+use App\Http\Requests\Admin\AdminUserStatusRequest;
+use App\Http\Requests\Admin\StoreAdminUserRequest;
+use App\Http\Requests\Admin\UpdateAdminUserRequest;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class AdminUserController extends Controller
 {
@@ -80,12 +84,6 @@ class AdminUserController extends Controller
             ->withQueryString();
 
         return view('admin.users.index', compact('users', 'filters'));
-    }
-    public function show( User $user, AdminUserShowService $showService) 
-    {
-        $user = $showService->getUserDetails($user);
-
-        return view('admin.users.show', compact('user'));
     }
 
     public function create(): View
