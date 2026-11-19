@@ -13,7 +13,6 @@ class OwnerSpaceLayoutController extends Controller
             $query->where('owner_id', auth()->id());
         })
         ->get();
-
     return view('owner.space-layouts.index', compact('layouts'));
 }
 }
