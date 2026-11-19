@@ -1,6 +1,6 @@
 <?php
-use App\Http\Middleware\OwnerMiddleware;
-use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
+
+use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerVenueController;
@@ -22,6 +22,4 @@ Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store']
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.space-layouts.store');
 
-Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
-    ->middleware(['auth', OwnerMiddleware::class])
-    ->name('owner.venues.index');
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
