@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Venue extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = ['name', 'description', 'address'];
 
     public function owner(): BelongsTo
