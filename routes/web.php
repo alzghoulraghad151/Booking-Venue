@@ -39,7 +39,7 @@ Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.venues.create');
 
-
+    
 
     Route::post('/owner/venues', [OwnerVenueController::class, 'store'])
     ->middleware(['auth', OwnerMiddleware::class])
