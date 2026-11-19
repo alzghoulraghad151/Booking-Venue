@@ -1,3 +1,6 @@
 @extends('layouts.admin')
-
-@section('title', 'Dashboard')
+   <article>
+     <h2>Total Users</h2>
+     <p>{{ $totalUsers }}</p>
+   </article>
+@section('title', 'Admin Dashboard')

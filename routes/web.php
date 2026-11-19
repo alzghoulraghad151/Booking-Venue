@@ -1,13 +1,11 @@
 <?php
-
-use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Middleware\OwnerMiddleware;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -24,7 +22,6 @@ Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store']
     ->middleware(['auth', 'owner'])
     ->name('owner.space-layouts.store');
 
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
 
 Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
@@ -53,6 +50,7 @@ Route::patch('/owner/venues/{venue}', [OwnerVenueController::class, 'update'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.venues.update');
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
 });
