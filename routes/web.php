@@ -44,7 +44,9 @@ Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.venues.create');
 
-    
+    Route::get('/owner/venues/{venue}', [OwnerVenueController::class, 'show'])
+    ->middleware(['auth', OwnerMiddleware::class])
+    ->name('owner.venues.show');
 
     Route::post('/owner/venues', [OwnerVenueController::class, 'store'])
     ->middleware(['auth', OwnerMiddleware::class])
@@ -61,6 +63,13 @@ Route::patch('/owner/venues/{venue}', [OwnerVenueController::class, 'update'])
     ->name('owner.venues.update');
 
 
+
+    Route::patch('/owner/venues/{venue}/availability', [OwnerVenueController::class, 'updateAvailability'])
+    ->middleware(['auth', OwnerMiddleware::class])
+    ->name('owner.venues.availability.update');
+
+    
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
@@ -72,6 +81,18 @@ Route::get('/admin/venues', [AdminVenueController::class, 'index'])
     ->name('admin.venues.index');
 
 
+    Route::get('/admin/venues/{venue}', [AdminVenueController::class, 'show'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.show');
+
+
+    Route::patch('/admin/venues/{venue}/approve', [AdminVenueController::class, 'approve'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.approve');
+
+Route::patch('/admin/venues/{venue}/reject', [AdminVenueController::class, 'reject'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.reject');
 
 
 
@@ -83,3 +104,10 @@ Route::get('/admin/venues', [AdminVenueController::class, 'index'])
 Route::patch('/owner/space-layouts/{id}', [OwnerSpaceLayoutController::class, 'update'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.space-layouts.update');
+
+
+    Route::patch('/admin/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])
+    ->middleware(['auth', AdminMiddleware::class])
+    ->name('admin.venues.status');
+
+    

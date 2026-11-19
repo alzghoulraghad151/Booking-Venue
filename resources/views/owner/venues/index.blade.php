@@ -21,8 +21,12 @@
                 <li>
                     <strong>{{ $venue->name }}</strong>
                     <span>{{ $venue->address }}</span>
+                    
                     <span>{{ ucfirst($venue->status) }}</span>
                     <a href="{{ route('owner.venues.edit', $venue) }}">Edit</a>
+
+                    <a href="{{ route('owner.venues.show', $venue) }}">View</a>
+<a href="{{ route('owner.venues.edit', $venue) }}">Edit</a>
                 </li>
             @empty
                 <li>You haven’t added any venues yet.</li>
