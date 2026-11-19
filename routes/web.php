@@ -2,17 +2,83 @@
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Controllers\Owner\OwnerVenueController;
+use App\Http\Controllers\Owner\OwnerVenueImageController;
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\AdminVenueController;
 use App\Http\Middleware\AdminMiddleware;
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
+
+use App\Http\Controllers\Owner\OwnerSpaceController;
+
+
+
+
+
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
+    Route::post('/register', [RegisteredUserController::class, 'store'])
+        ->name('register.store');
+
+        Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('login.store');
+});
+
+
+Route::get('/account/signed-in', fn () => response('Signed in successfully.'))
+    ->middleware('auth')
+    ->name('account.signed-in');
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
+
+
+
+
+
+
+
+
+
+
+Route::prefix('owner/spaces')
+    ->name('owner.spaces.')
+    ->middleware(['auth', 'owner'])
+    ->group(function () {
+        Route::get('/', [OwnerSpaceController::class, 'index'])->name('index');
+        Route::get('/create', [OwnerSpaceController::class, 'create'])->name('create');
+        Route::post('/', [OwnerSpaceController::class, 'store'])->name('store');
+        Route::get('/{space}/edit', [OwnerSpaceController::class, 'edit'])->name('edit');
+        Route::put('/{space}', [OwnerSpaceController::class, 'update'])->name('update');
+        Route::delete('/{space}', [OwnerSpaceController::class, 'destroy'])->name('destroy');
+    });
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
 Route::get('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'index'])
     ->middleware(['auth', 'owner'])
@@ -50,6 +116,10 @@ Route::get('/owner/venues', [OwnerVenueController::class, 'index'])
     Route::get('/owner/venues/{venue}/edit', [OwnerVenueController::class, 'edit'])
     ->middleware(['auth', OwnerMiddleware::class])
     ->name('owner.venues.edit');
+
+Route::post('/owner/venues/{venue}/images', [OwnerVenueImageController::class, 'store'])
+    ->middleware(['auth', OwnerMiddleware::class])
+    ->name('owner.venues.images.store');
 
 Route::patch('/owner/venues/{venue}', [OwnerVenueController::class, 'update'])
     ->middleware(['auth', OwnerMiddleware::class])

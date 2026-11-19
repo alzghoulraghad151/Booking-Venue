@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Venue extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = ['name', 'description', 'address'];
 
     public function owner(): BelongsTo
@@ -27,14 +27,11 @@ class Venue extends Model
     {
         return $this->hasMany(Space::class);
     }
-}
 
-
-protected function casts(): array
-{
-    return [
-        'is_active_by_owner' => 'boolean',
-    ];
-}
-
+    protected function casts(): array
+    {
+        return [
+            'is_active_by_owner' => 'boolean',
+        ];
+    }
 }
