@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Http\Requests\Admin\AdminUserIndexRequest;
 use App\Services\AdminUserListingService;
+use App\Services\AdminUserShowService;
 
 class AdminUserController extends Controller
 {
@@ -26,6 +27,12 @@ class AdminUserController extends Controller
         $users = $listingService->getUsers($filters);
 
         return view('admin.users.index', compact('users', 'filters'));
+    }
+    public function show( User $user, AdminUserShowService $showService) 
+    {
+        $user = $showService->getUserDetails($user);
+
+        return view('admin.users.show', compact('user'));
     }
 
 }
