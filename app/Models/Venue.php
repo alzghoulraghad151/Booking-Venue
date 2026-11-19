@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Venue extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = ['name', 'description', 'address'];
 
     public function owner(): BelongsTo
@@ -19,4 +22,25 @@ class Venue extends Model
     {
         return $this->hasMany(VenueImage::class);
     }
+
+
+
+    public function spaces(): HasMany
+{
+    return $this->hasMany(Space::class);
+}
+
+
+
+
+
+
+
+protected function casts(): array
+{
+    return [
+        'is_active_by_owner' => 'boolean',
+    ];
+}
+
 }
