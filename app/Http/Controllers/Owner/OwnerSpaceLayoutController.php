@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Owner;
+
+use App\Http\Controllers\Controller;
 use App\Models\SpaceLayout;
 use App\Models\Space;
 use Illuminate\Http\Request;
