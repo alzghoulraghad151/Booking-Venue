@@ -33,6 +33,39 @@
           <h2>Pending Bookings</h2>
           <p>{{ $pendingBookings }}</p>
         </article>
+
     </div>
+
+    <section>
+        <h2>Recent Bookings</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Booking #</th>
+                    <th scope="col">Organizer</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col">Requested On</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($recentBookings as $booking)
+                    <tr>
+                        <td>{{ $booking->id }}</td>
+                        <td>{{ $booking->customer?->name ?? '—' }}</td>
+                        <td>{{ $booking->venue?->name ?? '—' }}</td>
+                        <td>{{ $booking->created_at?->format('d M Y') ?? '—' }}</td>
+                        <td>{{ ucfirst($booking->status) }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5">No bookings yet.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </section>
+
 
 @endsection
