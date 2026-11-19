@@ -26,10 +26,6 @@ Route::post('/owner/space-layouts', [OwnerSpaceLayoutController::class, 'store']
     ->middleware(['auth', 'owner'])
     ->name('owner.space-layouts.store');
 
-Route::get('/owner/space-layouts/{id}/edit', [OwnerSpaceLayoutController::class, 'edit'])
-    ->middleware(OwnerMiddleware::class)
-    ->name('owner.space-layouts.edit');
-
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
 

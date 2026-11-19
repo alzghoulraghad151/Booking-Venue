@@ -12,7 +12,7 @@ class OwnerSpaceLayoutController extends Controller
     public function index()
     {
         $layouts = SpaceLayout::with('space')
-            ->whereRelation('space.venue', 'owner_id', auth()->guard()->id())
+            ->whereRelation('space.venue', 'owner_id', auth()->id())
             ->get();
 
         return view('owner.space-layouts.index', compact('layouts'));
@@ -50,4 +50,21 @@ class OwnerSpaceLayoutController extends Controller
 
         return view('owner.space-layouts.edit', compact('layout'));
     }
+    public function update(Request $request,int $id){
+        $layout=SpaceLayout::whereRilation('space.venue','owner_id',auth()->id())->findOrFile($id);
+
+          $layout->update($request->validate([
+        'name' => 'required|string|max:255',
+        'capacity' => 'required|integer|min:1',
+    ]));
+       return redirect()->route('owner.space-layouts.index');
+    }
+
+   public function destroy(int $id){
+      $layout=SpaceLayout::whereRelation('space.venue', auth()->id())
+      ->findOrFail($id);
+      $layout->delete();
+      return redirect()->route(('owner.space-layouts.index'));
+   }
+
 }

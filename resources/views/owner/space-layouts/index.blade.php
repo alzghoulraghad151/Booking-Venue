@@ -1,6 +1,5 @@
 <h1>Space Layouts</h1>
-
- <a href="{{ route('owner.space-layouts.crete') }}"></a>
+<a href="{{ route('owner.space-layouts.create') }}">Add Space Layout</a>
 <table>
     <thead>
         <tr>
@@ -16,9 +15,16 @@
                 <td>{{ $layout->space->name }}</td>
                 <td>{{ $layout->capacity }}</td>
                 <td><a href="{{ route('owner.space-layouts.edit', ['id' => $layout->id]) }}"> Edit
-                </a></td>
-                   Edit
                 </a>
+                   <form method="POST" action="{{ route('owner.space-layouts.destroy', ['id' => $layout->id]) }}">
+                     @csrf
+                     @method('DELETE')
+                 
+                     <button type="submit">Delete</button>
+                    </form>
+                </td>
+                  
+                
             </tr>
         @empty
             <tr>
