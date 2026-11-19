@@ -29,5 +29,6 @@ class Space extends Model
     public function spaceLayouts(): HasMany
     {
         return $this->hasMany(SpaceLayout::class);
+
     }
 }
