@@ -112,4 +112,40 @@ public function updateAvailability(Request $request, Venue $venue): RedirectResp
     });
 }
 
+
+
+
+public function destroy(Venue $venue): RedirectResponse
+{
+    return DB::transaction(function () use ($venue) {
+        $currentVenue = Venue::query()
+            ->lockForUpdate()
+            ->findOrFail($venue->getKey());
+
+        Gate::authorize('delete', $currentVenue);
+
+        $hasSpaces = DB::table('spaces')
+            ->where('venue_id', $currentVenue->getKey())
+            ->exists();
+
+        $hasBookings = DB::table('bookings')
+            ->where('venue_id', $currentVenue->getKey())
+            ->exists();
+
+        if ($hasSpaces || $hasBookings) {
+            return redirect()
+                ->route('owner.venues.show', $currentVenue)
+                ->withErrors([
+                    'archive' => 'Venues with spaces or bookings cannot be archived.',
+                ]);
+        }
+
+        $currentVenue->delete();
+
+        return redirect()
+            ->route('owner.venues.index')
+            ->with('success', 'Venue archived successfully.');
+    });
+}
+
 }
