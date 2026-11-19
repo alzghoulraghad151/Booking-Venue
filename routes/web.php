@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 
 Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])
+    ->name('admin.users.show');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
