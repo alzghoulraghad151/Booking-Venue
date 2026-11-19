@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEventTypeController;
+use App\Http\Controllers\Owner\OwnerDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
@@ -31,3 +32,7 @@ Route::put('/admin/event-types/{eventType}', [AdminEventTypeController::class, '
 Route::delete('/admin/event-types/{eventType}', [AdminEventTypeController::class, 'destroy'])
     ->middleware(['auth', 'admin'])
     ->name('admin.event-types.destroy');
+
+Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index'])
+    ->middleware(['auth', 'owner'])
+    ->name('owner.dashboard');
