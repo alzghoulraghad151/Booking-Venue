@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -12,6 +13,9 @@ class AdminMiddleware
         if (!$request->user() || $request->user()->role !== 'admin') {
             abort(403, 'Unauthorized access.');
         }
+        $user = $request->user();
+
+        abort_unless($user?->role === 'admin' && $user->status === 'active', 403);
 
         return $next($request);
     }
