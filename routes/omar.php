@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerSpaceController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Middleware\OwnerMiddleware;
@@ -22,4 +23,8 @@ Route::prefix('owner')->name('owner.')->group(function () {
             Route::delete('/{space}', [OwnerSpaceController::class, 'destroy'])->name('destroy');
         });
     });
+});
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::patch('/users/{user}/status', [AdminUserController::class, 'updateStatus'])
+        ->name('users.status');
 });
