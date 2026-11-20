@@ -21,10 +21,11 @@ class CreateVenue
         $url = $this->cloudinary->upload($image, $publicId);
 
         try {
-            DB::transaction(function () use ($owner, $attributes, $url): void {
+            DB::transaction(function () use ($owner, $attributes, $url, $publicId): void {
                 $venue = $owner->venues()->create($attributes);
                 $venue->images()->create([
                     'image_url' => $url,
+                    'cloudinary_public_id' => $publicId,
                     'is_primary' => true,
                 ]);
             });
