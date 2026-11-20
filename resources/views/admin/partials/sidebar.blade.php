@@ -1,4 +1,4 @@
-<aside class="admin-sidebar">
+<aside class="admin-sidebar admin-sidebar--management">
     <div class="admin-brand">
         <a href="{{ route(Route::has('admin.dashboard') ? 'admin.dashboard' : 'admin.users.index') }}">
             <span class="admin-mark" aria-hidden="true">C</span>
@@ -16,6 +16,12 @@
             @if (\Illuminate\Support\Facades\Route::has('admin.event-types.index'))
                 <x-admin.nav-item label="Event Types" route-name="admin.event-types.index" active-pattern="admin.event-types.*" />
             @endif
+            <x-admin.nav-item label="Reviews" route-name="admin.reviews.index" active-pattern="admin.reviews.*" />
         </div>
     </nav>
+
+    <form class="admin-sidebar-logout" method="POST" action="{{ route('admin.logout') }}">
+        @csrf
+        <button class="admin-nav-item" type="submit">Logout</button>
+    </form>
 </aside>

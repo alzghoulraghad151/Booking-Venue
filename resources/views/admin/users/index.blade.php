@@ -4,90 +4,91 @@
 @section('hide-layout-heading', '1')
 
 @section('content')
-<h1>Manage Users</h1>
-
-    <a href="{{ route('admin.users.create') }}">Create user</a>
+    <x-admin.list-heading title="Manage Users" :action-url="route('admin.users.create')" action-label="Create user" />
 
     @if (session('success'))
         <p role="status">{{ session('success') }}</p>
     @endif
 
-    <form action="{{ route('admin.users.index') }}" method="GET">
+    <div class="admin-users-toolbar">
+        <form class="admin-users-filters" action="{{ route('admin.users.index') }}" method="GET">
 
-        <input type="text" name="search" placeholder="Search by name, email, or phone" value="{{ $filters['search'] }}">
+            <input type="search" name="search" aria-label="Search users" placeholder="Name, email, or phone" value="{{ $filters['search'] }}">
 
-        <select name="role">
-            <option value="">All Roles</option>
-            <option value="organizer" @selected($filters['role'] === 'organizer')>
-                Organizer
-            </option>
-            <option value="venue_owner" @selected($filters['role'] === 'venue_owner')>
-                Venue Owner
-            </option>
-            <option value="admin" @selected($filters['role'] === 'admin')>
-                Admin
-            </option>
-        </select>
+            <select name="role" aria-label="Role">
+                <option value="">All Roles</option>
+                <option value="organizer" @selected($filters['role'] === 'organizer')>
+                    Organizer
+                </option>
+                <option value="venue_owner" @selected($filters['role'] === 'venue_owner')>
+                    Venue Owner
+                </option>
+                <option value="admin" @selected($filters['role'] === 'admin')>
+                    Admin
+                </option>
+            </select>
 
-        <select name="status">
-            <option value="">All Statuses</option>
-            <option value="active" @selected($filters['status'] === 'active')>
-                Active
-            </option>
-            <option value="suspended" @selected($filters['status'] === 'suspended')>
-                Suspended
-            </option>
-        </select>
+            <select name="status" aria-label="Status">
+                <option value="">All Statuses</option>
+                <option value="active" @selected($filters['status'] === 'active')>
+                    Active
+                </option>
+                <option value="suspended" @selected($filters['status'] === 'suspended')>
+                    Suspended
+                </option>
+            </select>
 
-        <select name="sort">
-            <option value="created_at" @selected($filters['sort'] === 'created_at')>
-                Registration Date
-            </option>
-            <option value="name" @selected($filters['sort'] === 'name')>
-                Name
-            </option>
-            <option value="email" @selected($filters['sort'] === 'email')>
-                Email
-            </option>
-            <option value="role" @selected($filters['sort'] === 'role')>
-                Role
-            </option>
-            <option value="status" @selected($filters['sort'] === 'status')>
-                Status
-            </option>
-        </select>
+            <select name="sort" aria-label="Sort by">
+                <option value="created_at" @selected($filters['sort'] === 'created_at')>
+                    Registration Date
+                </option>
+                <option value="name" @selected($filters['sort'] === 'name')>
+                    Name
+                </option>
+                <option value="email" @selected($filters['sort'] === 'email')>
+                    Email
+                </option>
+                <option value="role" @selected($filters['sort'] === 'role')>
+                    Role
+                </option>
+                <option value="status" @selected($filters['sort'] === 'status')>
+                    Status
+                </option>
+            </select>
 
-        <select name="direction">
-            <option value="asc" @selected($filters['direction'] === 'asc')>
-                Ascending
-            </option>
-            <option value="desc" @selected($filters['direction'] === 'desc')>
-                Descending
-            </option>
-        </select>
+            <select name="direction" aria-label="Sort direction">
+                <option value="asc" @selected($filters['direction'] === 'asc')>
+                    Ascending
+                </option>
+                <option value="desc" @selected($filters['direction'] === 'desc')>
+                    Descending
+                </option>
+            </select>
 
-        <select name="per_page">
-            <option value="5" @selected($filters['per_page'] === '5')>
-                5 users
-            </option>
-            <option value="10" @selected($filters['per_page'] === '10')>
-                10 users
-            </option>
-            <option value="20" @selected($filters['per_page'] === '20')>
-                20 users
-            </option>
-            <option value="50" @selected($filters['per_page'] === '50')>
-                50 users
-            </option>
-        </select>
+            <select name="per_page" aria-label="Users per page">
+                <option value="5" @selected($filters['per_page'] === '5')>
+                    5 users
+                </option>
+                <option value="10" @selected($filters['per_page'] === '10')>
+                    10 users
+                </option>
+                <option value="20" @selected($filters['per_page'] === '20')>
+                    20 users
+                </option>
+                <option value="50" @selected($filters['per_page'] === '50')>
+                    50 users
+                </option>
+            </select>
 
-        <button type="submit">Apply Filters</button>
+            <button type="submit">Apply filters</button>
 
-    </form>
+        </form>
+    </div>
 
-    <hr>
 
-    <table border="1" cellpadding="10" cellspacing="0">
+    <div class="admin-list-panel">
+    <div class="dashboard-table-wrap" tabindex="0" role="region" aria-label="Users table">
+    <table>
 
         <thead>
             <tr>
@@ -117,14 +118,14 @@
                             View
                         </a>
                         <a href="{{ route('admin.users.edit', $user) }}">Edit</a>
-                        @unless (auth()->id() === $user->id)
+                        @if (auth()->id() !== $user->id && Route::has('admin.users.status'))
                             <form action="{{ route('admin.users.status', $user) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="{{ $user->status === 'active' ? 'suspended' : 'active' }}">
                                 <button type="submit">{{ $user->status === 'active' ? 'Suspend' : 'Activate' }}</button>
                             </form>
-                        @endunless
+                        @endif
                     </td>
                 </tr>
             @empty
@@ -135,10 +136,7 @@
         </tbody>
 
     </table>
-
-    <br>
-
-    <div class="admin-user-pagination">
-        {{ $users->links() }}
+    </div>
+    {{ $users->links('components.admin.pagination') }}
     </div>
 @endsection

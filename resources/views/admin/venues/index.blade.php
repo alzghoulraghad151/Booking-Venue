@@ -21,8 +21,8 @@
 @endpush
 
 @section('content')
-<div>
-        <h1>Manage Venues</h1>
+<x-admin.list-heading title="Manage Venues" />
+    <div>
 
 
         <form method="GET" action="{{ route('admin.venues.index') }}">
@@ -50,6 +50,8 @@
 </form>
 
 
+    <div class="admin-list-panel">
+        <div class="dashboard-table-wrap" tabindex="0" role="region" aria-label="Venues table">
         <table>
             <thead>
                 <tr>
@@ -84,7 +86,8 @@
                 @endforelse
             </tbody>
         </table>
-
-        {{ $venues->links() }}
+        </div>
+        {{ $venues->links('components.admin.pagination') }}
+    </div>
     </div>
 @endsection

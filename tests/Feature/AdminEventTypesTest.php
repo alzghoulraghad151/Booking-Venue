@@ -38,35 +38,37 @@ class AdminEventTypesTest extends TestCase
     {
         $this->signIn();
         $this->get(route('admin.event-types.index'))->assertOk()->assertSee('No event types yet.');
-        $this->get(route('admin.event-types.create'))->assertOk()->assertSee('Corporate Conference');
+        $this->get(route('admin.event-types.create'))->assertOk()
+            ->assertSee('type="text" name="name"', false)
+            ->assertDontSee('<select id="event-type-name"', false)
+            ->assertDontSee('name="description"', false);
 
-        $this->post(route('admin.event-types.store'), ['name' => 'Dinner'])
+        $this->post(route('admin.event-types.store'), ['name' => 'Leadership Summit', 'description' => 'Ignored'])
             ->assertRedirectToRoute('admin.event-types.index');
         $type = EventType::sole();
 
-        $this->get(route('admin.event-types.index', ['search' => 'Din']))->assertOk()->assertSee('Dinner');
+        $this->get(route('admin.event-types.index', ['search' => 'Leader']))->assertOk()->assertSee('Leadership Summit')->assertDontSee('Booking details')->assertDontSee('Description');
         $this->get(route('admin.event-types.index', ['search' => 'Networking']))
             ->assertOk()->assertSee('No event types match your search.');
-        $this->get(route('admin.event-types.edit', $type))->assertOk()->assertSee('Edit Event Type');
+        $this->get(route('admin.event-types.edit', $type))->assertOk()->assertSee('Edit Event Type')->assertSee('value="Leadership Summit"', false);
 
         $this->put(route('admin.event-types.update', $type), [
-            'name' => 'Dinner',
-            'description' => 'Corporate dining',
+            'name' => 'Leadership Forum',
         ])->assertRedirectToRoute('admin.event-types.index');
-        $this->assertDatabaseHas('event_types', ['id' => $type->id, 'description' => 'Corporate dining']);
+        $this->assertDatabaseHas('event_types', ['id' => $type->id, 'name' => 'Leadership Forum', 'description' => null]);
 
         $this->delete(route('admin.event-types.destroy', $type))
             ->assertRedirectToRoute('admin.event-types.index');
         $this->assertDatabaseMissing('event_types', ['id' => $type->id]);
     }
 
-    public function test_names_must_be_approved_unique_and_valid(): void
+    public function test_names_must_be_unique_and_valid(): void
     {
         $this->signIn();
         $type = EventType::create(['name' => 'Dinner']);
         EventType::create(['name' => 'Networking']);
 
-        foreach (['', str_repeat('x', 101), 'Wedding', 'Dinner'] as $name) {
+        foreach (['', str_repeat('x', 101), 'Dinner'] as $name) {
             $this->post(route('admin.event-types.store'), ['name' => $name])->assertSessionHasErrors('name');
         }
 
@@ -88,9 +90,6 @@ class AdminEventTypesTest extends TestCase
                 ->assertSessionHasErrors('delete');
             $this->assertDatabaseHas('event_types', ['id' => $type->id]);
         }
-
-        $this->get(route('admin.event-types.index'))
-            ->assertViewHas('eventTypes', fn ($types) => (int) $types->firstWhere('name', 'Dinner')->booking_details_count === 1);
     }
 
     public function test_only_active_admins_can_manage_event_types(): void
