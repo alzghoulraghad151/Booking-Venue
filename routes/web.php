@@ -130,5 +130,6 @@ Route::prefix('owner')
     });
 
 require __DIR__ . '/zaid.php';
+require __DIR__ . '/omar.php';
 
 
