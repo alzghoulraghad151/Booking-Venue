@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $venue->name }}</title>
-    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
-</head>
-<body>
-    <main>
+@extends('layouts.users')
+
+@section('title', $venue->name)
+
+@section('content')
+    <div class="site-container site-page">
         <h1>{{ $venue->name }}</h1>
         <p>{{ $venue->address }}</p>
 
@@ -77,6 +73,5 @@
                 <p>No spaces are currently available at this venue.</p>
             @endforelse
         </section>
-    </main>
-</body>
-</html>
+    </div>
+@endsection
