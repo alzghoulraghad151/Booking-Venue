@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Venue</title>
-</head>
-<body>
-    <main>
+@extends('layouts.owner')
+
+@section('title', 'Add Venue')
+@section('hide-layout-heading', '1')
+
+@section('content')
+<div>
         <h1>Add Venue</h1>
 
 
 
-        <form method="POST" action="{{ route('owner.venues.store') }}">
+        <form method="POST" action="{{ route('owner.venues.store') }}" enctype="multipart/form-data">
     @csrf
 
     <div>
@@ -41,11 +39,19 @@
         @enderror
     </div>
 
+    <div>
+        <label for="image">Venue image (JPEG, PNG or WebP, up to 2 MB)</label>
+        <input id="image" name="image" type="file"
+               accept="image/jpeg,image/png,image/webp" required>
+        @error('image')
+            <p role="alert">{{ $message }}</p>
+        @enderror
+    </div>
+
     <button type="submit">Save Venue</button>
 </form>
 
        
         <a href="{{ route('owner.venues.index') }}">Back to My Venues</a>
-    </main>
-</body>
-</html>
+    </div>
+@endsection

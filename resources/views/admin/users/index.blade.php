@@ -1,23 +1,20 @@
+@extends('layouts.admin')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Manage Users</title>
-</head>
-<body>
+@section('title', 'Admin - Manage Users')
+@section('hide-layout-heading', '1')
 
-    <h1>Manage Users</h1>
+@section('content')
+<h1>Manage Users</h1>
+
+    <a href="{{ route('admin.users.create') }}">Create user</a>
+
+    @if (session('success'))
+        <p role="status">{{ session('success') }}</p>
+    @endif
 
     <form action="{{ route('admin.users.index') }}" method="GET">
 
-        <input
-            type="text"
-            name="search"
-            placeholder="Search by name, email, or phone"
-            value="{{ $filters['search'] }}"
-        >
+        <input type="text" name="search" placeholder="Search by name, email, or phone" value="{{ $filters['search'] }}">
 
         <select name="role">
             <option value="">All Roles</option>
@@ -90,7 +87,6 @@
 
     <hr>
 
-    {{-- Users Table --}}
     <table border="1" cellpadding="10" cellspacing="0">
 
         <thead>
@@ -102,6 +98,7 @@
                 <th>Role</th>
                 <th>Status</th>
                 <th>Registration Date</th>
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -115,10 +112,23 @@
                     <td>{{ $user->role }}</td>
                     <td>{{ $user->status }}</td>
                     <td>{{ $user->created_at->format('Y-m-d') }}</td>
+                    <td>
+                        <a href="{{ route('admin.users.show', $user->id) }}">
+                            View
+                        </a>
+                        @unless (auth()->id() === $user->id)
+                            <form action="{{ route('admin.users.status', $user) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="{{ $user->status === 'active' ? 'suspended' : 'active' }}">
+                                <button type="submit">{{ $user->status === 'active' ? 'Suspend' : 'Activate' }}</button>
+                            </form>
+                        @endunless
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7">No users found what so ever.</td>
+                    <td colspan="8">No users found.</td>
                 </tr>
             @endforelse
         </tbody>
@@ -128,6 +138,4 @@
     <br>
 
     {{ $users->links() }}
-
-</body>
-</html>
+@endsection

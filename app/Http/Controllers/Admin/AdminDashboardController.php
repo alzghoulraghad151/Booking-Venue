@@ -3,63 +3,68 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Booking;
+use App\Models\Review;
+use App\Models\User;
+use App\Models\Venue;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
-        return view('admin.dashboard');
-    }
+        $totalUsers = User::count();
+        $totalVenues = Venue::count();
+        $totalBookings = Booking::count();
+        $totalOwners = User::where('role', 'venue_owner')->count();
+        $pendingVenues = Venue::where('status', 'pending')->count();
+        $pendingBookings = Booking::where('status', 'pending')->count();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $recentBookings = Booking::with(['customer', 'venue'])
+            ->latest()
+            ->orderByDesc('id')
+            ->limit(5)
+            ->get();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $venuesAwaitingReview = Venue::where('status', 'pending')
+            ->latest()
+            ->orderByDesc('id')
+            ->limit(5)
+            ->get();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $totalPaid = DB::table('payments')->where('status', 'paid')->sum('amount');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $paymentCounts = DB::table('payments')
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $totalCommission = DB::table('booking_details')
+            ->join('bookings', 'bookings.id', '=', 'booking_details.booking_id')
+            ->whereIn('bookings.status', ['confirmed', 'completed'])
+            ->sum('booking_details.commission_amount');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $averageRating = Review::avg('rating');
+        $reviews = Review::with(['booking.customer', 'booking.venue'])
+            ->latest()
+            ->orderByDesc('id')
+            ->simplePaginate(5, ['*'], 'reviews_page');
+
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'totalVenues',
+            'totalBookings',
+            'totalOwners',
+            'pendingVenues',
+            'pendingBookings',
+            'recentBookings',
+            'venuesAwaitingReview',
+            'totalPaid',
+            'paymentCounts',
+            'totalCommission',
+            'averageRating',
+            'reviews',
+        ));
     }
 }

@@ -13,9 +13,7 @@ class OwnerMiddleware
        $user = $request->user();
 
 abort_unless(
-    $user?->role === 'venue_owner' && $user->status === 'active',
-    403
-);
+    $user?->role === 'venue_owner' && $user->status === 'active', 403, "Permission Denied");
 
 return $next($request);
     }

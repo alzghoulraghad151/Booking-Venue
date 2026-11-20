@@ -1,3 +1,9 @@
+@extends('layouts.owner')
+
+@section('title', 'Space Layouts')
+@section('hide-layout-heading', '1')
+
+@section('content')
 <h1>Space Layouts</h1>
 
 <a href="{{ route('owner.space-layouts.create') }}">Add Space Layout</a>
@@ -56,3 +62,4 @@
         @endforelse
     </tbody>
 </table>
+@endsection
