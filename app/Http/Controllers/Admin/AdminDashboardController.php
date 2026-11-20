@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\Review;
+use Carbon\CarbonImmutable;
 use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Support\Facades\DB;
@@ -33,23 +33,27 @@ class AdminDashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $totalPaid = DB::table('payments')->where('status', 'paid')->sum('amount');
+        $monthStart = CarbonImmutable::now('Asia/Amman')->startOfMonth();
+        $monthEnd = $monthStart->addMonth();
+        $monthLabel = $monthStart->format('F Y');
+
+        $monthlyPaid = DB::table('payments')
+            ->where('status', 'paid')
+            ->where('paid_at', '>=', $monthStart->utc())
+            ->where('paid_at', '<', $monthEnd->utc())
+            ->sum('amount');
 
         $paymentCounts = DB::table('payments')
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
 
-        $totalCommission = DB::table('booking_details')
+        $monthlyCommission = DB::table('booking_details')
             ->join('bookings', 'bookings.id', '=', 'booking_details.booking_id')
             ->whereIn('bookings.status', ['confirmed', 'completed'])
+            ->where('booking_details.start_at', '>=', $monthStart->utc())
+            ->where('booking_details.start_at', '<', $monthEnd->utc())
             ->sum('booking_details.commission_amount');
-
-        $averageRating = Review::avg('rating');
-        $reviews = Review::with(['booking.customer', 'booking.venue'])
-            ->latest()
-            ->orderByDesc('id')
-            ->simplePaginate(5, ['*'], 'reviews_page');
 
         return view('admin.dashboard', compact(
             'totalUsers',
@@ -60,11 +64,10 @@ class AdminDashboardController extends Controller
             'pendingBookings',
             'recentBookings',
             'venuesAwaitingReview',
-            'totalPaid',
+            'monthlyPaid',
             'paymentCounts',
-            'totalCommission',
-            'averageRating',
-            'reviews',
+            'monthlyCommission',
+            'monthLabel',
         ));
     }
 }

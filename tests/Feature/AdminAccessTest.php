@@ -8,18 +8,20 @@ use Tests\TestCase;
 
 class AdminAccessTest extends TestCase
 {
-    public function test_guests_cannot_access_admin_pages_without_a_login_route(): void
+    public function test_guest_json_requests_to_admin_pages_are_unauthorized(): void
     {
-        $this->get('/admin/users')->assertUnauthorized();
-        $this->get('/admin/users/1')->assertUnauthorized();
+        $this->getJson('/admin/users')->assertUnauthorized();
+        $this->getJson('/admin/users/1')->assertUnauthorized();
     }
 
     public function test_guests_are_redirected_when_the_shared_login_route_exists(): void
     {
-        Route::get('/test-login', fn () => 'Login')->name('login');
-        Route::getRoutes()->refreshNameLookups();
+        if (! Route::has('login')) {
+            Route::get('/test-login', fn () => 'Login')->name('login');
+            Route::getRoutes()->refreshNameLookups();
+        }
 
-        $this->get('/admin/users')->assertRedirect('/test-login');
+        $this->get('/admin/users')->assertRedirectToRoute('login');
     }
 
     public function test_non_admin_roles_and_suspended_admins_are_forbidden(): void

@@ -29,8 +29,6 @@
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Booking details</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -38,8 +36,6 @@
                     @forelse ($eventTypes as $eventType)
                         <tr>
                             <th scope="row">{{ $eventType->name }}</th>
-                            <td>{{ $eventType->description ?? '—' }}</td>
-                            <td>{{ $eventType->booking_details_count }}</td>
                             <td>
                                 <a href="{{ route('admin.event-types.edit', $eventType) }}">Edit</a>
                                 <details class="event-types-delete">
@@ -54,7 +50,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">{{ $search === '' ? 'No event types yet.' : 'No event types match your search.' }}</td>
+                            <td colspan="2">{{ $search === '' ? 'No event types yet.' : 'No event types match your search.' }}</td>
                         </tr>
                     @endforelse
                 </tbody>

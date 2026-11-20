@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEventTypeController;
+use App\Http\Controllers\Admin\AdminLogoutController;
+use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Owner\OwnerCalendarController;
 use App\Http\Controllers\Owner\OwnerDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +11,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth', 'admin'])
     ->name('admin.dashboard');
+
+Route::post('/admin/logout', AdminLogoutController::class)
+    ->middleware('auth')
+    ->name('admin.logout');
 
 Route::get('/admin/event-types', [AdminEventTypeController::class, 'index'])
     ->middleware(['auth', 'admin'])
@@ -33,6 +39,10 @@ Route::put('/admin/event-types/{eventType}', [AdminEventTypeController::class, '
 Route::delete('/admin/event-types/{eventType}', [AdminEventTypeController::class, 'destroy'])
     ->middleware(['auth', 'admin'])
     ->name('admin.event-types.destroy');
+
+Route::get('/admin/reviews', [AdminReviewController::class, 'index'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.reviews.index');
 
 Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index'])
     ->middleware(['auth', 'owner'])
