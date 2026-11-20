@@ -9,6 +9,10 @@
     <main>
         <h1>ابحث عن مساحة</h1>
 
+        @if (session('favourite_status'))
+    <p role="status">{{ session('favourite_status') }}</p>
+@endif
+
         <form method="GET" action="{{ route('spaces.search') }}">
             <label for="city">المدينة</label>
             <input id="city" name="city" value="{{ old('city', $city) }}" maxlength="100">
@@ -58,6 +62,15 @@
                    </a>
                    — {{ $space->venue->address }}
                  </p>
+
+                 @auth
+               <form method="POST" action="{{ route('account.favourites.store', ['space' => $space->id]) }}">
+                 @csrf
+
+                 <button type="submit">Save to favourites</button>
+               </form>
+                @endauth
+
                 </article>
             @empty
               @unless ($voiceSummary)
