@@ -11,12 +11,8 @@ require __DIR__.'/shatha_routes.php';
 use App\Http\Controllers\Admin\AdminVenueController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Admin\AdminBookingController;
-
-
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-
-    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 
 
