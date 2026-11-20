@@ -13,19 +13,54 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class OwnerSpaceController extends Controller
 {
     public function index(Request $request): View
     {
-        $spaces = Space::query()
-            ->with(['venue', 'images'])
-            ->whereHas('venue', fn ($query) => $query->where('owner_id', $request->user()->getKey()))
-            ->latest()
-            ->paginate(15);
+        $allowedSorts = ['name', 'capacity', 'hourly_rate', 'status', 'created_at'];
+        $filters = array_merge([
+            'search' => '',
+            'status' => '',
+            'sort' => 'created_at',
+            'direction' => 'desc',
+            'per_page' => '10',
+        ], array_filter(
+            $request->validate([
+                'search' => ['nullable', 'string', 'max:100'],
+                'status' => ['nullable', Rule::in(['active', 'inactive', 'maintenance'])],
+                'sort' => ['nullable', Rule::in($allowedSorts)],
+                'direction' => ['nullable', Rule::in(['asc', 'desc'])],
+                'per_page' => ['nullable', Rule::in(['5', '10', '20', '50'])],
+            ]),
+            static fn ($value) => $value !== null && $value !== ''
+        ));
 
-        return view('owner.spaces.index', compact('spaces'));
+        $query = Space::query()
+            ->with(['venue', 'images'])
+            ->whereHas('venue', fn ($venueQuery) => $venueQuery->where('owner_id', $request->user()->getKey()));
+
+        if ($filters['search'] !== '') {
+            $search = $filters['search'];
+
+            $query->where(function ($spaceQuery) use ($search) {
+                $spaceQuery->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('venue', fn ($venueQuery) => $venueQuery->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        if ($filters['status'] !== '') {
+            $query->where('status', $filters['status']);
+        }
+
+        $spaces = $query
+            ->orderBy($filters['sort'], $filters['direction'])
+            ->paginate((int) $filters['per_page'])
+            ->withQueryString();
+
+        return view('owner.spaces.index', compact('spaces', 'filters'));
     }
 
     public function create(Request $request): View
