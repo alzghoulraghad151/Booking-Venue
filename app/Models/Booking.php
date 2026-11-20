@@ -22,7 +22,8 @@ class Booking extends Model
 
     public function venue(): BelongsTo
     {
-        return $this->belongsTo(Venue::class);
+        
+        return $this->belongsTo(Venue::class)->withTrashed();
     }
 
 

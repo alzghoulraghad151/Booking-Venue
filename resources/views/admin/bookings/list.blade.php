@@ -1,10 +1,24 @@
-@extends('layouts.bookings')
+@extends('layouts.admin')
 
 @section('title', 'Bookings Management')
-@section('heading', 'Bookings Management')
-@section('subtitle', 'Review booking activity across all EventPlan venues.')
 
 @section('content')
+    <link rel="stylesheet" href="{{ asset('css/convene-bookings.css') }}">
+    <div class="bookings-page">
+        <p class="page-subtitle">Review booking activity across all EventPlan venues.</p>
+        @if (session('success'))
+            <div class="alert alert--success" role="status">{{ session('success') }}</div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert--error" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
     <section class="metric-grid" aria-label="Booking summary">
         <article class="metric-card">
             <span class="metric-label">Total bookings</span>
@@ -64,6 +78,22 @@
             <div class="field">
                 <label for="date">Event date</label>
                 <input id="date" name="date" type="date" value="{{ $filters['date'] ?? '' }}">
+            </div>
+            <div class="field">
+                <label for="sort">Sort by</label>
+                <select id="sort" name="sort">
+                    @foreach ([
+                        'newest' => 'Newest first',
+                        'oldest' => 'Oldest first',
+                        'event_date_asc' => 'Event date (earliest)',
+                        'event_date_desc' => 'Event date (latest)',
+                        'total_desc' => 'Total (highest)',
+                        'total_asc' => 'Total (lowest)',
+                        'guests_desc' => 'Guests (most)',
+                    ] as $value => $label)
+                        <option value="{{ $value }}" @selected(($filters['sort'] ?? 'newest') === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="filter-actions">
                 <button class="button button--primary" type="submit">Apply filters</button>
@@ -132,6 +162,7 @@
             </table>
         </div>
 
-        {{ $bookings->links('components.pagination') }}
+        {{ $bookings->links() }}
     </section>
+    </div>
 @endsection
