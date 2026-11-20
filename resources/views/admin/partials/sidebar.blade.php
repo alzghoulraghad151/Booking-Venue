@@ -12,12 +12,6 @@
             <x-admin.nav-item label="Dashboard" route-name="admin.dashboard" active-pattern="admin.dashboard" />
             <x-admin.nav-item label="Venues" route-name="admin.venues.index" active-pattern="admin.venues.*" />
             <x-admin.nav-item label="Bookings" route-name="admin.bookings.index" active-pattern="admin.bookings.*" />
-            @if (\Illuminate\Support\Facades\Route::has('admin.venues.index'))
-                <x-admin.nav-item label="Venues" route-name="admin.venues.index" active-pattern="admin.venues.*" />
-            @endif
-            @if (\Illuminate\Support\Facades\Route::has('admin.bookings.index'))
-                <x-admin.nav-item label="Bookings" route-name="admin.bookings.index" active-pattern="admin.bookings.*" />
-            @endif
             <x-admin.nav-item label="Users" route-name="admin.users.index" active-pattern="admin.users.*" />
             @if (\Illuminate\Support\Facades\Route::has('admin.event-types.index'))
                 <x-admin.nav-item label="Event Types" route-name="admin.event-types.index" active-pattern="admin.event-types.*" />

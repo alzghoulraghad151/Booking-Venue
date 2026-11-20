@@ -1,0 +1,125 @@
+/* Styles for the Admin / Owner booking pages (everything is scoped under .bookings-page). */
+.bookings-standalone {
+    --convene-navy: #172b3a;
+    --convene-cream: #f5f2ec;
+    --convene-warm: #e5a66a;
+    --convene-white: #ffffff;
+    --convene-sage: #526c68;
+    margin: 0;
+    min-height: 100vh;
+    background: var(--convene-cream);
+    color: var(--convene-navy);
+    font: 400 14px/1.5 system-ui, sans-serif;
+}
+
+.bookings-page {
+    --convene-navy: #172b3a;
+    --convene-cream: #f5f2ec;
+    --convene-warm: #e5a66a;
+    --convene-white: #ffffff;
+    --convene-sage: #526c68;
+    --bk-line: #dedbd5;
+    display: grid;
+    gap: 16px;
+    color: var(--convene-navy);
+}
+
+.bookings-standalone .bookings-page { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+.bookings-page *, .bookings-page *::before, .bookings-page *::after { box-sizing: border-box; }
+.bookings-page h1, .bookings-page h2, .bookings-page p { margin: 0; }
+.bookings-page :focus-visible { outline: 3px solid var(--convene-sage); outline-offset: 3px; }
+.bookings-page .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.bookings-page .page-title { font-size: 30px; line-height: 1.15; }
+.bookings-page .page-subtitle { color: var(--convene-sage); }
+.bookings-page .eyebrow { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--convene-sage); font-weight: 700; }
+
+/* Messages */
+.bookings-page .alert { padding: 10px 14px; border-radius: 10px; border: 1px solid; }
+.bookings-page .alert--success { background: #e3edeb; border-color: #9fbab5; color: #234742; }
+.bookings-page .alert--error { background: #fbeaec; border-color: #e3a9ae; color: #881c24; }
+.bookings-page .alert ul { margin: 0; padding-left: 18px; }
+
+/* Summary cards */
+.bookings-page .metric-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 175px), 1fr)); }
+.bookings-page .metric-card { padding: 16px; display: grid; gap: 2px; background: var(--convene-white); border: 1px solid var(--bk-line); border-top: 3px solid var(--convene-sage); border-radius: 12px; }
+.bookings-page .metric-card--warm { border-top-color: var(--convene-warm); }
+.bookings-page .metric-label { font-size: 13px; color: var(--convene-sage); font-weight: 600; }
+.bookings-page .metric-value { font-size: 28px; line-height: 1.2; }
+.bookings-page .metric-note { font-size: 12px; color: var(--convene-sage); }
+
+/* Panels */
+.bookings-page .panel { min-width: 0; padding: 16px; background: var(--convene-white); border: 1px solid var(--bk-line); border-radius: 12px; }
+.bookings-page .panel-heading { margin-bottom: 12px; }
+.bookings-page .panel-heading--row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; }
+.bookings-page .panel-heading h2 { font-size: 18px; }
+.bookings-page .panel-heading p { color: var(--convene-sage); font-size: 13px; }
+.bookings-page .result-count { padding: 3px 10px; background: var(--convene-cream); border-radius: 999px; font-weight: 600; font-size: 13px; }
+
+/* Filters / form fields */
+.bookings-page .filter-grid { display: grid; gap: 12px; align-items: end; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.bookings-page .field { display: grid; gap: 4px; }
+.bookings-page .field label { font-weight: 600; }
+.bookings-page .field input, .bookings-page .field select { min-height: 40px; width: 100%; padding: 8px 10px; border: 1px solid var(--convene-sage); border-radius: 8px; background: var(--convene-white); color: inherit; font: inherit; }
+.bookings-page .filter-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Buttons */
+.bookings-page .button { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 8px 14px; border: 1px solid transparent; border-radius: 8px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; color: var(--convene-navy); background: var(--convene-white); }
+.bookings-page .button--primary { background: var(--convene-warm); }
+.bookings-page .button--quiet { border-color: var(--convene-sage); }
+.bookings-page .button--danger { background: #881c24; color: #fff; }
+
+/* Tables */
+.bookings-page .table-scroll { overflow-x: auto; }
+.bookings-page .data-table { width: 100%; border-collapse: collapse; text-align: left; }
+.bookings-page .data-table th, .bookings-page .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--convene-cream); vertical-align: top; }
+.bookings-page .data-table thead { background: var(--convene-cream); }
+.bookings-page .data-table td.amount { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bookings-page .cell-primary, .bookings-page .cell-secondary { display: block; }
+.bookings-page .cell-secondary { font-size: 12px; color: var(--convene-sage); }
+.bookings-page .booking-id, .bookings-page .table-link { color: var(--convene-navy); font-weight: 700; text-underline-offset: 3px; }
+
+/* Status badges */
+.bookings-page .status-badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-weight: 600; font-size: 12px; background: var(--convene-cream); }
+.bookings-page .status-badge--pending { color: #74340f; background: #fff0dc; }
+.bookings-page .status-badge--confirmed, .bookings-page .status-badge--paid { color: #234742; background: #e3edeb; }
+.bookings-page .status-badge--completed { background: #e2ebf2; }
+.bookings-page .status-badge--cancelled, .bookings-page .status-badge--refunded { color: #49515c; background: #eef0f2; }
+.bookings-page .status-badge--rejected, .bookings-page .status-badge--failed { color: #881c24; background: #fbeaec; }
+
+/* Empty states */
+.bookings-page .empty-state { display: grid; justify-items: center; gap: 4px; padding: 24px 12px; text-align: center; color: var(--convene-sage); }
+.bookings-page .empty-mark { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: var(--convene-cream); font-weight: 700; }
+.bookings-page .empty-inline { padding: 12px 0; color: var(--convene-sage); }
+
+/* Detail pages */
+.bookings-page .detail-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.bookings-page .info-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.bookings-page .info-item { display: grid; gap: 2px; padding: 10px 12px; background: var(--convene-cream); border-radius: 10px; }
+.bookings-page .info-item span { font-size: 12px; color: var(--convene-sage); }
+.bookings-page .totals-strip { display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: flex-end; margin-top: 12px; }
+.bookings-page .totals-strip div { display: grid; gap: 2px; text-align: right; }
+.bookings-page .totals-strip span { font-size: 12px; color: var(--convene-sage); }
+.bookings-page .review-card { display: flex; gap: 16px; align-items: flex-start; }
+.bookings-page .review-score { display: grid; place-items: center; min-width: 72px; padding: 10px; background: var(--convene-cream); border-radius: 12px; }
+.bookings-page .review-score strong { font-size: 28px; line-height: 1.1; }
+.bookings-page .review-score span { font-size: 12px; color: var(--convene-sage); }
+
+/* Owner pages */
+.bookings-page .owner-welcome { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px; background: var(--convene-white); border: 1px solid var(--bk-line); border-radius: 12px; }
+.bookings-page .owner-avatar { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: var(--convene-warm); font-weight: 700; }
+.bookings-page .owner-welcome > div:not(.owner-avatar) { display: grid; }
+.bookings-page .owner-id { margin-left: auto; color: var(--convene-sage); font-size: 13px; }
+.bookings-page .decision-banner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding: 16px; background: #fff0dc; border: 1px solid var(--convene-warm); border-radius: 12px; }
+.bookings-page .decision-banner > div:first-child { display: grid; gap: 2px; }
+.bookings-page .decision-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Pagination (Laravel default markup) */
+.bookings-page nav[role="navigation"] { margin-top: 12px; }
+.bookings-page nav[role="navigation"] svg { width: 16px; height: 16px; }
+.bookings-page nav[role="navigation"] a, .bookings-page nav[role="navigation"] span[aria-current] > span { padding: 4px 10px; }
+.bookings-page nav[role="navigation"] > div:first-child { display: none; } /* mobile prev/next row */
+.bookings-page nav[role="navigation"] > div:last-child { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.bookings-page nav[role="navigation"] span.relative { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.bookings-page nav[role="navigation"] a, .bookings-page nav[role="navigation"] span[aria-disabled] > span, .bookings-page nav[role="navigation"] span[aria-current] > span { display: inline-block; border: 1px solid var(--bk-line); border-radius: 6px; color: var(--convene-navy); text-decoration: none; }
+.bookings-page nav[role="navigation"] span[aria-current] > span { background: var(--convene-warm); }
