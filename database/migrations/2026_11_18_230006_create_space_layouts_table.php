@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('space_layouts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('space_id')->constrained('spaces');
-            $table->string('name', 100);
+            $table->string('name', 100)->unique();
             $table->unsignedInteger('capacity');
             $table->timestamps();
         });

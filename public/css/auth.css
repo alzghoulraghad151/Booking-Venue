@@ -1,0 +1,137 @@
+.auth-page {
+    box-sizing: border-box;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1.25rem;
+    display: grid;
+    place-items: center;
+    background: var(--color-cream);
+    color: var(--color-navy);
+    font-family: system-ui, sans-serif;
+}
+
+.auth-card {
+    box-sizing: border-box;
+    width: min(100%, 26rem);
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    border-radius: 1rem;
+    background: var(--color-white);
+    box-shadow: 0 12px 36px rgb(23 43 58 / 10%);
+}
+
+.auth-card h1 {
+    margin: 0;
+    font-size: 1.875rem;
+    line-height: 1.2;
+}
+
+.auth-card form {
+    display: grid;
+    gap: 1rem;
+    margin-block: 1.5rem;
+}
+
+.auth-card label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-weight: 600;
+}
+
+.auth-card input,
+.auth-submit {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    border-radius: 0.5rem;
+    font: inherit;
+}
+
+.auth-card input {
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--color-sage);
+    background: var(--color-white);
+    color: var(--color-navy);
+}
+
+.auth-submit {
+    padding: 0.625rem 1rem;
+    border: 0;
+    background: var(--color-warm);
+    color: var(--color-navy);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.auth-card a {
+    color: var(--color-sage);
+    text-underline-offset: 0.2em;
+}
+
+.auth-card :focus-visible {
+    outline: 2px solid var(--color-sage);
+    outline-offset: 2px;
+}
+
+.auth-card [role="alert"] {
+    margin: 0.375rem 0 0;
+    color: #a12626;
+    font-size: 0.875rem;
+}
+
+.password-field {
+    position: relative;
+}
+
+.auth-card .password-field input {
+    padding-inline-end: 3rem;
+}
+
+.password-eye {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-sage);
+    cursor: pointer;
+}
+
+.password-eye svg {
+    vertical-align: middle;
+}
+
+
+
+
+
+
+.password-rules {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0.625rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: #626b70;
+    font-size: 0.875rem;
+}
+
+.password-rules li::before {
+    display: inline-block;
+    width: 1.25rem;
+    content: "○";
+}
+
+.password-rules .is-met {
+    color: #247047;
+}
+
+.password-rules .is-met::before {
+    content: "✓";
+}
+
+.auth-submit:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}

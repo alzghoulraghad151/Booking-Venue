@@ -4,10 +4,7 @@
 @section('hide-layout-heading', '1')
 
 @section('content')
-{{-- Existing Admin Sidebar --}}
-    @include('admin.partials.sidebar')
 
-    <main class="admin-main">
 
         @if (session('success'))
             <p role="status">{{ session('success') }}</p>
@@ -64,5 +61,4 @@
 
         </section>
 
-    </div>
 @endsection

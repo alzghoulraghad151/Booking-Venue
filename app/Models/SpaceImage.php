@@ -9,6 +9,7 @@ class SpaceImage extends Model
 {
     protected $fillable = [
         'image_url',
+        'cloudinary_public_id',
         'is_primary',
     ];
 
