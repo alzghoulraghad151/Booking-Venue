@@ -50,6 +50,6 @@ Route::prefix('owner')->name('owner.')->middleware(['auth', 'owner'])->group(fun
     ->name('packages.show');
 
     Route::delete('/packages/{id}', [OwnerPackageController::class, 'destroy'])
-    ->whereNumber('id')
+     ->whereNumber('id')
     ->name('packages.destroy');
 });
