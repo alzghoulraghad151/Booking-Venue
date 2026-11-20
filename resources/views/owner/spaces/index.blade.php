@@ -20,6 +20,44 @@
 
         <a href="{{ route('owner.spaces.create') }}">Add space</a>
 
+        <form action="{{ route('owner.spaces.index') }}" method="GET">
+            <label for="search">Search</label>
+            <input id="search" type="text" name="search" placeholder="Search by space or venue name" value="{{ $filters['search'] }}">
+
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="">All statuses</option>
+                <option value="active" @selected($filters['status'] === 'active')>Active</option>
+                <option value="inactive" @selected($filters['status'] === 'inactive')>Inactive</option>
+                <option value="maintenance" @selected($filters['status'] === 'maintenance')>Maintenance</option>
+            </select>
+
+            <label for="sort">Sort by</label>
+            <select id="sort" name="sort">
+                <option value="created_at" @selected($filters['sort'] === 'created_at')>Date added</option>
+                <option value="name" @selected($filters['sort'] === 'name')>Name</option>
+                <option value="capacity" @selected($filters['sort'] === 'capacity')>Capacity</option>
+                <option value="hourly_rate" @selected($filters['sort'] === 'hourly_rate')>Hourly rate</option>
+                <option value="status" @selected($filters['sort'] === 'status')>Status</option>
+            </select>
+
+            <label for="direction">Direction</label>
+            <select id="direction" name="direction">
+                <option value="asc" @selected($filters['direction'] === 'asc')>Ascending</option>
+                <option value="desc" @selected($filters['direction'] === 'desc')>Descending</option>
+            </select>
+
+            <label for="per_page">Spaces per page</label>
+            <select id="per_page" name="per_page">
+                <option value="5" @selected($filters['per_page'] === '5')>5 spaces</option>
+                <option value="10" @selected($filters['per_page'] === '10')>10 spaces</option>
+                <option value="20" @selected($filters['per_page'] === '20')>20 spaces</option>
+                <option value="50" @selected($filters['per_page'] === '50')>50 spaces</option>
+            </select>
+
+            <button type="submit">Apply filters</button>
+        </form>
+
         <table>
             <thead>
                 <tr>
@@ -58,7 +96,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7">You have not added any spaces yet.</td></tr>
+                    <tr><td colspan="7">No spaces match these filters.</td></tr>
                 @endforelse
             </tbody>
         </table>
