@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Owner;
 
 use App\Models\EventType;
 use App\Models\Space;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Package;
@@ -21,7 +22,7 @@ class OwnerPackageController extends Controller
         'status' => 'nullable|in:active,inactive',
     ]);
 
-    $query = Package::where('owner_id', auth()->id())
+    $query = Package::where('owner_id', Auth::id())
         ->with('eventTypes');
 
     $search = $filters['search'] ?? '';
@@ -44,7 +45,7 @@ class OwnerPackageController extends Controller
      */
     public function create()
     { 
-       $spaces = Space::whereRelation('venue', 'owner_id', auth()->id())
+       $spaces = Space::whereRelation('venue', 'owner_id', Auth::id())
         ->orderBy('name')
         ->get(['id', 'name']);
 
@@ -131,7 +132,7 @@ class OwnerPackageController extends Controller
      */
     public function show(string $id)
 {
-    $package = Package::where('owner_id', auth()->id())
+    $package = Package::where('owner_id', Auth::id())
         ->with(['items.space', 'eventTypes'])
         ->findOrFail($id);
 
@@ -143,7 +144,7 @@ class OwnerPackageController extends Controller
      */
     public function edit(string $id)
 {
-    $ownerId = auth()->id();
+    $ownerId = Auth::id();
 
     $package = Package::where('owner_id', $ownerId)->findOrFail($id);
 
@@ -178,7 +179,7 @@ class OwnerPackageController extends Controller
      */
 public function update(Request $request, string $id)
 {
-    $ownerId = auth()->id();
+    $ownerId = Auth::id();
     $package = Package::where('owner_id', $ownerId)->findOrFail($id);
 
     $data = $request->validate([
@@ -273,7 +274,7 @@ public function update(Request $request, string $id)
 }
 public function updateStatus(Request $request, string $id)
 {
-    $package = Package::where('owner_id', auth()->id())->findOrFail($id);
+    $package = Package::where('owner_id', Auth::id())->findOrFail($id);
 
     $request->validate([
         'is_active' => 'required|boolean',
@@ -289,7 +290,7 @@ public function updateStatus(Request $request, string $id)
      */
  public function destroy(string $id)
 {
-    $ownerId = auth()->id();
+    $ownerId = Auth::id();
     $connection = (new Package())->getConnection();
 
     $connection->transaction(function () use ($connection, $ownerId, $id) {
