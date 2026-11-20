@@ -6,7 +6,7 @@ use App\Http\Controllers\PublicSpaceSearchController;
 use App\Http\Controllers\Owner\OwnerSpaceController;
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
-require __DIR__.'/shatha_routes.php';
+
 use App\Http\Controllers\Admin\AdminVenueController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Admin\AdminBookingController;
@@ -146,3 +146,4 @@ Route::prefix('owner')
 require __DIR__ . '/zaid.php';
 require __DIR__ . '/omar.php';
 require __DIR__ . '/yousef.php';
+require __DIR__.'/shatha_routes.php';
