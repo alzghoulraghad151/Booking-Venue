@@ -170,3 +170,53 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
     .calendar-days--week, .calendar-days--month { grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
     .calendar-day-spacer { display: none; }
 }
+/* Admin user list pagination (Laravel's default Tailwind view without Tailwind). */
+.admin-user-pagination { margin-top: 16px; }
+.admin-user-pagination nav > div:first-child { display: none; }
+.admin-user-pagination nav > div:nth-child(2) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.admin-user-pagination nav > div:nth-child(2) p { margin: 0; }
+.admin-user-pagination nav > div:nth-child(2) > div:last-child {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+}
+.admin-user-pagination nav a[aria-label^="Go to page"],
+.admin-user-pagination nav a[rel="prev"],
+.admin-user-pagination nav a[rel="next"],
+.admin-user-pagination nav [aria-current="page"] > span,
+.admin-user-pagination nav [aria-disabled="true"] > span {
+    display: inline-flex;
+    min-width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 9px;
+    border: 1px solid #dedbd5;
+    background: var(--convene-white);
+    color: var(--convene-navy);
+    font-size: 14px;
+    line-height: 1;
+    text-decoration: none;
+}
+.admin-user-pagination nav [aria-current="page"] > span {
+    background: var(--convene-navy);
+    color: var(--convene-white);
+    font-weight: 700;
+}
+.admin-user-pagination nav [aria-disabled="true"] > span { color: #7a858b; }
+.admin-user-pagination nav svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    max-width: 16px;
+}
+@media (max-width: 600px) {
+    .admin-user-pagination nav > div:nth-child(2) { align-items: flex-start; }
+    .admin-user-pagination nav > div:nth-child(2) > div:last-child { max-width: 100%; }
+}
