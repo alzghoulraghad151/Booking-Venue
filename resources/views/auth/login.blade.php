@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <script src="{{ asset('js/auth-submit.js') }}" defer></script>
     <script src="{{ asset('js/login.js') }}" defer></script>
 </head>
 <body class="auth-page">
@@ -55,9 +56,11 @@
                 @enderror
             </div>
 
-            <button type="submit" class="auth-submit">Sign in</button>
+          <button type="submit" class="auth-submit" data-pending-label="Signing in…">
+    Sign in
+</button>
         </form>
-
+<p><a href="{{ route('password.request') }}">Forgot password?</a></p>
         <a href="{{ route('register') }}">Create an account</a>
     </main>
 </body>
