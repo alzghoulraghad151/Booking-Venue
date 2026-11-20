@@ -2,6 +2,10 @@
 
 @section('title', $eventType->exists ? 'Edit Event Type' : 'Add Event Type')
 
+@section('subtitle', $eventType->exists
+    ? 'Update the name shown wherever this event type is used.'
+    : 'Add a name organizers can use to classify an event.')
+
 @section('content')
     <form class="dashboard-panel event-types-form" method="POST"
           action="{{ $eventType->exists ? route('admin.event-types.update', $eventType) : route('admin.event-types.store') }}">
@@ -19,8 +23,8 @@
         @enderror
 
         <div class="event-types-actions">
-            <button class="event-types-primary" type="submit">Save event type</button>
-            <a href="{{ route('admin.event-types.index') }}">Cancel</a>
+            <button class="admin-button admin-button--primary event-types-primary" type="submit">Save event type</button>
+            <a class="admin-button admin-button--outline" href="{{ route('admin.event-types.index') }}">Cancel</a>
         </div>
     </form>
 @endsection

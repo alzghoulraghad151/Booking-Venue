@@ -1,3 +1,4 @@
+@php($adminActions = request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*'))
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,8 +10,12 @@
     @stack('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-admin-ui.css') }}">
     <script src="{{ asset('js/convene-admin-navigation.js') }}" defer></script>
+    @if ($adminActions)
+        <link rel="stylesheet" href="{{ asset('css/convene-admin-actions.css') }}">
+        <script src="{{ asset('js/convene-admin-actions.js') }}" defer></script>
+    @endif
 </head>
-<body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.index') ? ' admin-warm-actions' : '' }}">
+<body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.bookings.*') ? ' admin-warm-actions' : '' }}">
     <a class="admin-skip" href="#admin-content">Skip to content</a>
 
     @section('sidebar')
@@ -21,7 +26,7 @@
         <button class="admin-nav-close" type="button" autofocus>Close menu</button>
     </dialog>
 
-    <main id="admin-content" class="admin-content{{ request()->routeIs('admin.venues.index', 'admin.users.index', 'admin.event-types.index', 'admin.reviews.index') ? ' admin-management-list' : '' }}{{ request()->routeIs('admin.bookings.*') ? ' admin-content--unstyled' : '' }}" tabindex="-1">
+    <main id="admin-content" class="admin-content{{ request()->routeIs('admin.venues.index', 'admin.users.index', 'admin.event-types.index', 'admin.reviews.index') ? ' admin-management-list' : '' }}" tabindex="-1">
         <button class="admin-nav-toggle" type="button" aria-haspopup="dialog" aria-controls="admin-nav-drawer" hidden>
             <span aria-hidden="true">☰</span> Menu
         </button>
@@ -32,7 +37,7 @@
                 <h1>@yield('title', 'Administration')</h1>
             @endif
             @hasSection('subtitle')
-                <p class="admin-page-subtitle">@yield('subtitle')</p>
+                <p class="{{ $adminActions ? 'admin-description admin-description--page' : 'admin-page-subtitle' }}">@yield('subtitle')</p>
             @endif
         @endif
         @yield('content')

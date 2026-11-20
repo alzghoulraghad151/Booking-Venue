@@ -1,5 +1,6 @@
 <section class="dashboard-panel dashboard-quick-actions" aria-labelledby="quick-actions-title">
     <h2 id="quick-actions-title">Quick Actions</h2>
+    <p class="admin-description">Jump straight to booking requests, pending venues, or platform accounts.</p>
     <ul>
         @if (Route::has('admin.bookings.index'))
             <li>
