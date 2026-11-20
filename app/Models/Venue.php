@@ -24,8 +24,13 @@ class Venue extends Model
     }
 
     public function spaces(): HasMany
+{
+    return $this->hasMany(Space::class);
+}
+
+  public function bookings(): HasMany
     {
-        return $this->hasMany(Space::class);
+        return $this->hasMany(Booking::class);
     }
 
     protected function casts(): array

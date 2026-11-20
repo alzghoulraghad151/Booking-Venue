@@ -1,57 +1,67 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 
 class AdminBookingController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Booking::with([
+        $filters = $request->validate([
+            'status' => ['nullable', 'in:pending,confirmed,completed,cancelled,rejected'],
+            'venue_id' => ['nullable', 'integer', 'exists:venues,id'],
+            'date' => ['nullable', 'date'],
+            'organizer' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        $query = Booking::query()->with([
             'customer',
             'venue',
-            'details.space',
+            'details.space.venue',
             'details.spaceLayout',
             'details.eventType',
             'details.package',
-            'payments',
-            'review',
-        ]);
+        ])->withCount('details');
 
-      
-        $query->when($request->filled('status'), function ($q) use ($request) {
-            $q->where('status', $request->status);
-        });
+        if (! empty($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
 
+        if (! empty($filters['venue_id'])) {
+            $query->where('venue_id', $filters['venue_id']);
+        }
 
-        $query->when($request->filled('venue_id'), function ($q) use ($request) {
-            $q->where('venue_id', $request->venue_id);
-        });
+        if (! empty($filters['date'])) {
+            $query->whereHas('details', fn ($details) => $details->whereDate('start_at', $filters['date']));
+        }
 
-   
-        $query->when($request->filled('date'), function ($q) use ($request) {
-            $q->whereHas('details', function ($detailQuery) use ($request) {
-                $detailQuery->whereDate('start_at', $request->date);
+        if (! empty($filters['organizer'])) {
+            $search = '%'.$filters['organizer'].'%';
+            $query->whereHas('customer', function ($customer) use ($search) {
+                $customer->where(function ($nameOrEmail) use ($search) {
+                    $nameOrEmail->where('name', 'like', $search)
+                        ->orWhere('email', 'like', $search);
+                });
             });
-        });
+        }
 
-      
-        $query->when($request->filled('organizer'), function ($q) use ($request) {
-            $search = $request->organizer;
-
-            $q->whereHas('customer', function ($customerQuery) use ($search) {
-                $customerQuery->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        });
-
-        $bookings = $query
-            ->latest()
+        $bookings = $query->orderByDesc('created_at')
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.bookings.index', compact('bookings'));
+        $venues = Venue::query()->orderBy('name')->get(['id', 'name']);
+        $summary = [
+            'total' => Booking::count(),
+            'pending' => Booking::where('status', 'pending')->count(),
+            'confirmed' => Booking::where('status', 'confirmed')->count(),
+            'completed' => Booking::where('status', 'completed')->count(),
+        ];
+
+        return view('admin.bookings.list', compact('bookings', 'venues', 'summary', 'filters'));
     }
 
     public function show(Booking $booking)
@@ -59,7 +69,7 @@ class AdminBookingController extends Controller
         $booking->load([
             'customer',
             'venue',
-            'details.space',
+            'details.space.venue',
             'details.spaceLayout',
             'details.eventType',
             'details.package',
@@ -67,6 +77,12 @@ class AdminBookingController extends Controller
             'review',
         ]);
 
-        return view('admin.bookings.show', compact('booking'));
+        $totals = [
+            'amount' => $booking->details->sum('total_price'),
+            'commission' => $booking->details->sum('commission_amount'),
+            'payments' => $booking->payments->sum('amount'),
+        ];
+
+        return view('admin.bookings.details', compact('booking', 'totals'));
     }
 }
