@@ -52,8 +52,12 @@
             @forelse ($spaces as $space)
                 <article>
                     <h3>{{ $space->name }}</h3>
-                    <p>{{ $space->venue->name }} · {{ $space->venue->address }}</p>
-                    <p>السعة {{ $space->capacity }} شخص</p>
+                    <p>
+                   <a href="{{ route('public.venues.show', ['venue' => $space->venue->id]) }}">
+                       {{ $space->venue->name }}
+                   </a>
+                   — {{ $space->venue->address }}
+                 </p>
                 </article>
             @empty
               @unless ($voiceSummary)

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnerMiddleware;
+use App\Http\Middleware\OrganizerMiddleware;
 use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => AdminMiddleware::class,
             'owner' => OwnerMiddleware::class,
+            'organizer' =>OrganizerMiddleware::class,
         ]);
 
         $middleware->prependToPriorityList(

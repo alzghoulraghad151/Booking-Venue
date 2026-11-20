@@ -4,6 +4,7 @@ use App\Http\Controllers\Owner\OwnerPackageController;
 use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicVenueController;
+use App\Http\Controllers\OrganizerBookingController;
 
 Route::prefix('owner')->name('owner.')->middleware(['auth', 'owner'])->group(function () {
     Route::get('/space-layouts', [OwnerSpaceLayoutController::class, 'index'])
@@ -58,3 +59,9 @@ Route::prefix('owner')->name('owner.')->middleware(['auth', 'owner'])->group(fun
  Route::get('/venues/{venue}', [PublicVenueController::class, 'show'])
     ->whereNumber('venue')
     ->name('public.venues.show');
+
+    
+Route::get('/organizer/bookings/{booking}', [OrganizerBookingController::class, 'show'])
+    ->whereNumber('booking')
+    ->middleware(['auth', 'organizer'])
+    ->name('organizer.bookings.show');
