@@ -10,8 +10,9 @@
         <h1>ابحث عن مساحة</h1>
 
         <form method="GET" action="{{ route('spaces.search') }}">
-            <label for="city">المدينة</label>
-            <input id="city" name="city" value="{{ old('city', $city) }}" maxlength="100">
+          <label for="city">المدينة</label>
+<input id="city" name="city" dir="ltr"
+       value="{{ old('city', $city) }}" maxlength="100">
             @error('city')
                 <p role="alert">{{ $message }}</p>
             @enderror
@@ -43,7 +44,13 @@
             <h2>نتائج البحث</h2>
 
          @if ($voiceSummary)
-    <p>{{ $voiceSummary }}</p>
+    @if ($voiceSummary)
+    <p lang="{{ $isEnglish ? 'en' : 'ar' }}" dir="{{ $isEnglish ? 'ltr' : 'rtl' }}">
+        {{ $voiceSummary }}
+    </p>
+
+    {{-- خلي عنصر audio وباقي كود التشغيل هون --}}
+@endif
     <audio id="voice-summary-audio" src="{{ $voiceSummaryAudioUrl }}" preload="none"></audio>
     <button type="button" id="voice-summary-play" hidden>اسمع الملخّص</button>
     <p id="voice-summary-status" role="status"></p>

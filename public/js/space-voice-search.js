@@ -84,18 +84,29 @@ button.addEventListener('click', async () => {
                 city.value = result.filters.city ?? '';
                 capacity.value = result.filters.capacity ?? '';
 
-              if (city.value.trim() && capacity.value) {
+                   if (city.value.trim() && capacity.value) {
     status.textContent = 'جاري البحث عن المساحات المناسبة…';
 
+    const form = city.form;
 
-const voiceSearch = document.createElement('input');
-voiceSearch.type = 'hidden';
-voiceSearch.name = 'voice';
-voiceSearch.value = '1';
-city.form.append(voiceSearch);
+    for (const [name, value] of Object.entries({
+        voice: '1',
+        lang: result.filters.language === 'en' ? 'en' : 'ar',
+    })) {
+        const field = document.createElement('input');
+        field.type = 'hidden';
+        field.name = name;
+        field.value = value;
+        form.append(field);
+    }
 
+    try {
+        sessionStorage.setItem('play-space-summary-once', '1');
+    } catch {
+        // The manual play button remains available.
+    }
 
-    city.form.requestSubmit();
+    form.requestSubmit();
     return;
 }
 
