@@ -4,8 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminUserIndexRequest;
-use App\Services\AdminUserListingService;
+use App\Http\Requests\Admin\AdminUserStatusRequest;
+use App\Http\Requests\Admin\StoreAdminUserRequest;
+use App\Http\Requests\Admin\UpdateAdminUserRequest;
+use App\Models\User;
 use App\Services\AdminUserShowService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+
 
 class AdminUserController extends Controller
 {
@@ -106,15 +112,7 @@ class AdminUserController extends Controller
             ->with('success', 'User created successfully.');
     }
 
-    public function show(User $user): View
-    {
-        $user = User::query()
-            ->select(self::SAFE_USER_COLUMNS)
-            ->whereKey($user->getKey())
-            ->firstOrFail();
-
-        return view('admin.users.show', compact('user'));
-    }
+   
 
     public function edit(User $user): View
     {

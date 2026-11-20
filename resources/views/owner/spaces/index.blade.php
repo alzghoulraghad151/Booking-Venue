@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Spaces</title>
-</head>
-<body>
-    <main>
+@extends('layouts.owner')
+
+@section('title', 'My Spaces')
+@section('hide-layout-heading', '1')
+
+@section('content')
+<div>
         <h1>My Spaces</h1>
 
         @if (session('success'))
@@ -66,6 +64,5 @@
         </table>
 
         {{ $spaces->links() }}
-    </main>
-</body>
-</html>
+    </div>
+@endsection

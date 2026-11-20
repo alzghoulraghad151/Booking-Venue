@@ -1,36 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Venue Details</title>
-</head>
-<body>
-    <main>
+@extends('layouts.owner')
+
+@section('title', 'Venue Details')
+@section('hide-layout-heading', '1')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/convene-venues.css') }}">
+@endpush
+
+@section('content')
+<div class="venue-page">
         <a href="{{ route('owner.venues.index') }}">Back to My Venues</a>
 
         <h1>{{ $venue->name }}</h1>
 
-        <section>
+        <section class="venue-card">
             <h2>Venue images</h2>
 
-            @foreach ($venue->images as $image)
+            <div class="venue-gallery">
+            @forelse ($venue->images as $image)
                 <img src="{{ $image->image_url }}" alt="{{ $venue->name }}" width="240" loading="lazy">
-            @endforeach
+            @empty
+                <p>No images have been uploaded yet.</p>
+            @endforelse
+            </div>
 
-            <form method="POST" action="{{ route('owner.venues.images.store', $venue) }}"
-                  enctype="multipart/form-data">
-                @csrf
-                <label for="image">Add an image (JPEG, PNG or WebP, up to 2 MB)</label>
-                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" required>
-                @error('image')
-                    <p role="alert">{{ $message }}</p>
-                @enderror
-                <button type="submit">Upload image</button>
-            </form>
+          
         </section>
 
-        <dl>
+        <dl class="venue-card venue-details">
             <dt>Address</dt>
             <dd>{{ $venue->address }}</dd>
 
@@ -45,7 +42,7 @@
             <p>Your venue is awaiting approval. Customers cannot see it yet.</p>
         @endif
 
-        <a href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
+        <a class="venue-button venue-button--primary" href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
 
 
         @if (session('success'))
@@ -81,7 +78,7 @@
     @csrf
     @method('DELETE')
 
-    <button type="submit">Archive Venue</button>
+    <button class="venue-button--danger" type="submit">Archive Venue</button>
 </form>
         <h2>Spaces</h2>
 
@@ -92,6 +89,5 @@
                 <li>No spaces have been added to this venue.</li>
             @endforelse
         </ul>
-    </main>
-</body>
-</html>
+    </div>
+@endsection
