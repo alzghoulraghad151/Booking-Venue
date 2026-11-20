@@ -1,0 +1,54 @@
+.auth-page {
+    background-color: var(--color-cream);
+    color: var(--color-navy);
+}
+
+.auth-card {
+    background-color: var(--color-white);
+}
+
+.auth-submit {
+    background-color: var(--color-warm);
+    color: var(--color-navy);
+}
+
+.auth-card a,
+.password-eye {
+    color: var(--color-sage);
+}
+
+
+
+
+
+
+
+
+ .password-field {
+        position: relative;
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    .password-field input {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 40px;
+        padding-inline-end: 44px;
+    }
+
+    .password-eye {
+        position: absolute;
+        inset-block: 0;
+        inset-inline-end: 0;
+        width: 44px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #475569;
+        cursor: pointer;
+    }
+
+    .password-eye svg {
+        vertical-align: middle;
+    }
