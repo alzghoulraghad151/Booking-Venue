@@ -4,16 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ابحث عن مساحة | Convene</title>
+    <link rel="stylesheet" href="{{ asset('css/convene-listing-cards.css') }}">
 </head>
 <body>
     <main>
         <h1>ابحث عن مساحة</h1>
 
         <form method="GET" action="{{ route('spaces.search') }}">
-          <label for="city">المدينة</label>
-<input id="city" name="city" dir="ltr"
-       value="{{ old('city', $city) }}" maxlength="100">
-            @error('city')
+          <label for="address">الموقع أو العنوان</label>
+<input id="address" name="address" dir="ltr"
+       value="{{ old('address', $address) }}" maxlength="255">
+            @error('address')
                 <p role="alert">{{ $message }}</p>
             @enderror
 
@@ -56,18 +57,30 @@
     <p id="voice-summary-status" role="status"></p>
   <script type="module" src="{{ asset('js/space-search-summary-audio.js') }}"></script>
 @endif
-            @forelse ($spaces as $space)
-                <article>
-                    <h3>{{ $space->name }}</h3>
-                    <p>{{ $space->venue->name }} · {{ $space->venue->address }}</p>
-                    <p>السعة {{ $space->capacity }} شخص</p>
-                </article>
-            @empty
-              @unless ($voiceSummary)
-                <p>ما لقينا مساحة بتطابق هالشروط. جرّبي تغيّري المدينة أو العدد.</p>
-
-                 @endunless
-            @endforelse
+            <div class="listing-card-grid">
+                @forelse ($spaces as $space)
+                    @php($image = $space->images->firstWhere('is_primary', true) ?? $space->images->first())
+                    <article class="listing-card {{ $image ? '' : 'listing-card--empty' }}" @if ($image) style="background-image: url(&quot;{{ $image->image_url }}&quot;)" @endif>
+                        <div class="listing-card__body">
+                            <h3 class="listing-card__title">{{ $space->name }}</h3>
+                            <p class="listing-card__location">{{ $space->venue->name }} · {{ $space->venue->address }}</p>
+                            @if ($space->description)
+                                <p class="listing-card__description">{{ \Illuminate\Support\Str::limit($space->description, 110) }}</p>
+                            @endif
+                            <div class="listing-card__meta">
+                                <span>السعة {{ $space->capacity }} شخص</span>
+                                @if ($space->hourly_rate !== null)
+                                    <span>{{ number_format((float) $space->hourly_rate, 2) }} JOD / ساعة</span>
+                                @endif
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                    @unless ($voiceSummary)
+                        <p>ما لقينا مساحة بتطابق هالشروط. جرّبي تغيّري الموقع أو العدد.</p>
+                    @endunless
+                @endforelse
+            </div>
 
             {{ $spaces->links() }}
         @endif

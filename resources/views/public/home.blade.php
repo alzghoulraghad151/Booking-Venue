@@ -6,6 +6,7 @@
     <meta name="description" content="Find a venue for your next gathering. Explore event spaces by city and guest count with Convene.">
     <title>Find your space | Convene</title>
     <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/convene-listing-cards.css') }}">
     <link rel="stylesheet" href="{{ asset('css/convene-landing.css') }}">
 </head>
 <body class="convene-landing">
@@ -15,14 +16,19 @@
                 <p class="landing-eyebrow">A space for every gathering</p>
                 <h1 id="landing-title">Find the right space for your next event</h1>
                 <p class="landing-hero__intro">From meaningful dinners to memorable celebrations, discover a venue that brings people together.</p>
-                <a class="landing-button landing-button--warm" href="#explore-cities">Explore spaces <span aria-hidden="true">→</span></a>
+                <a class="landing-button landing-button--warm" href="#explore-locations">Explore spaces <span aria-hidden="true">→</span></a>
             </div>
         </section>
 
         <form class="landing-search" action="{{ route('spaces.search') }}" method="GET" aria-label="Search event spaces">
             <div class="landing-search__field">
-                <label for="landing-city">City</label>
-                <input id="landing-city" name="city" type="text" placeholder="Where are you planning?" autocomplete="address-level2" required>
+                <label for="landing-address">Location</label>
+                <input id="landing-address" name="address" type="text" list="landing-locations" placeholder="Where are you planning?" autocomplete="street-address" required>
+                <datalist id="landing-locations">
+                    @foreach ($locations as $location)
+                        <option value="{{ $location['address'] }}"></option>
+                    @endforeach
+                </datalist>
             </div>
             <div class="landing-search__field landing-search__field--guests">
                 <label for="landing-capacity">Guests</label>
@@ -31,21 +37,55 @@
             <button class="landing-button landing-button--navy" type="submit">Search spaces <span aria-hidden="true">→</span></button>
         </form>
 
-        <section class="landing-section landing-cities" id="explore-cities" aria-labelledby="cities-title">
+        <section class="landing-section landing-cities" id="explore-locations" aria-labelledby="locations-title">
             <div class="landing-section__heading">
                 <p class="landing-eyebrow landing-eyebrow--sage">Start with a place</p>
-                <h2 id="cities-title">Explore spaces by city</h2>
-                <p>Choose a city to find a space close to where your people are.</p>
+                <h2 id="locations-title">Explore spaces by location</h2>
+                <p>Choose a venue location to find a space close to where your people are.</p>
             </div>
 
             <div class="landing-city-grid">
-                @foreach (['Amman', 'Aqaba', 'Irbid', 'Zarqa'] as $index => $city)
-                    <a class="landing-city-card landing-city-card--{{ $index + 1 }}" href="{{ route('spaces.search', ['city' => $city]) }}">
-                        <span class="landing-city-card__number">0{{ $index + 1 }}</span>
-                        <span class="landing-city-card__name">{{ $city }}</span>
-                        <span class="landing-city-card__action">Explore spaces <span aria-hidden="true">↗</span></span>
+                @forelse ($locations as $location)
+                    <a class="landing-city-card" href="{{ route('spaces.search', ['address' => $location['address']]) }}">
+                        <img class="landing-card-image" src="{{ $location['image_url'] }}" alt="" loading="lazy">
+                        <span class="landing-city-card__content">
+                            <span class="landing-city-card__name">{{ $location['address'] }}</span>
+                            @if ($location['description'])
+                                <span class="landing-city-card__description">{{ \Illuminate\Support\Str::limit($location['description'], 90) }}</span>
+                            @endif
+                            <span class="landing-city-card__count">{{ $location['venue_count'] }} {{ \Illuminate\Support\Str::plural('venue', $location['venue_count']) }}</span>
+                        </span>
                     </a>
-                @endforeach
+                @empty
+                    <p>No locations have approved venues yet.</p>
+                @endforelse
+            </div>
+        </section>
+
+        <section class="landing-section landing-venues" aria-labelledby="venues-title">
+            <div class="landing-section__heading">
+                <p class="landing-eyebrow landing-eyebrow--sage">Places to gather</p>
+                <h2 id="venues-title">Venues to explore</h2>
+                <p>Browse venues currently available on Convene.</p>
+            </div>
+
+            <div class="listing-card-grid landing-venue-grid">
+                @forelse ($featuredVenues as $venue)
+                    <a class="listing-card" href="{{ route('public.venues.show', $venue) }}" style="background-image: url(&quot;{{ $venue->images->first()->image_url }}&quot;)">
+                        <div class="listing-card__body">
+                            <h3 class="listing-card__title">{{ $venue->name }}</h3>
+                            <p class="listing-card__location">{{ $venue->address }}</p>
+                            @if ($venue->description)
+                                <p class="listing-card__description">{{ \Illuminate\Support\Str::limit($venue->description, 110) }}</p>
+                            @endif
+                            <div class="listing-card__meta">
+                                <span>{{ $venue->active_spaces_count }} {{ \Illuminate\Support\Str::plural('space', $venue->active_spaces_count) }}</span>
+                            </div>
+                        </div>
+                    </a>
+                @empty
+                    <p>No approved venues are available yet.</p>
+                @endforelse
             </div>
         </section>
 
@@ -56,21 +96,17 @@
                 <p>Find a setting that feels right for the people, plans, and moments that matter.</p>
             </div>
             <div class="landing-occasion__cards">
-                <article class="landing-occasion-card landing-occasion-card--dinner">
-                    <span class="landing-occasion-card__label">Gather around</span>
-                    <h3>Dinner</h3>
-                    <p>Thoughtful spaces for good food and better conversation.</p>
-                </article>
-                <article class="landing-occasion-card landing-occasion-card--celebration">
-                    <span class="landing-occasion-card__label">Make a memory</span>
-                    <h3>Celebrations</h3>
-                    <p>Room for the moments you’ll want to remember.</p>
-                </article>
-                <article class="landing-occasion-card landing-occasion-card--meeting">
-                    <span class="landing-occasion-card__label">Bring ideas together</span>
-                    <h3>Meetings</h3>
-                    <p>Comfortable places to think, plan, and connect.</p>
-                </article>
+                @forelse ($occasionCards as $card)
+                    <a class="landing-occasion-card" href="{{ route('spaces.search', ['event_type_id' => $card['id']]) }}">
+                        <img class="landing-card-image" src="{{ $card['image_url'] }}" alt="" loading="lazy">
+                        <h3>{{ $card['name'] }}</h3>
+                        @if ($card['description'])
+                            <p>{{ $card['description'] }}</p>
+                        @endif
+                    </a>
+                @empty
+                    <p>No event types have available spaces yet.</p>
+                @endforelse
             </div>
         </section>
     </main>

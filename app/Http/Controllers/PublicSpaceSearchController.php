@@ -11,43 +11,37 @@ class PublicSpaceSearchController extends Controller
     public function index(Request $request): View
     {
         $filters = $request->validate([
-            'city' => ['nullable', 'string', 'max:100'],
+            'address' => ['nullable', 'string', 'max:255'],
             'capacity' => ['nullable', 'integer', 'min:1'],
+            'event_type_id' => ['nullable', 'integer', 'exists:event_types,id'],
             'lang' => ['nullable', 'in:ar,en'],
         ]);
 
-        $city = $filters['city'] ?? '';
+        $address = $filters['address'] ?? '';
 
          $isEnglish = ($filters['lang'] ?? 'ar') === 'en';
-        $cityNames = match (mb_strtolower($city)) {
-    'عمان', 'عمّان', 'amman' => ['عمان', 'عمّان', 'amman'],
-    'إربد', 'اربد', 'irbid' => ['إربد', 'اربد', 'Irbid'],
-'عجلون', 'ajloun', 'ajlun' => ['عجلون', 'Ajloun', 'Ajlun'],
-'الزرقاء', 'zarqa', 'az zarqa' => ['الزرقاء', 'زرقاء', 'Zarqa'],
-    default => [$city],
-};
-
         $capacity = $filters['capacity'] ?? null;
-        $searched = $city !== '' || $capacity !== null;
+        $eventTypeId = $filters['event_type_id'] ?? null;
+        $searched = $address !== '' || $capacity !== null || $eventTypeId !== null;
         $spaces = collect();
 
         if ($searched) {
             $spaces = Space::query()
-                ->with('venue')
+                ->with(['venue', 'images'])
                 ->where('status', 'active')
-                ->whereHas('venue', function ($query) use ($city, $cityNames){
+                ->whereHas('venue', function ($query) use ($address){
                     $query->where('status', 'approved')
                         ->where('is_active_by_owner', true);
 
-                    if ($city !== '') {
-    $query->where(function ($addressQuery) use ($cityNames) {
-        foreach ($cityNames as $cityName) {
-            $addressQuery->orWhere('address', 'like', '%'.$cityName.'%');
-        }
-    });
+                    if ($address !== '') {
+    $query->where('address', 'like', '%'.$address.'%');
 }
                 })
                 ->when($capacity !== null, fn ($query) => $query->where('capacity', '>=', $capacity))
+                ->when($eventTypeId !== null, fn ($query) => $query->whereHas(
+                    'spaceLayouts.eventTypes',
+                    fn ($eventTypeQuery) => $eventTypeQuery->whereKey($eventTypeId)
+                ))
                 ->orderBy('capacity')
                 ->orderBy('id')
                 ->paginate(12)
@@ -62,8 +56,8 @@ if ($searched && $request->boolean('voice') && $spaces->currentPage() === 1) {
 
     if ($topSpaces->isEmpty()) {
         $voiceSummary = $isEnglish
-            ? 'We found no matching spaces. Try a different city or guest count.'
-            : 'ما لقينا مساحات بتناسب طلبك. جرّبي تعدّلي المدينة أو عدد الأشخاص.';
+            ? 'We found no matching spaces. Try a different location or guest count.'
+            : 'ما لقينا مساحات بتناسب طلبك. جرّبي تعدّلي الموقع أو عدد الأشخاص.';
     } else {
         $intro = match ($topSpaces->count()) {
             1 => $isEnglish ? 'We found one matching space.' : 'لقينا إلك مساحة مناسبة.',
@@ -100,8 +94,9 @@ $voiceSummaryAudioUrl = $voiceSummary === null
 
 
        return view('public.spaces.search', compact(
-    'city',
+    'address',
     'capacity',
+    'eventTypeId',
     'searched',
     'spaces',
     'voiceSummary',

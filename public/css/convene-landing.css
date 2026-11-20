@@ -132,28 +132,51 @@
     margin: 12px 0 0;
     color: #52616a;
 }
-.landing-city-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.landing-city-grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 2px 2px 14px;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: rgb(82 108 104 / 55%) transparent;
+    scrollbar-width: thin;
+}
 .landing-city-card {
-    min-height: 180px;
+    position: relative;
+    flex: 0 0 270px;
+    width: 270px;
+    height: 350px;
+    max-width: 75vw;
+    max-height: 100vw;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 27px;
     overflow: hidden;
-    border: 1px solid rgb(23 43 58 / 8%);
-    border-radius: 12px;
-    background: var(--landing-white);
-    text-decoration: none;
+    border-radius: 7px;
+    color: var(--landing-white);
+    background-color: #9a9a9a;
+    background-position: 50%;
+    background-size: cover;
+    text-decoration: none !important;
+    text-align: center;
+    scroll-snap-align: start;
     transition: transform .18s ease, box-shadow .18s ease;
 }
+.landing-card-image { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.landing-city-card::before,
+.landing-occasion-card::after { position: absolute; z-index: 1; inset: 0; border-radius: inherit; background: linear-gradient(0deg, rgb(23 43 58 / 82%), rgb(23 43 58 / 5%) 75%); content: ''; }
+.landing-city-card::after { position: absolute; z-index: 3; top: 0; right: 0; bottom: 0; left: 0; content: ''; }
+.landing-city-card > :not(.landing-card-image),
+.landing-occasion-card > :not(.landing-card-image) { position: relative; z-index: 2; }
 .landing-city-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgb(23 43 58 / 10%); }
-.landing-city-card--1 { background: linear-gradient(145deg, var(--landing-white), #e9eeeb); }
-.landing-city-card--2 { background: linear-gradient(145deg, #f4e5d6, var(--landing-white)); }
-.landing-city-card--3 { background: linear-gradient(145deg, #e2e9e4, var(--landing-white)); }
-.landing-city-card--4 { background: linear-gradient(145deg, #e8e4dd, var(--landing-white)); }
-.landing-city-card__number { color: var(--landing-sage); font-size: 12px; font-weight: 750; letter-spacing: .12em; }
-.landing-city-card__name { font-family: Georgia, 'Times New Roman', serif; font-size: 30px; line-height: 1.1; }
-.landing-city-card__action { display: flex; justify-content: space-between; align-items: center; color: var(--landing-sage); font-size: 13px; font-weight: 700; }
+.landing-city-card__content { display: flex; width: 100%; flex-direction: column; align-items: center; gap: 0; }
+.landing-city-card__name { margin-bottom: 10px; color: #fff; font-size: 24px; font-weight: 700; line-height: 1.2; text-shadow: 0 2px 20px rgb(0 0 0 / 50%); overflow-wrap: anywhere; }
+.landing-city-card__description { max-width: 100%; color: rgb(255 255 255 / 94%); font-size: 14px; line-height: 1.4; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+.landing-city-card__count { margin-top: 14px; color: rgb(255 255 255 / 90%); font-size: 14px; line-height: 1.4; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+
+.landing-venues { padding-block: 0 76px; }
 
 .landing-occasion {
     display: grid;
@@ -169,6 +192,7 @@
 .landing-occasion__intro > p:last-child { color: rgb(255 255 255 / 72%); }
 .landing-occasion__cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .landing-occasion-card {
+    position: relative;
     min-height: 210px;
     display: flex;
     flex-direction: column;
@@ -176,11 +200,11 @@
     padding: 18px;
     border-radius: 10px;
     color: var(--landing-white);
-    background: linear-gradient(155deg, rgb(82 108 104 / 92%), rgb(23 43 58 / 96%));
+    background: var(--landing-navy);
+    text-decoration: none;
+    transition: transform .18s ease, filter .18s ease;
 }
-.landing-occasion-card--celebration { background: linear-gradient(155deg, #bd8050, #653f31); }
-.landing-occasion-card--meeting { background: linear-gradient(155deg, #526c68, #263e4d); }
-.landing-occasion-card__label { margin-bottom: auto; color: rgb(255 255 255 / 78%); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.landing-occasion-card:hover { transform: translateY(-3px); filter: brightness(1.06); }
 .landing-occasion-card h3 { margin: 22px 0 4px; font-family: Georgia, 'Times New Roman', serif; font-size: 26px; font-weight: 500; }
 .landing-occasion-card p { margin: 0; color: rgb(255 255 255 / 80%); font-size: 13px; }
 
@@ -190,13 +214,10 @@
     .landing-search__field { padding: 8px; }
     .landing-search__field--guests { border-left: 1px solid #e5e2dc; }
     .landing-search .landing-button { grid-column: 1 / -1; width: 100%; }
-    .landing-city-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .landing-occasion { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
-    .landing-city-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
-    .landing-city-card { min-height: 150px; padding: 14px; }
-    .landing-city-card__name { font-size: 24px; }
+    .landing-city-card { padding: 22px; }
     .landing-occasion { width: calc(100% - 28px); padding: 22px 16px; }
     .landing-occasion__cards { grid-template-columns: 1fr; }
     .landing-occasion-card { min-height: 150px; }

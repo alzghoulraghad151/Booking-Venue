@@ -1,0 +1,71 @@
+.listing-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 270px));
+    gap: 18px;
+}
+
+.listing-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    width: 270px;
+    max-width: 75vw;
+    height: 350px;
+    max-height: 100vw;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    border-radius: 7px;
+    background: #9a9a9a;
+    background-position: 50%;
+    background-size: cover;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.listing-card::before {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(0deg, rgb(23 43 58 / 86%), rgb(23 43 58 / 4%) 78%);
+    content: '';
+}
+
+a.listing-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgb(23 43 58 / 12%);
+}
+
+.listing-card--empty { background-image: linear-gradient(135deg, #e8e4dd, #d7e0dc); }
+
+.listing-card__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 27px;
+}
+
+.listing-card__title {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 2px 20px rgb(0 0 0 / 50%);
+}
+
+.listing-card__location { margin: 0; color: rgb(255 255 255 / 94%); font-size: 14px; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+.listing-card__description { margin: 8px 0 0; color: rgb(255 255 255 / 94%); font-size: 14px; line-height: 1.4; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+.listing-card__meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; margin-top: 14px; color: rgb(255 255 255 / 90%); font-size: 14px; font-weight: 400; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+
+@media (max-width: 380px) {
+    .listing-card-grid { grid-template-columns: minmax(0, 1fr); }
+    .listing-card { width: 100%; max-width: 100%; }
+}
