@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EventType;
+use App\Models\Space;
 use App\Models\Venue;
 use Illuminate\View\View;
 
@@ -43,16 +44,16 @@ class PublicHomeController extends Controller
                 ->where('status', 'active')
                 ->whereHas('venue', fn ($venueQuery) => $venueQuery
                     ->where('status', 'approved')
-                    ->where('is_active_by_owner', true))
-                ->whereHas('images'))
+                    ->where('is_active_by_owner', true)
+                    ->whereHas('images')))
             ->with([
                 'spaceLayouts.space' => fn ($query) => $query
                     ->where('status', 'active')
                     ->whereHas('venue', fn ($venueQuery) => $venueQuery
                         ->where('status', 'approved')
-                        ->where('is_active_by_owner', true))
-                    ->whereHas('images'),
-                'spaceLayouts.space.images' => fn ($query) => $query
+                        ->where('is_active_by_owner', true)
+                        ->whereHas('images')),
+                'spaceLayouts.space.venue.images' => fn ($query) => $query
                     ->orderByDesc('is_primary')
                     ->orderBy('id'),
             ])
@@ -62,7 +63,7 @@ class PublicHomeController extends Controller
                 $space = $eventType->spaceLayouts
                     ->pluck('space')
                     ->filter()
-                    ->first(fn ($space) => $space->images->isNotEmpty());
+                    ->first(fn ($space) => $space->venue && $space->venue->images->isNotEmpty());
 
                 if (! $space) {
                     return null;
@@ -72,7 +73,7 @@ class PublicHomeController extends Controller
                     'id' => $eventType->id,
                     'name' => $eventType->name,
                     'description' => $eventType->description,
-                    'image_url' => $space->images->first()->image_url,
+                    'image_url' => $space->venue->images->first()->image_url,
                 ];
             })
             ->filter()
@@ -92,9 +93,24 @@ class PublicHomeController extends Controller
             ->limit(8)
             ->get();
 
+        $latestPlaces = Space::query()
+            ->where('status', 'active')
+            ->whereHas('venue', fn ($query) => $query
+                ->where('status', 'approved')
+                ->where('is_active_by_owner', true))
+            ->whereHas('images')
+            ->with([
+                'venue',
+                'images' => fn ($query) => $query->orderByDesc('is_primary')->orderBy('id'),
+            ])
+            ->latest()
+            ->limit(8)
+            ->get();
+
         return view('public.home', [
             'locations' => $venues,
             'featuredVenues' => $featuredVenues,
+            'latestPlaces' => $latestPlaces,
             'occasionCards' => $eventTypes,
         ]);
     }

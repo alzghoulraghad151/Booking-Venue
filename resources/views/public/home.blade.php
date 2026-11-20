@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Find a venue for your next gathering. Explore event spaces by city and guest count with Convene.">
+    <meta name="description" content="Find a venue for your next gathering. Explore event spaces by address and guest count with Convene.">
     <title>Find your space | Convene</title>
     <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('css/convene-listing-cards.css') }}">
@@ -71,7 +71,7 @@
 
             <div class="listing-card-grid landing-venue-grid">
                 @forelse ($featuredVenues as $venue)
-                    <a class="listing-card" href="{{ route('public.venues.show', $venue) }}" style="background-image: url(&quot;{{ $venue->images->first()->image_url }}&quot;)">
+                    <a class="listing-card" href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}" style="background-image: url(&quot;{{ $venue->images->first()->image_url }}&quot;)">
                         <div class="listing-card__body">
                             <h3 class="listing-card__title">{{ $venue->name }}</h3>
                             <p class="listing-card__location">{{ $venue->address }}</p>
@@ -85,6 +85,36 @@
                     </a>
                 @empty
                     <p>No approved venues are available yet.</p>
+                @endforelse
+            </div>
+        </section>
+
+        <section class="landing-section landing-venues" aria-labelledby="latest-places-title">
+            <div class="landing-section__heading">
+                <p class="landing-eyebrow landing-eyebrow--sage">Recently added</p>
+                <h2 id="latest-places-title">Latest added places</h2>
+                <p>Explore the newest spaces available for your event.</p>
+            </div>
+
+            <div class="listing-card-grid">
+                @forelse ($latestPlaces as $place)
+                    <a class="listing-card" href="{{ route('public.venues.show', $place->venue) }}" style="background-image: url(&quot;{{ $place->images->first()->image_url }}&quot;)">
+                        <div class="listing-card__body">
+                            <h3 class="listing-card__title">{{ $place->name }}</h3>
+                            <p class="listing-card__location">{{ $place->venue->name }} · {{ $place->venue->address }}</p>
+                            @if ($place->description)
+                                <p class="listing-card__description">{{ \Illuminate\Support\Str::limit($place->description, 100) }}</p>
+                            @endif
+                            <div class="listing-card__meta">
+                                <span>{{ $place->capacity }} {{ \Illuminate\Support\Str::plural('guest', $place->capacity) }}</span>
+                                @if ($place->hourly_rate !== null)
+                                    <span>{{ number_format((float) $place->hourly_rate, 2) }} JOD / hour</span>
+                                @endif
+                            </div>
+                        </div>
+                    </a>
+                @empty
+                    <p>No active places have been added yet.</p>
                 @endforelse
             </div>
         </section>
