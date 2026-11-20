@@ -13,12 +13,17 @@ class PublicSpaceSearchController extends Controller
         $filters = $request->validate([
             'city' => ['nullable', 'string', 'max:100'],
             'capacity' => ['nullable', 'integer', 'min:1'],
+            'lang' => ['nullable', 'in:ar,en'],
         ]);
 
         $city = $filters['city'] ?? '';
 
+         $isEnglish = ($filters['lang'] ?? 'ar') === 'en';
         $cityNames = match (mb_strtolower($city)) {
     'عمان', 'عمّان', 'amman' => ['عمان', 'عمّان', 'amman'],
+    'إربد', 'اربد', 'irbid' => ['إربد', 'اربد', 'Irbid'],
+'عجلون', 'ajloun', 'ajlun' => ['عجلون', 'Ajloun', 'Ajlun'],
+'الزرقاء', 'zarqa', 'az zarqa' => ['الزرقاء', 'زرقاء', 'Zarqa'],
     default => [$city],
 };
 
@@ -50,31 +55,37 @@ class PublicSpaceSearchController extends Controller
         }
 
 
-$voiceSummary = null;
+     $voiceSummary = null;
 
 if ($searched && $request->boolean('voice') && $spaces->currentPage() === 1) {
     $topSpaces = $spaces->getCollection()->take(3);
 
     if ($topSpaces->isEmpty()) {
-        $voiceSummary = 'ما لقينا مساحات بتناسب طلبك. جرّبي تعدّلي المدينة أو عدد الأشخاص.';
+        $voiceSummary = $isEnglish
+            ? 'We found no matching spaces. Try a different city or guest count.'
+            : 'ما لقينا مساحات بتناسب طلبك. جرّبي تعدّلي المدينة أو عدد الأشخاص.';
     } else {
         $intro = match ($topSpaces->count()) {
-            1 => 'لقينا إلك مساحة مناسبة.',
-            2 => 'لقينا إلك مساحتين مناسبات.',
-            3 => 'هاي أول ثلاث مساحات مناسبة.',
+            1 => $isEnglish ? 'We found one matching space.' : 'لقينا إلك مساحة مناسبة.',
+            2 => $isEnglish ? 'We found two matching spaces.' : 'لقينا إلك مساحتين مناسبات.',
+            3 => $isEnglish ? 'Here are the three closest matches.' : 'هاي أقرب ثلاث مساحات للعدد اللي طلبته.',
         };
 
-        $details = $topSpaces->map(function (Space $space): string {
+        $details = $topSpaces->map(function (Space $space) use ($isEnglish): string {
             $name = \Illuminate\Support\Str::limit($space->name, 60);
             $venue = \Illuminate\Support\Str::limit($space->venue->name, 60);
 
-            return "مساحة {$name} في {$venue}، بتسع {$space->capacity} شخص.";
+            return $isEnglish
+                ? "{$name} at {$venue} can accommodate {$space->capacity} guests."
+                : "مساحة {$name} في {$venue}، بتسع {$space->capacity} شخص.";
         })->implode(' ');
 
         $voiceSummary = $intro.' '.$details;
 
         if ($spaces->total() > $topSpaces->count()) {
-            $voiceSummary .= ' وإذا بدك خيارات أكثر، باقي المساحات موجودة بنتائج البحث.';
+            $voiceSummary .= $isEnglish
+                ? ' More options are listed in the search results.'
+                : ' وإذا بدك خيارات أكثر، باقي المساحات موجودة بنتائج البحث.';
         }
     }
 }
@@ -95,6 +106,8 @@ $voiceSummaryAudioUrl = $voiceSummary === null
     'spaces',
     'voiceSummary',
     'voiceSummaryAudioUrl',
+
+    'isEnglish'
 ));
     }
 }

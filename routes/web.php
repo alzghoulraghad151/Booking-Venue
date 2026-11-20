@@ -18,11 +18,10 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\SpaceVoiceSearchController;
 
 
-require __DIR__.'/shatha_routes.php';
-require __DIR__.'/zaid.php';
-
 
 Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 
@@ -70,8 +69,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])->name('venues.status');
 });
 
-
-
 Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
     ->name('spaces.search');
 
@@ -86,40 +83,7 @@ Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
     ->name('spaces.search.summary-audio');
 
 
-    Route::prefix('admin')
-    ->name('admin.')
-    ->middleware(['auth', 'admin'])
-    ->group(function () {
-        Route::prefix('users')->name('users.')->group(function () {
-            Route::get('/', [AdminUserController::class, 'index'])->name('index');
-            Route::get('/create', [AdminUserController::class, 'create'])->name('create');
-            Route::post('/', [AdminUserController::class, 'store'])->name('store');
-            Route::get('/{user}', [AdminUserController::class, 'show'])->name('show');
-            Route::get('/{user}/edit', [AdminUserController::class, 'edit'])->name('edit');
-            Route::put('/{user}', [AdminUserController::class, 'update'])->name('update');
-            Route::delete('/{user}', [AdminUserController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::prefix('venues')->name('venues.')->group(function () {
-            Route::get('/', [AdminVenueController::class, 'index'])->name('index');
-            Route::get('/{venue}', [AdminVenueController::class, 'show'])->name('show');
-            Route::patch('/{venue}/approve', [AdminVenueController::class, 'approve'])->name('approve');
-            Route::patch('/{venue}/reject', [AdminVenueController::class, 'reject'])->name('reject');
-            Route::patch('/{venue}/status', [AdminVenueController::class, 'updateStatus'])->name('status');
-        });
-    });
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 Route::prefix('owner')
