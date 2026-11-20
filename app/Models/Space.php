@@ -35,5 +35,4 @@ class Space extends Model
     {
         return $this->hasMany(BookingDetail::class);
     }
-     
 }

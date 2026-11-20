@@ -1,6 +1,5 @@
 <?php
 use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Controllers\Owner\OwnerVenueImageController;
 use App\Http\Controllers\PublicSpaceSearchController;
@@ -106,14 +105,6 @@ Route::prefix('owner')
             Route::delete('/{space}', [OwnerSpaceController::class, 'destroy'])->name('destroy');
         });
 
-        Route::prefix('space-layouts')->name('space-layouts.')->group(function () {
-            Route::get('/', [OwnerSpaceLayoutController::class, 'index'])->name('index');
-            Route::get('/create', [OwnerSpaceLayoutController::class, 'create'])->name('create');
-            Route::post('/', [OwnerSpaceLayoutController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [OwnerSpaceLayoutController::class, 'edit'])->name('edit');
-            Route::patch('/{id}', [OwnerSpaceLayoutController::class, 'update'])->name('update');
-        });
-
         Route::prefix('venues')->name('venues.')->group(function () {
             Route::get('/', [OwnerVenueController::class, 'index'])->name('index');
             Route::get('/create', [OwnerVenueController::class, 'create'])->name('create');
@@ -138,5 +129,4 @@ Route::prefix('owner')
 
 require __DIR__ . '/zaid.php';
 require __DIR__ . '/omar.php';
-
-
+require __DIR__ . '/yousef.php';
