@@ -1,10 +1,24 @@
-@extends('layouts.bookings')
+@extends('layouts.admin')
 
 @section('title', 'Booking #'.$booking->id)
-@section('heading', 'Booking details')
-@section('subtitle', 'Full booking, payment, commission, and review information.')
 
 @section('content')
+    <link rel="stylesheet" href="{{ asset('css/convene-bookings.css') }}">
+    <div class="bookings-page">
+        <p class="page-subtitle">Full booking, payment, commission, and review information.</p>
+        @if (session('success'))
+            <div class="alert alert--success" role="status">{{ session('success') }}</div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert--error" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
     <div class="detail-toolbar">
         <a class="button button--quiet" href="{{ route('admin.bookings.index') }}">← Back to bookings</a>
         <span class="status-badge status-badge--{{ $booking->status }}">{{ ucfirst($booking->status) }}</span>
@@ -137,10 +151,17 @@
                 <div>
                     <strong class="review-title">Booking rating</strong>
                     <p class="review-comment">{{ $booking->review->comment ?: 'No written comment.' }}</p>
+                    <form action="{{ route('admin.bookings.review.destroy', $booking) }}" method="POST"
+                          onsubmit="return confirm('Delete this review? This cannot be undone.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="button button--danger">Delete review</button>
+                    </form>
                 </div>
             </div>
         @else
             <div class="empty-inline">No review has been submitted for this booking.</div>
         @endif
     </section>
+    </div>
 @endsection

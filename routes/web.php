@@ -1,48 +1,89 @@
 <?php
+
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Controllers\Owner\OwnerVenueImageController;
-
+use App\Http\Controllers\PublicSpaceSearchController;
 use App\Http\Controllers\Owner\OwnerSpaceController;
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
-require __DIR__.'/shatha_routes.php';
+
 use App\Http\Controllers\Admin\AdminVenueController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\SpaceVoiceSearchController;
 
 
-
-
+require __DIR__.'/shatha_routes.php';
+require __DIR__.'/zaid.php';
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-    ->name('login');
-    Route::post('/register', [RegisteredUserController::class, 'store'])
-        ->name('register.store');
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 
         Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('login.store');
-});
 
+
+
+    Route::get('/forgot-password', [PasswordResetController::class, 'requestForm'])
+    ->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetController::class, 'sendLink'])
+    ->middleware('throttle:5,1')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'resetForm'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])
+    ->middleware('throttle:5,1')
+    ->name('password.update');
+});
 
 Route::get('/account/signed-in', fn () => response('Signed in successfully.'))
     ->middleware('auth')
     ->name('account.signed-in');
 
 
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+  
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::patch('/users/{user}/status', [AdminUserController::class, 'updateStatus'])->name('users.status');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/venues', [AdminVenueController::class, 'index'])->name('venues.index');
+    Route::get('/venues/{venue}', [AdminVenueController::class, 'show'])->name('venues.show');
+    Route::patch('/venues/{venue}/approve', [AdminVenueController::class, 'approve'])->name('venues.approve');
+    Route::patch('/venues/{venue}/reject', [AdminVenueController::class, 'reject'])->name('venues.reject');
+    Route::patch('/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])->name('venues.status');
+});
 
 
 
+Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
+    ->name('spaces.search');
 
+
+    Route::post('/spaces/search/voice', [SpaceVoiceSearchController::class, 'transcribe'])
+    ->middleware('throttle:5,1')
+    ->name('spaces.search.voice');
+
+
+    Route::get('/spaces/search/summary-audio', \App\Http\Controllers\SpaceSearchAudioController::class)
+    ->middleware(['signed', 'throttle:10,1'])
+    ->name('spaces.search.summary-audio');
 
 
     Route::prefix('admin')
@@ -119,3 +160,4 @@ Route::prefix('owner')
 require __DIR__ . '/zaid.php';
 require __DIR__ . '/omar.php';
 require __DIR__ . '/yousef.php';
+require __DIR__.'/shatha_routes.php';

@@ -7,6 +7,7 @@ use App\Models\EventType;
 use App\Models\Space;
 use App\Models\SpaceLayout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class OwnerSpaceLayoutController extends Controller
@@ -95,12 +96,12 @@ class OwnerSpaceLayoutController extends Controller
 
     private function ownerSpaces()
     {
-        return Space::whereRelation('venue', 'owner_id', auth()->id());
+        return Space::whereRelation('venue', 'owner_id', Auth::id());
     }
 
     private function ownerLayouts()
     {
-        return SpaceLayout::whereRelation('space.venue', 'owner_id', auth()->id());
+        return SpaceLayout::whereRelation('space.venue', 'owner_id', Auth::id());
     }
 
     private function saveLayout(Request $request, SpaceLayout $layout): void

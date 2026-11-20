@@ -39,7 +39,6 @@ class AdminUserController extends Controller
 
         $query = User::query()->select(self::SAFE_USER_COLUMNS);
 
-        // Search by name, email, or phone.
         if ($filters['search'] !== '') {
             $search = $filters['search'];
 
@@ -50,17 +49,14 @@ class AdminUserController extends Controller
             });
         }
 
-        // Filter by role.
         if ($filters['role'] !== '') {
             $query->where('role', $filters['role']);
         }
 
-        // Filter by status.
         if ($filters['status'] !== '') {
             $query->where('status', $filters['status']);
         }
 
-        // Apply sorting.
         $allowedSorts = [
             'name',
             'email',

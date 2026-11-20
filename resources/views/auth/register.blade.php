@@ -3,48 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create an account</title>
+    <title>Create an account | Convene</title>
+
+    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <script src="{{ asset('js/auth-submit.js') }}" defer></script>
+    <script src="{{ asset('js/register.js') }}" defer></script>
 </head>
-<body>
-    <h1>Create an account</h1>
+<body class="auth-page">
+    <main class="auth-card">
+        <h1>Create an account</h1>
 
-    <form method="POST" action="{{ route('register.store') }}">
-        @csrf
+        <form method="POST" action="{{ route('register.store') }}">
+            @csrf
 
-        <div>
-            <label for="name">Name</label>
-            <input id="name" name="name" value="{{ old('name') }}"
-                   autocomplete="name" required>
-            @error('name')
-                <p>{{ $message }}</p>
-            @enderror
-        </div>
+            <div>
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text"
+                       value="{{ old('name') }}" autocomplete="name" required>
 
-        <div>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" value="{{ old('email') }}"
-                   autocomplete="email" required>
-            @error('email')
-                <p>{{ $message }}</p>
-            @enderror
-        </div>
+                @error('name')
+                    <p role="alert">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div>
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password"
-                   autocomplete="new-password" required>
-            @error('password')
-                <p>{{ $message }}</p>
-            @enderror
-        </div>
+            <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email"
+                       value="{{ old('email') }}" autocomplete="email" required>
 
-        <div>
-            <label for="password_confirmation">Confirm password</label>
-            <input id="password_confirmation" name="password_confirmation"
-                   type="password" autocomplete="new-password" required>
-        </div>
+                @error('email')
+                    <p role="alert">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <button type="submit">Register</button>
-    </form>
+            <div>
+    <label for="phone">Phone number</label>
+    <input id="phone" name="phone" type="tel"
+           value="{{ old('phone') }}" autocomplete="tel"
+           maxlength="20" required>
+
+    @error('phone')
+        <p role="alert">{{ $message }}</p>
+    @enderror
+</div>
+
+<div>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password"
+           autocomplete="new-password" minlength="8" maxlength="64"
+           aria-describedby="password-rules" required>
+
+    <ul id="password-rules" class="password-rules">
+        <li data-rule="length">At least 8 characters</li>
+        <li data-rule="uppercase">At least one uppercase letter</li>
+        <li data-rule="lowercase">At least one lowercase letter</li>
+        <li data-rule="symbol">At least one symbol, such as !, @, or #</li>
+    </ul>
+
+    @error('password')
+        <p role="alert">{{ $message }}</p>
+    @enderror
+</div>
+
+            <div>
+                <label for="password_confirmation">Confirm password</label>
+                <input id="password_confirmation" name="password_confirmation"
+                       type="password" autocomplete="new-password" required>
+
+                @error('password_confirmation')
+                    <p role="alert">{{ $message }}</p>
+                @enderror
+            </div>
+
+           <button type="submit" class="auth-submit" data-pending-label="Creating account…">
+    Create account
+</button>
+        </form>
+
+        <a href="{{ route('login') }}">Back to sign in</a>
+    </main>
 </body>
 </html>

@@ -29,10 +29,10 @@
     </select>
 
     <label for="password">{{ $editing ? 'New password (leave blank to keep current)' : 'Password' }}</label>
-    <input id="password" type="password" name="password" autocomplete="new-password" @required(! $editing) minlength="12">
+    <input id="password" type="password" name="password" autocomplete="new-password" @required(! $editing) minlength="8">
 
     <label for="password_confirmation">Confirm password</label>
-    <input id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password" @required(! $editing) minlength="12">
+    <input id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password" @required(! $editing) minlength="8">
 
     <button type="submit">{{ $editing ? 'Save changes' : 'Create user' }}</button>
 </form>

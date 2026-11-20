@@ -3,6 +3,7 @@
 use App\Http\Controllers\Owner\OwnerPackageController;
 use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicVenueController;
 
 Route::prefix('owner')->name('owner.')->middleware(['auth', 'owner'])->group(function () {
     Route::get('/space-layouts', [OwnerSpaceLayoutController::class, 'index'])
@@ -50,6 +51,10 @@ Route::prefix('owner')->name('owner.')->middleware(['auth', 'owner'])->group(fun
     ->name('packages.show');
 
     Route::delete('/packages/{id}', [OwnerPackageController::class, 'destroy'])
-    ->whereNumber('id')
+     ->whereNumber('id')
     ->name('packages.destroy');
 });
+
+ Route::get('/venues/{venue}', [PublicVenueController::class, 'show'])
+    ->whereNumber('venue')
+    ->name('public.venues.show');

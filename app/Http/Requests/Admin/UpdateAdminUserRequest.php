@@ -26,7 +26,7 @@ class UpdateAdminUserRequest extends FormRequest
             ],
             'phone' => ['nullable', 'string', 'max:20'],
             'role' => ['required', 'in:organizer,venue_owner,admin'],
-            'password' => ['nullable', 'string', 'min:12', 'max:255', 'confirmed'],
+            'password' => ['nullable', 'string', 'min:8', 'max:20', 'confirmed'],
         ];
     }
 }

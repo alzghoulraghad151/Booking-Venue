@@ -14,12 +14,12 @@ class CloudinaryImages
         $stream = fopen($image->getPathname(), 'rb');
 
         if ($stream === false) {
-            throw new RuntimeException('Could not read the uploaded venue image.');
+            throw new RuntimeException('Could not read the uploaded image.');
         }
 
         try {
             $url = $this->client()
-                ->attach('file', $stream, 'venue-image')
+                ->attach('file', $stream, 'uploaded-image')
                 ->post('upload', ['public_id' => $publicId, 'overwrite' => 'false'])
                 ->throw()
                 ->json('secure_url');
@@ -30,7 +30,7 @@ class CloudinaryImages
         }
 
         if (!is_string($url) || !str_starts_with($url, 'https://') || strlen($url) > 500) {
-            throw new RuntimeException('Cloudinary returned an invalid venue image URL.');
+            throw new RuntimeException('Cloudinary returned an invalid image URL.');
         }
 
         return $url;

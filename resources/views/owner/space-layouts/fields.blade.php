@@ -35,7 +35,8 @@
 
 <div>
     <label for="event_type_ids">Event Types</label>
-    <select id="event_type_ids" name="event_type_ids[]" multiple required>
+    <select id="event_type_ids" name="event_type_ids[]" required>
+    <option value="">Select an event type</option>
         @foreach ($eventTypes as $eventType)
             <option value="{{ $eventType->id }}"
                     @selected(in_array($eventType->id, (array) old('event_type_ids', isset($layout) && !$errors->any() ? $layout->eventTypes->modelKeys() : [])))>

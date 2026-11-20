@@ -117,6 +117,7 @@
                         <a href="{{ route('admin.users.show', $user->id) }}">
                             View
                         </a>
+                        <a href="{{ route('admin.users.edit', $user) }}">Edit</a>
                         @if (auth()->id() !== $user->id && Route::has('admin.users.status'))
                             <form action="{{ route('admin.users.status', $user) }}" method="POST">
                                 @csrf

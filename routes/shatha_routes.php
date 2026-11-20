@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -19,6 +18,10 @@ Route::prefix('admin')
        
         Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])
             ->name('bookings.show');
+
+        // Only admins can delete reviews (owners have no such route).
+        Route::delete('/bookings/{booking}/review', [AdminBookingController::class, 'destroyReview'])
+            ->name('bookings.review.destroy');
     });
 
 
