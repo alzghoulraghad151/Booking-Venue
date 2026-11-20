@@ -34,5 +34,10 @@
     <label for="password_confirmation">Confirm password</label>
     <input id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password" @required(! $editing) minlength="8">
 
-    <button type="submit">{{ $editing ? 'Save changes' : 'Create user' }}</button>
+    <button @class(['admin-button', 'admin-button--primary', 'admin-button--page']) type="submit">
+        @unless ($editing)
+            <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+        @endunless
+        {{ $editing ? 'Save changes' : 'Create user' }}
+    </button>
 </form>

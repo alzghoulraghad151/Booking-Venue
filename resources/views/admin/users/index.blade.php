@@ -4,7 +4,7 @@
 @section('hide-layout-heading', '1')
 
 @section('content')
-    <x-admin.list-heading title="Manage Users" :action-url="route('admin.users.create')" action-label="Create user" />
+    <x-admin.list-heading title="Manage Users" description="Find accounts by name, email, or phone and manage their roles and status." :action-url="route('admin.users.create')" action-label="Create user" />
 
     @if (session('success'))
         <p role="status">{{ session('success') }}</p>
@@ -80,7 +80,7 @@
                 </option>
             </select>
 
-            <button type="submit">Apply filters</button>
+            <button class="admin-button admin-filter-submit" type="submit">Apply filters</button>
 
         </form>
     </div>
@@ -99,7 +99,7 @@
                 <th>Role</th>
                 <th>Status</th>
                 <th>Registration Date</th>
-                <th>Actions</th>
+                <th scope="col" class="admin-table-actions">Actions</th>
             </tr>
         </thead>
 
@@ -113,19 +113,27 @@
                     <td>{{ $user->role }}</td>
                     <td>{{ $user->status }}</td>
                     <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                    <td>
-                        <a href="{{ route('admin.users.show', $user->id) }}">
-                            View
-                        </a>
-                        <a href="{{ route('admin.users.edit', $user) }}">Edit</a>
-                        @if (auth()->id() !== $user->id && Route::has('admin.users.status'))
-                            <form action="{{ route('admin.users.status', $user) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="status" value="{{ $user->status === 'active' ? 'suspended' : 'active' }}">
-                                <button type="submit">{{ $user->status === 'active' ? 'Suspend' : 'Activate' }}</button>
-                            </form>
-                        @endif
+                    <td class="admin-table-actions">
+                        <div class="admin-table-action-group">
+                            <a class="admin-table-icon" href="{{ route('admin.users.show', $user) }}" aria-label="View {{ $user->name }}" title="View">
+                                        <x-admin.table-action-icon name="view" />
+                                    </a>
+                            <a class="admin-table-icon" href="{{ route('admin.users.edit', $user) }}" aria-label="Edit {{ $user->name }}" title="Edit">
+                                <x-admin.table-action-icon name="edit" />
+                            </a>
+                            @if (auth()->id() !== $user->id && Route::has('admin.users.status'))
+                                <form action="{{ route('admin.users.status', $user) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="{{ $user->status === 'active' ? 'suspended' : 'active' }}">
+                                    <button @class(['admin-button', 'admin-table-icon', 'admin-table-icon--danger' => $user->status === 'active'])
+                                            type="submit" aria-label="{{ $user->status === 'active' ? 'Suspend' : 'Activate' }} {{ $user->name }}"
+                                            title="{{ $user->status === 'active' ? 'Suspend' : 'Activate' }}">
+                                        <x-admin.table-action-icon :name="$user->status === 'active' ? 'suspend' : 'activate'" />
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </td>
                 </tr>
             @empty

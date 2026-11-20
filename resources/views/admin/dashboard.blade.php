@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Admin Dashboard')
+@section('subtitle', 'Track platform activity and see which bookings and venues need attention.')
 
 @section('content')
     <div class="dashboard-stats admin-dashboard-stats" aria-label="Platform statistics">
@@ -30,9 +31,12 @@
 
     <section class="dashboard-panel" aria-labelledby="recent-bookings-title">
         <header class="dashboard-panel-header">
-            <h2 id="recent-bookings-title">Recent Bookings</h2>
+            <div>
+                <h2 id="recent-bookings-title">Recent Bookings</h2>
+                <p class="admin-description">See the latest requests, who made them, and their current status.</p>
+            </div>
             @if (Route::has('admin.bookings.index'))
-                <a class="dashboard-panel-action" href="{{ route('admin.bookings.index') }}">View all bookings</a>
+                <a class="admin-button admin-button--primary admin-button--small dashboard-panel-action" href="{{ route('admin.bookings.index') }}">View all bookings</a>
             @endif
         </header>
         <div class="dashboard-table-wrap" tabindex="0" role="region" aria-labelledby="recent-bookings-title">
@@ -72,9 +76,12 @@
     <div class="dashboard-summary-grid">
         <section class="dashboard-panel" aria-labelledby="venues-review-title">
             <header class="dashboard-panel-header">
-                <h2 id="venues-review-title">Venues Awaiting Review <span class="dashboard-badge">{{ $pendingVenues }}</span></h2>
+                <div>
+                    <h2 id="venues-review-title">Venues Awaiting Review <span class="dashboard-badge">{{ $pendingVenues }}</span></h2>
+                    <p class="admin-description">Open pending listings to check their details before making a decision.</p>
+                </div>
                 @if (Route::has('admin.venues.index'))
-                    <a class="dashboard-panel-action" href="{{ route('admin.venues.index', ['status' => 'pending']) }}">Manage venues</a>
+                    <a class="admin-button admin-button--primary admin-button--small dashboard-panel-action" href="{{ route('admin.venues.index', ['status' => 'pending']) }}">Manage venues</a>
                 @endif
             </header>
 
@@ -98,6 +105,7 @@
 
         <section class="dashboard-panel" aria-labelledby="payments-title">
             <h2 id="payments-title">Payments &amp; Commission</h2>
+            <p class="admin-description">See this month’s paid totals and commission, plus payment counts across all time.</p>
             <p class="dashboard-note">{{ $monthLabel }} · Asia/Amman</p>
             <dl class="dashboard-metrics">
                 <div><dt>Paid This Month</dt><dd>{{ number_format($monthlyPaid, 2) }} JOD</dd></div>

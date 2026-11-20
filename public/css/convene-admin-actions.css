@@ -1,0 +1,90 @@
+#admin-content .admin-description {
+    max-width: 62ch;
+    margin: 4px 0 0;
+    color: var(--convene-sage);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+#admin-content h1:has(+ .admin-description) { margin-bottom: 0; }
+#admin-content h1 + .admin-description { margin-top: var(--admin-title-description-gap); }
+#admin-content .admin-description--page { margin-bottom: 16px; }
+#admin-content .admin-record > .admin-description,
+#admin-content .dashboard-quick-actions > .admin-description,
+#admin-content .dashboard-panel > .admin-description { margin-bottom: 12px; }
+#admin-content .dashboard-panel-header > div { min-width: 0; }
+#admin-content .admin-record-header > div { flex-basis: 100%; }
+#admin-content .admin-venue-record section .admin-description { flex-basis: 100%; margin-top: -8px; }
+#admin-content .dashboard-panel > h2:has(+ .admin-description) { margin-bottom: 0; }
+
+.convene-admin-ui #admin-content .admin-button {
+    --button-bg: var(--convene-white);
+    --button-hover: var(--convene-cream);
+    --button-ink: var(--convene-navy);
+    --button-border: var(--admin-ui-border);
+    --button-size: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: var(--button-size);
+    max-width: 100%;
+    padding: 9px 16px;
+    border: 1px solid var(--button-border);
+    border-radius: 10px;
+    background: var(--button-bg);
+    color: var(--button-ink);
+    font: 700 14px/1.4 var(--admin-ui-body);
+    text-align: center;
+    text-decoration: none;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+}
+
+.convene-admin-ui #admin-content .admin-button--small {
+    --button-size: 30px;
+    padding: 4px 12px;
+    font-size: 13px;
+}
+.convene-admin-ui #admin-content .admin-button--page,
+.convene-admin-ui #admin-content .dashboard-panel-action { border-radius: 999px; }
+.convene-admin-ui #admin-content .admin-button--primary {
+    --button-bg: var(--convene-warm);
+    --button-hover: color-mix(in srgb, var(--convene-warm), var(--convene-white) 25%);
+    --button-border: transparent;
+}
+.convene-admin-ui #admin-content .admin-button--secondary { --button-bg: var(--convene-cream); --button-hover: var(--convene-white); }
+.convene-admin-ui #admin-content .admin-button--outline { --button-border: var(--convene-sage); }
+.convene-admin-ui #admin-content .admin-button--text { --button-border: transparent; --button-bg: transparent; }
+.convene-admin-ui #admin-content .admin-button--danger {
+    --button-ink: #981d1d;
+    --button-border: #981d1d;
+    --button-hover: #fbeaec;
+}
+.convene-admin-ui #admin-content .admin-button svg {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+}
+.convene-admin-ui #admin-content .admin-button:hover { background: var(--button-hover); }
+.convene-admin-ui #admin-content .admin-button:active { box-shadow: inset 0 0 0 1px currentColor; }
+.convene-admin-ui #admin-content .admin-button:focus-visible { outline: 3px solid var(--convene-sage); outline-offset: 2px; }
+.convene-admin-ui #admin-content .admin-button:is(:disabled, [aria-disabled="true"]) { opacity: .65; cursor: not-allowed; }
+.convene-admin-ui #admin-content .admin-button[aria-busy="true"] { cursor: progress; }
+
+@media (pointer: coarse) {
+    .convene-admin-ui #admin-content .admin-button { min-height: max(44px, var(--button-size)); }
+}
+
+#admin-content .admin-review-filters input[type="search"] {
+    flex: 1 1 240px;
+    min-width: 0;
+}
+
+#admin-content .admin-review-detail .admin-review-comment {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}

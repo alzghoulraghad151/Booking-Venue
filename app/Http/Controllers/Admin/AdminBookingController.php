@@ -68,14 +68,8 @@ class AdminBookingController extends Controller
 
         // withTrashed(): venues deleted later can still be used to filter their old bookings.
         $venues = Venue::withTrashed()->orderBy('name')->get(['id', 'name']);
-        $summary = [
-            'total' => Booking::count(),
-            'pending' => Booking::where('status', 'pending')->count(),
-            'confirmed' => Booking::where('status', 'confirmed')->count(),
-            'completed' => Booking::where('status', 'completed')->count(),
-        ];
 
-        return view('admin.bookings.list', compact('bookings', 'venues', 'summary', 'filters'));
+        return view('admin.bookings.list', compact('bookings', 'venues', 'filters'));
     }
 
     public function show(Booking $booking)

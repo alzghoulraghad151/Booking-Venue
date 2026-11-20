@@ -44,6 +44,14 @@ Route::get('/admin/reviews', [AdminReviewController::class, 'index'])
     ->middleware(['auth', 'admin'])
     ->name('admin.reviews.index');
 
+Route::get('/admin/reviews/{review}', [AdminReviewController::class, 'show'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.reviews.show');
+
+Route::delete('/admin/reviews/{review}', [AdminReviewController::class, 'destroy'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.reviews.destroy');
+
 Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index'])
     ->middleware(['auth', 'owner'])
     ->name('owner.dashboard');
