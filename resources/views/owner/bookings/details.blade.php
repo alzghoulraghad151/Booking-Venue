@@ -1,14 +1,14 @@
+@extends('layouts.owner')
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Owner booking #{{ $booking->id }} | Convene</title>
+@section('title', 'Booking #'.$booking->id)
+@section('hide-layout-heading', '1')
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-bookings.css') }}">
-</head>
-<body class="bookings-standalone">
-<main class="bookings-page">
+@endpush
+
+@section('content')
+<div class="bookings-page">
     <header>
         <h1 class="page-title">Booking review</h1>
         <p class="page-subtitle">Confirm or reject this booking for your venue.</p>
@@ -228,7 +228,5 @@
             @endif
         </p>
     </section>
-
-</main>
-</body>
-</html>
+</div>
+@endsection

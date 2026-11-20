@@ -1,13 +1,14 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Owner bookings | Convene</title>
+@extends('layouts.owner')
+
+@section('title', 'Bookings')
+@section('hide-layout-heading', '1')
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-bookings.css') }}">
-</head>
-<body class="bookings-standalone">
-<main class="bookings-page">
+@endpush
+
+@section('content')
+<div class="bookings-page">
     <header>
         <h1 class="page-title">Bookings</h1>
         <p class="page-subtitle">Review requests for your venues and make booking decisions.</p>
@@ -144,6 +145,5 @@
 
         {{ $bookings->links() }}
     </section>
-</main>
-</body>
-</html>
+</div>
+@endsection
