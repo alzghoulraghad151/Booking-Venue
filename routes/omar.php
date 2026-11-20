@@ -6,6 +6,7 @@ use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
 
+Route::view('/', 'public.home')->name('home');
 Route::prefix('owner')->name('owner.')->group(function () {
     Route::middleware(['auth', OwnerMiddleware::class])->group(function () {
         Route::get('/venues/{venue}', [OwnerVenueController::class, 'show'])
