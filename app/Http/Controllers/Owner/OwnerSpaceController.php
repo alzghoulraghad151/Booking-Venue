@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Owner\StoreSpaceRequest;
 use App\Http\Requests\Owner\UpdateSpaceRequest;
 use App\Models\Space;
-use App\Services\ImageService;
+use App\Services\SpaceImageStorage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use RuntimeException;
 use Throwable;
 
 class OwnerSpaceController extends Controller
@@ -70,30 +72,44 @@ class OwnerSpaceController extends Controller
         return view('owner.spaces.create', compact('venues'));
     }
 
-    public function store(StoreSpaceRequest $request, ImageService $imageService): RedirectResponse
+    public function store(StoreSpaceRequest $request, SpaceImageStorage $imageStorage): RedirectResponse
     {
         $data = $request->validated();
         $venue = $request->user()->venues()->findOrFail($data['venue_id']);
         $attributes = Arr::only($data, ['name', 'description', 'capacity', 'hourly_rate', 'status']);
-        $uploadedImages = $request->file('images', []);
-        $storedPaths = [];
+        $space = $venue->spaces()->create($attributes);
+        $uploadedImages = [];
+
         try {
-            DB::transaction(function () use ($venue, $attributes, $uploadedImages, $imageService, &$storedPaths): void {
-                $space = $venue->spaces()->create($attributes);
+            $uploadedImages = $imageStorage->upload($request->file('images', []), (int) $space->getKey());
+
+            DB::transaction(function () use ($space, $uploadedImages): void {
+                $needsPrimary = true;
 
                 foreach ($uploadedImages as $image) {
-                    $path = $imageService->store($image, 'spaces/'.$space->getKey());
-                    $storedPaths[] = $path;
-
                     $space->images()->create([
-                        'image_url' => $path,
-                        'is_primary' => ! $space->images()->where('is_primary', true)->exists(),
+                        ...$image,
+                        'is_primary' => $needsPrimary,
                     ]);
+
+                    $needsPrimary = false;
                 }
             });
         } catch (Throwable $exception) {
-            foreach ($storedPaths as $path) {
-                $imageService->delete($path);
+            $imageStorage->discard($uploadedImages);
+
+            try {
+                $space->delete();
+            } catch (Throwable $cleanupException) {
+                report($cleanupException);
+            }
+
+            if ($exception instanceof HttpClientException || $exception instanceof RuntimeException) {
+                report($exception);
+
+                return back()->withInput($request->safe()->except('images'))->withErrors([
+                    'images' => 'The space and images could not be saved. Please try again.',
+                ]);
             }
 
             throw $exception;
@@ -115,21 +131,25 @@ class OwnerSpaceController extends Controller
     public function update(
         UpdateSpaceRequest $request,
         Space $space,
-        ImageService $imageService
+        SpaceImageStorage $imageStorage
     ): RedirectResponse {
         $data = $request->validated();
         $attributes = Arr::only($data, ['name', 'description', 'capacity', 'hourly_rate', 'status']);
-        $uploadedImages = $request->file('images', []);
-        $storedPaths = [];
-        $removedPaths = [];
+        $uploadedImages = [];
+        $removedImages = [];
 
         try {
-            DB::transaction(function () use ($space, $attributes, $data, $uploadedImages, $imageService, &$storedPaths, &$removedPaths): void {
+            $uploadedImages = $imageStorage->upload($request->file('images', []), (int) $space->getKey());
+
+            DB::transaction(function () use ($space, $attributes, $data, $uploadedImages, &$removedImages): void {
                 $space->update($attributes);
 
                 foreach ($data['remove_images'] ?? [] as $imageId) {
                     $image = $space->images()->findOrFail($imageId);
-                    $removedPaths[] = $image->image_url;
+                    $removedImages[] = [
+                        'image_url' => $image->image_url,
+                        'cloudinary_public_id' => $image->cloudinary_public_id,
+                    ];
                     $image->delete();
                 }
 
@@ -137,37 +157,48 @@ class OwnerSpaceController extends Controller
                     $space->images()->orderBy('id')->first()?->update(['is_primary' => true]);
                 }
 
-                foreach ($uploadedImages as $image) {
-                    $path = $imageService->store($image, 'spaces/'.$space->getKey());
-                    $storedPaths[] = $path;
+                $needsPrimary = ! $space->images()->where('is_primary', true)->exists();
 
+                foreach ($uploadedImages as $image) {
                     $space->images()->create([
-                        'image_url' => $path,
-                        'is_primary' => ! $space->images()->where('is_primary', true)->exists(),
+                        ...$image,
+                        'is_primary' => $needsPrimary,
                     ]);
+
+                    $needsPrimary = false;
                 }
             });
         } catch (Throwable $exception) {
-            foreach ($storedPaths as $path) {
-                $imageService->delete($path);
+            $imageStorage->discard($uploadedImages);
+
+            if ($exception instanceof HttpClientException || $exception instanceof RuntimeException) {
+                report($exception);
+
+                return back()->withInput($request->safe()->except('images'))->withErrors([
+                    'images' => 'The space images could not be saved. Please try again.',
+                ]);
             }
 
             throw $exception;
         }
 
-        foreach ($removedPaths as $path) {
-            $imageService->delete($path);
-        }
+        $imageStorage->delete($removedImages);
 
         return redirect()
             ->route('owner.spaces.index')
             ->with('success', 'Space updated successfully.');
     }
 
-    public function destroy(Request $request, Space $space, ImageService $imageService): RedirectResponse
+    public function destroy(Request $request, Space $space, SpaceImageStorage $imageStorage): RedirectResponse
     {
         $this->ensureOwner($request, $space);
-        $imagePaths = $space->images()->pluck('image_url')->all();
+        $images = $space->images()
+            ->get(['image_url', 'cloudinary_public_id'])
+            ->map(fn ($image) => [
+                'image_url' => $image->image_url,
+                'cloudinary_public_id' => $image->cloudinary_public_id,
+            ])
+            ->all();
 
         try {
             DB::transaction(function () use ($space): void {
@@ -180,9 +211,7 @@ class OwnerSpaceController extends Controller
             ]);
         }
 
-        foreach ($imagePaths as $path) {
-            $imageService->delete($path);
-        }
+        $imageStorage->delete($images);
 
         return redirect()
             ->route('owner.spaces.index')

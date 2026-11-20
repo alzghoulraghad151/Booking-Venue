@@ -76,7 +76,7 @@
                     <tr>
                         <td>
                             @if ($image)
-                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image->image_url) }}" alt="{{ $space->name }}" width="100">
+                                <img src="{{ $image->image_url }}" alt="{{ $space->name }}" width="100">
                             @else
                                 No image
                             @endif
