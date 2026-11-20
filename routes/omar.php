@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Owner\OwnerSpaceController;
-use App\Http\Controllers\Owner\OwnerSpaceLayoutController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -23,12 +22,4 @@ Route::prefix('owner')->name('owner.')->group(function () {
             Route::delete('/{space}', [OwnerSpaceController::class, 'destroy'])->name('destroy');
         });
     });
-
-    Route::get('/space-layouts/{id}/edit', [OwnerSpaceLayoutController::class, 'edit'])
-        ->middleware(OwnerMiddleware::class)
-        ->name('space-layouts.edit');
-
-    Route::patch('/space-layouts/{id}', [OwnerSpaceLayoutController::class, 'update'])
-        ->middleware(['auth', OwnerMiddleware::class])
-        ->name('space-layouts.update');
 });
