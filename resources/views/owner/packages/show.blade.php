@@ -3,7 +3,7 @@
 <p>{{ $package->description }}</p>
 <p>Price: {{ $package->price }} JOD</p>
 <p>Duration: {{ $package->duration_minutes }} minutes</p>
-<p>Guests: {{ $package->min_guests }}–{{ $package->max_guests }}</p>
+<p>Guests: {{ $package->min_guests }}-{{ $package->max_guests }}</p>
 <p>Status: {{ $package->is_active ? 'Active' : 'Inactive' }}</p>
 
 <h2>Eligible Spaces</h2>
