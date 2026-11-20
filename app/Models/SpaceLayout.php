@@ -27,5 +27,11 @@ class SpaceLayout extends Model
             'space_layout_id',
             'event_type_id'
         );
+     public function bookingDetails(): HasMany
+    {
+        return $this->hasMany(BookingDetail::class);
+    }
+    public function eventTypes(){
+        return $this->belongsToMany(EventTybe::class,'layout_event_types');
     }
 }

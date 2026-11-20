@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Manage Users</title>
-</head>
+@section('title', 'Admin - Manage Users')
+@section('hide-layout-heading', '1')
 
-<body>
-
-    <h1>Manage Users</h1>
+@section('content')
+<h1>Manage Users</h1>
 
     <a href="{{ route('admin.users.create') }}">Create user</a>
 
@@ -143,7 +138,4 @@
     <br>
 
     {{ $users->links() }}
-
-</body>
-
-</html>
+@endsection

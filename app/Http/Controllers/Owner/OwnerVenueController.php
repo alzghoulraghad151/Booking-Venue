@@ -73,9 +73,10 @@ public function edit(Venue $venue): View
 {
     Gate::authorize('update', $venue);
 
+    $venue->load('images');
+
     return view('owner.venues.edit', ['venue' => $venue]);
 }
-
 
 
 

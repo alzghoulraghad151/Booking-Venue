@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VenueImage extends Model
 {
-    protected $fillable = ['image_url', 'is_primary'];
+   protected $fillable = ['image_url', 'cloudinary_public_id', 'is_primary'];
 
     public function venue(): BelongsTo
     {

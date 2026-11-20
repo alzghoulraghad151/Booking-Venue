@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Manage Venues</title>
-    <style>
+@extends('layouts.admin')
+
+@section('title', 'Manage Venues')
+@section('hide-layout-heading', '1')
+
+@push('styles')
+<style>
     .venue-status {
         display: inline-block;
         padding: 0.25rem 0.6rem;
@@ -18,9 +18,10 @@
     .venue-status--rejected { background: #fee2e2; color: #7f1d1d; }
     .venue-status--inactive { background: #e5e7eb; color: #374151; }
 </style>
-</head>
-<body>
-    <main>
+@endpush
+
+@section('content')
+<div>
         <h1>Manage Venues</h1>
 
 
@@ -85,6 +86,5 @@
         </table>
 
         {{ $venues->links() }}
-    </main>
-</body>
-</html>
+    </div>
+@endsection

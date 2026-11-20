@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Venue</title>
-</head>
-<body>
-    <main>
+@extends('layouts.owner')
+
+@section('title', 'Add Venue')
+@section('hide-layout-heading', '1')
+
+@section('content')
+<div>
         <h1>Add Venue</h1>
 
 
@@ -55,6 +53,5 @@
 
        
         <a href="{{ route('owner.venues.index') }}">Back to My Venues</a>
-    </main>
-</body>
-</html>
+    </div>
+@endsection

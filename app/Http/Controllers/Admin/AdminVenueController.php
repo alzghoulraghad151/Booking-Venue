@@ -48,7 +48,7 @@ class AdminVenueController extends Controller
 
     public function show(Venue $venue): View
 {
-    $venue->load(['owner', 'spaces']);
+   $venue->load(['owner', 'spaces', 'images']);
 
     return view('admin.venues.show', ['venue' => $venue]);
 }
