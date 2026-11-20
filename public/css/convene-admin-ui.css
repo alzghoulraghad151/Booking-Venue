@@ -1,0 +1,312 @@
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('../fonts/convene-admin/baloo-2.ttf') format('truetype');
+    font-weight: 400 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url('../fonts/convene-admin/nunito.ttf') format('truetype');
+    font-weight: 200 1000;
+    font-display: swap;
+}
+
+.convene-admin-ui {
+    --admin-sidebar-width: 240px;
+    --admin-ui-body: Nunito, system-ui, sans-serif;
+    --admin-ui-heading: 'Baloo 2', system-ui, sans-serif;
+    --admin-ui-border: #dedbd5;
+    --admin-ui-hover: #faf6ef;
+    --admin-ui-radius: 16px;
+    --admin-ui-gap: 16px;
+    --admin-ui-shadow: 0 4px 16px rgb(23 43 58 / 5%);
+    font: 600 14px/1.5 var(--admin-ui-body);
+}
+
+.convene-admin-ui .admin-content { padding: 20px 20px 24px 16px; }
+.convene-admin-ui .admin-brand a { gap: 12px; font: 700 26px/1.2 var(--admin-ui-heading); }
+.convene-admin-ui .admin-brand { min-height: 64px; }
+.convene-admin-ui .admin-mark { flex: 0 0 40px; height: 40px; border-radius: 12px; }
+.convene-admin-ui .admin-nav-item { font-size: 14px; }
+.convene-admin-ui .admin-sidebar { padding: 16px 12px; }
+.convene-admin-ui .admin-sidebar-logout button { color: inherit; }
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(h1, h2, h3) {
+    font-family: var(--admin-ui-heading);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) h1 { margin: 0 0 var(--admin-ui-gap); font-size: 30px; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) h2 { font-size: 22px; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) h3 { font-size: 18px; }
+.convene-admin-ui .admin-page-subtitle { margin: -12px 0 var(--admin-ui-gap); color: var(--convene-sage); }
+.convene-admin-ui .admin-dashboard-stats h2 { font: 700 13px/1.4 var(--admin-ui-body); }
+.convene-admin-ui .admin-dashboard-stats strong { font-family: var(--admin-ui-heading); }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) a { text-underline-offset: 3px; }
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.dashboard-panel, .admin-list-panel, .admin-edit-form, .admin-record dl, .admin-venue-record section, .admin-venue-record ul) {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--admin-ui-border);
+    border-radius: var(--admin-ui-radius);
+    background: var(--convene-white);
+    box-shadow: var(--admin-ui-shadow);
+}
+
+.convene-admin-ui :is(.dashboard-panel-header, .event-types-actions) { gap: 12px; }
+.convene-admin-ui .dashboard-panel { margin-top: var(--admin-ui-gap); }
+.convene-admin-ui .dashboard-summary-grid { margin-top: var(--admin-ui-gap); gap: var(--admin-ui-gap); }
+.convene-admin-ui .dashboard-summary-grid > .dashboard-panel { margin-top: 0; }
+.convene-admin-ui .admin-dashboard-stats > article { border-radius: var(--admin-ui-radius); }
+
+.convene-admin-ui .dashboard-table-wrap {
+    position: relative;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) table :is(td, th):last-child { min-width: 96px; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) table :is(a, button, summary):focus-visible { outline-offset: 1px; }
+
+.convene-admin-ui .admin-content :is(button:not(.admin-nav-toggle), .admin-record-header a, .admin-record > a, .event-types-form .event-types-actions a) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 9px 16px;
+    border: 1px solid var(--admin-ui-border);
+    border-radius: 10px;
+    background: var(--convene-white);
+    color: var(--convene-navy);
+    font: 700 14px/1.4 var(--admin-ui-body);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.event-types-primary, .admin-edit-form button, .admin-record-header a:nth-of-type(2)) {
+    background: var(--convene-warm);
+    border-color: transparent;
+}
+
+.convene-admin-ui .admin-content :is(button:not(.admin-nav-toggle), .admin-record-header a, .admin-record > a, .event-types-form .event-types-actions a):not(:disabled):hover {
+    background: var(--convene-cream);
+    border-color: var(--convene-sage);
+}
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.event-types-primary, .admin-edit-form button):hover {
+    background: color-mix(in srgb, var(--convene-warm), var(--convene-white) 25%);
+}
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) button:disabled { opacity: .65; cursor: not-allowed; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .event-types-delete button.event-types-error { color: #981d1d; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .event-types-delete[open] > summary { background: var(--convene-cream); }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [role="alert"] { color: #981d1d; overflow-wrap: anywhere; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [role="status"] { color: var(--convene-sage); overflow-wrap: anywhere; }
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.admin-edit-form, .event-types-form) { max-width: 960px; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.admin-edit-form, .event-types-form) label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.admin-edit-form, .event-types-form) :is(input:not([type="hidden"]), select, textarea) {
+    display: block;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 12px;
+    border: 1px solid var(--convene-sage);
+    border-radius: 10px;
+    background: var(--convene-white);
+    color: var(--convene-navy);
+    font: inherit;
+}
+
+.convene-admin-ui .admin-edit-form { margin-top: var(--admin-ui-gap); }
+.convene-admin-ui .admin-edit-form :is(input:not([type="hidden"]), select) { margin-bottom: var(--admin-ui-gap); }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [aria-invalid="true"] { border-color: #981d1d; }
+
+.convene-admin-ui .admin-record { max-width: 960px; }
+.convene-admin-ui .admin-record > a:first-child { margin-bottom: var(--admin-ui-gap); }
+.convene-admin-ui .admin-record-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--admin-ui-gap);
+}
+.convene-admin-ui .admin-record-header h1 { flex: 1 0 100%; margin-bottom: 4px; }
+.convene-admin-ui .admin-record-header form { margin: 0; }
+.convene-admin-ui .admin-record-header form button { color: #981d1d; }
+.convene-admin-ui .admin-record dl {
+    display: grid;
+    grid-template-columns: minmax(85px, max-content) minmax(0, 1fr);
+    gap: 12px 16px;
+    margin: 0 0 var(--admin-ui-gap);
+}
+.convene-admin-ui .admin-record dt { font-weight: 800; }
+.convene-admin-ui .admin-record dd { margin: 0; overflow-wrap: anywhere; }
+.convene-admin-ui .admin-record .user-details h2 { margin: 0 0 12px; }
+.convene-admin-ui .admin-venue-record section { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: var(--admin-ui-gap); }
+.convene-admin-ui .admin-venue-record section h2 { flex-basis: 100%; margin: 0; }
+.convene-admin-ui .admin-venue-record figure { max-width: 240px; margin: 0; }
+.convene-admin-ui .admin-venue-record img { display: block; max-width: 100%; height: auto; border-radius: 10px; }
+.convene-admin-ui .admin-venue-record > form { display: inline-block; margin: 0 8px 12px 0; }
+.convene-admin-ui .admin-venue-record ul { padding-inline-start: 36px; }
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .admin-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px 12px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--admin-ui-border);
+    font-size: 13px;
+}
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .admin-pagination p { margin: 0; color: var(--convene-sage); }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .admin-pagination-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .admin-pagination-links > * {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 1px solid var(--admin-ui-border);
+    border-radius: 8px;
+    color: var(--convene-navy);
+    text-decoration: none;
+}
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .admin-pagination-links :is(a:hover, [aria-current="page"]) { background: var(--convene-cream); }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .admin-pagination-links [aria-disabled="true"] { color: var(--convene-sage); }
+
+.convene-admin-ui .admin-content > .admin-nav-toggle {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--convene-sage);
+    border-radius: 10px;
+    background: var(--convene-white);
+    color: var(--convene-navy);
+    font: inherit;
+    cursor: pointer;
+}
+.convene-admin-ui .admin-nav-toggle:hover { background: var(--convene-cream); }
+.convene-admin-ui .admin-nav-drawer {
+    inset: 0 auto 0 0;
+    width: min(260px, calc(100vw - 48px));
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--convene-navy);
+    color: var(--convene-white);
+}
+.convene-admin-ui .admin-nav-drawer::backdrop { background: rgb(23 43 58 / 65%); }
+.convene-admin-ui .admin-nav-drawer .admin-sidebar { position: static; min-height: calc(100dvh - 64px); max-height: none; }
+.convene-admin-ui .admin-nav-close {
+    min-height: 44px;
+    margin: 12px 12px 8px;
+    padding: 8px 12px;
+    border: 1px solid currentColor;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+.convene-admin-ui .admin-nav-drawer :focus-visible { outline-color: var(--convene-warm); }
+
+@media (max-width: 991px) {
+    .convene-admin-ui { display: block; }
+    .convene-admin-ui .admin-content { padding: 20px 16px 24px; }
+    .convene-admin-ui > .admin-sidebar { position: static; min-height: 0; max-height: none; }
+    .convene-admin-ui.admin-nav-enhanced > .admin-sidebar { display: none; }
+    .convene-admin-ui .admin-content > .admin-nav-toggle:not([hidden]) { display: inline-flex; min-height: 44px; margin-bottom: 12px; }
+    .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) h1 { font-size: 28px; }
+}
+
+@media (max-width: 600px) {
+    .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.dashboard-panel, .admin-list-panel, .admin-edit-form, .admin-record dl, .admin-venue-record section) { padding: 16px; }
+    .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .admin-pagination-links .admin-page-number:not([aria-current="page"]) { display: none; }
+}
+
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) table td :is(a, button, summary) {
+    min-height: 36px;
+    padding-block: 6px;
+    border-radius: 8px;
+}
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) table td :is(form, .event-types-delete) {
+    margin-block: 0;
+    vertical-align: middle;
+}
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .event-types-delete[open] form { margin-top: 6px; }
+@media (pointer: coarse) {
+    .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) table td :is(a, button, summary) { min-height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(button, a, summary, th, td) { transition: none; }
+}
+
+.admin-warm-actions .admin-navigation :is(a.admin-nav-item:hover, a.admin-nav-item[aria-current="page"]) {
+    background: var(--convene-warm);
+    color: var(--convene-navy);
+    border: 0;
+    box-shadow: none;
+}
+
+.admin-warm-actions .dashboard-quick-actions a {
+    border-radius: 10px;
+}
+
+.admin-warm-actions .dashboard-quick-actions a:hover {
+    background: var(--convene-warm);
+    border-color: transparent;
+    color: var(--convene-navy);
+}
+
+.admin-warm-actions .dashboard-quick-actions a:hover span {
+    color: inherit;
+}
+
+.admin-warm-actions .dashboard-panel .dashboard-panel-action {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--convene-warm);
+    color: var(--convene-navy);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.admin-warm-actions .dashboard-panel .dashboard-panel-action:hover {
+    background: color-mix(in srgb, var(--convene-warm), var(--convene-white) 25%);
+}
+
+@media (pointer: coarse) {
+    .admin-warm-actions .dashboard-panel .dashboard-panel-action { min-height: 44px; }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .convene-admin-ui.admin-warm-actions :is(a, button, summary):hover,
+    .convene-admin-ui.admin-warm-actions tbody tr:hover > * {
+        transition: background-color 100ms ease-out, border-color 100ms ease-out, color 100ms ease-out;
+    }
+}

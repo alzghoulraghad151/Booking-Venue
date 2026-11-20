@@ -6,7 +6,7 @@
     </ul>
 @endif
 
-<form action="{{ $editing ? route('admin.users.update', $user) : route('admin.users.store') }}" method="POST">
+<form class="admin-edit-form" action="{{ $editing ? route('admin.users.update', $user) : route('admin.users.store') }}" method="POST">
     @csrf
     @if ($editing)
         @method('PUT')

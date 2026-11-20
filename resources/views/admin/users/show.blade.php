@@ -4,10 +4,7 @@
 @section('hide-layout-heading', '1')
 
 @section('content')
-{{-- Existing Admin Sidebar --}}
-    @include('admin.partials.sidebar')
-
-    <main class="admin-main">
+    <div class="admin-record">
 
         @if (session('success'))
             <p role="status">{{ session('success') }}</p>
@@ -20,7 +17,7 @@
             </ul>
         @endif
 
-        <header class="page-header">
+        <header class="admin-record-header">
             <h1>User Details</h1>
 
             <a href="{{ route('admin.users.index') }}">

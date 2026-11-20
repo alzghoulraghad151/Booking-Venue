@@ -4,7 +4,7 @@
 @section('hide-layout-heading', '1')
 
 @section('content')
-<div>
+<div class="admin-record admin-venue-record">
         <a href="{{ route('admin.venues.index') }}">Back to Manage Venues</a>
 
         <h1>{{ $venue->name }}</h1>

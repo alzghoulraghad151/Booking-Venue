@@ -2,7 +2,11 @@
 
 @section('title', 'Event Types')
 
+@section('hide-layout-heading', '1')
+
 @section('content')
+    <x-admin.list-heading title="Event Types" :action-url="route('admin.event-types.create')" action-label="Add event type" />
+
     @if (session('status'))
         <p role="status">{{ session('status') }}</p>
     @endif
@@ -11,19 +15,16 @@
         <p role="alert" class="event-types-error">{{ $message }}</p>
     @enderror
 
-    <section class="dashboard-panel" aria-label="Manage event types">
-        <div class="dashboard-panel-header event-types-actions">
-            <form action="{{ route('admin.event-types.index') }}" method="GET">
-                <label for="event-type-search">Search by name</label>
-                <input id="event-type-search" name="search" value="{{ $search }}" maxlength="100">
-                <button type="submit">Search</button>
-                @if ($search !== '')
-                    <a href="{{ route('admin.event-types.index') }}">Clear</a>
-                @endif
-            </form>
-            <a class="event-types-primary" href="{{ route('admin.event-types.create') }}">Add event type</a>
-        </div>
+    <form action="{{ route('admin.event-types.index') }}" method="GET">
+        <label for="event-type-search">Search by name</label>
+        <input id="event-type-search" name="search" value="{{ $search }}" maxlength="100">
+        <button type="submit">Search</button>
+        @if ($search !== '')
+            <a href="{{ route('admin.event-types.index') }}">Clear</a>
+        @endif
+    </form>
 
+    <section class="dashboard-panel" aria-label="Manage event types">
         <div class="dashboard-table-wrap" tabindex="0" role="region" aria-label="Event types table">
             <table class="dashboard-table">
                 <thead>

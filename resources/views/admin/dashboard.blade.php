@@ -32,7 +32,7 @@
         <header class="dashboard-panel-header">
             <h2 id="recent-bookings-title">Recent Bookings</h2>
             @if (Route::has('admin.bookings.index'))
-                <a href="{{ route('admin.bookings.index') }}">View all bookings</a>
+                <a class="dashboard-panel-action" href="{{ route('admin.bookings.index') }}">View all bookings</a>
             @endif
         </header>
         <div class="dashboard-table-wrap" tabindex="0" role="region" aria-labelledby="recent-bookings-title">
@@ -74,7 +74,7 @@
             <header class="dashboard-panel-header">
                 <h2 id="venues-review-title">Venues Awaiting Review <span class="dashboard-badge">{{ $pendingVenues }}</span></h2>
                 @if (Route::has('admin.venues.index'))
-                    <a href="{{ route('admin.venues.index', ['status' => 'pending']) }}">Manage venues</a>
+                    <a class="dashboard-panel-action" href="{{ route('admin.venues.index', ['status' => 'pending']) }}">Manage venues</a>
                 @endif
             </header>
 

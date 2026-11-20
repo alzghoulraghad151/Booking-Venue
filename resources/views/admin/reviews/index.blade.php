@@ -2,7 +2,11 @@
 
 @section('title', 'Reviews')
 
+@section('hide-layout-heading', '1')
+
 @section('content')
+    <x-admin.list-heading title="Reviews" />
+
     <section id="reviews" class="dashboard-panel" aria-labelledby="reviews-title">
         <header class="dashboard-panel-header">
             <h2 id="reviews-title">Venue Reviews</h2>
