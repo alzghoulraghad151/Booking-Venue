@@ -43,7 +43,7 @@
             <legend>Current images</legend>
             @foreach ($space->images as $image)
                 <label>
-                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image->image_url) }}" alt="{{ $space->name }}" width="120">
+                    <img src="{{ $image->image_url }}" alt="{{ $space->name }}" width="120">
                     <input type="checkbox" name="remove_images[]" value="{{ $image->id }}">
                     Remove image
                     @if ($image->is_primary)(Primary)@endif

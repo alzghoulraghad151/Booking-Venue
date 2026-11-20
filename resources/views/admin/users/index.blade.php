@@ -116,6 +116,7 @@
                         <a href="{{ route('admin.users.show', $user->id) }}">
                             View
                         </a>
+                        <a href="{{ route('admin.users.edit', $user) }}">Edit</a>
                         @unless (auth()->id() === $user->id)
                             <form action="{{ route('admin.users.status', $user) }}" method="POST">
                                 @csrf
@@ -137,5 +138,7 @@
 
     <br>
 
-    {{ $users->links() }}
+    <div class="admin-user-pagination">
+        {{ $users->links() }}
+    </div>
 @endsection
