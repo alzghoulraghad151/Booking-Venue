@@ -130,3 +130,8 @@
 .password-rules .is-met::before {
     content: "✓";
 }
+
+.auth-submit:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
