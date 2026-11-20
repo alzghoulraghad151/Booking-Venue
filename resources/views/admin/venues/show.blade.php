@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Venue Details</title>
-</head>
-<body>
-    <main>
+@extends('layouts.admin')
+
+@section('title', 'Venue Details')
+@section('hide-layout-heading', '1')
+
+@section('content')
+<div>
         <a href="{{ route('admin.venues.index') }}">Back to Manage Venues</a>
 
         <h1>{{ $venue->name }}</h1>
@@ -24,6 +22,27 @@
             <dt>Description</dt>
             <dd>{{ $venue->description ?: 'No description provided.' }}</dd>
         </dl>
+
+
+
+        <section>
+    <h2>Venue photos</h2>
+
+    @forelse ($venue->images as $image)
+        <figure>
+            <img src="{{ $image->image_url }}"
+                 alt="Photo of {{ $venue->name }}"
+                 width="240"
+                 loading="lazy">
+
+            @if ($image->is_primary)
+                <figcaption><strong>Primary photo</strong></figcaption>
+            @endif
+        </figure>
+    @empty
+        <p>No photos have been uploaded for this venue.</p>
+    @endforelse
+</section>
 
 
 
@@ -82,6 +101,5 @@
                 <li>No spaces have been added to this venue.</li>
             @endforelse
         </ul>
-    </main>
-</body>
-</html>
+    </div>
+@endsection

@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - User Details</title>
-</head>
+@section('title', 'Admin - User Details')
+@section('hide-layout-heading', '1')
 
-<body>
-
-    {{-- Existing Admin Sidebar --}}
+@section('content')
+{{-- Existing Admin Sidebar --}}
     @include('admin.partials.sidebar')
 
     <main class="admin-main">
@@ -69,8 +64,5 @@
 
         </section>
 
-    </main>
-
-</body>
-
-</html>
+    </div>
+@endsection
