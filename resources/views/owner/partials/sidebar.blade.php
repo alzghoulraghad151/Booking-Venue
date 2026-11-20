@@ -1,20 +1,21 @@
 <aside class="admin-sidebar">
     <div class="admin-brand">
-        <a href="{{ route('owner.venues.index') }}">
+        <a href="{{ route('owner.dashboard') }}">
             <span class="admin-mark" aria-hidden="true">C</span>
             Convene
         </a>
     </div>
 
-    <nav class="admin-navigation" aria-label="Venue owner">
+    <nav class="admin-navigation" aria-label="Owner workspace">
         <div class="admin-nav-group">
+            <h2>Management</h2>
+            <x-admin.nav-item label="Dashboard" route-name="owner.dashboard" active-pattern="owner.dashboard" />
             <x-admin.nav-item label="My Venues" route-name="owner.venues.index" active-pattern="owner.venues.*" />
-            @if (Route::has('owner.spaces.index'))
-                <x-admin.nav-item label="My Spaces" route-name="owner.spaces.index" active-pattern="owner.spaces.*" />
-            @endif
-            @if (Route::has('owner.space-layouts.index'))
-                <x-admin.nav-item label="Space Layouts" route-name="owner.space-layouts.index" active-pattern="owner.space-layouts.*" />
-            @endif
+            <x-admin.nav-item label="My Spaces" route-name="owner.spaces.index" active-pattern="owner.spaces.*" />
+            <x-admin.nav-item label="Space Layouts" route-name="owner.space-layouts.index" active-pattern="owner.space-layouts.*" />
+            <x-admin.nav-item label="Packages" route-name="owner.packages.index" active-pattern="owner.packages.*" />
+            <x-admin.nav-item label="Bookings" route-name="owner.bookings.index" active-pattern="owner.bookings.*" />
+            <x-admin.nav-item label="Calendar" route-name="owner.calendar.index" active-pattern="owner.calendar.*" />
         </div>
     </nav>
 </aside>
