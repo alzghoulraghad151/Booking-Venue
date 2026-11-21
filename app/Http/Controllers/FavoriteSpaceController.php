@@ -20,6 +20,6 @@ class FavoriteSpaceController extends Controller
             $message = 'Place added to favorites.';
         }
 
-        return back()->with('status', $message);
+        return back()->with('favourite_status', $message);
     }
 }

@@ -82,6 +82,10 @@
             </div>
         </form>
 
+        @if (session('favourite_status'))
+            <p role="status">{{ session('favourite_status') }}</p>
+        @endif
+
         @if ($voiceSummary)
             <section class="places-voice-summary" aria-live="polite">
                 <p>{{ $voiceSummary }}</p>
