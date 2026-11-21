@@ -13,18 +13,13 @@
 }
 
 .bookings-page {
-    --convene-navy: #172b3a;
-    --convene-cream: #f5f2ec;
-    --convene-warm: #e5a66a;
-    --convene-white: #ffffff;
-    --convene-sage: #526c68;
-    --bk-line: #dedbd5;
+    --bk-line: var(--admin-ui-border, #dedbd5);
     display: grid;
     gap: 16px;
     color: var(--convene-navy);
 }
 
-.bookings-standalone .bookings-page { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+.bookings-standalone .bookings-page { --bk-line: #dedbd5; max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
 .bookings-page *, .bookings-page *::before, .bookings-page *::after { box-sizing: border-box; }
 .bookings-page h1, .bookings-page h2, .bookings-page p { margin: 0; }
 .bookings-page :focus-visible { outline: 3px solid var(--convene-sage); outline-offset: 3px; }
@@ -123,3 +118,244 @@
 .bookings-page nav[role="navigation"] span.relative { display: inline-flex; flex-wrap: wrap; gap: 4px; }
 .bookings-page nav[role="navigation"] a, .bookings-page nav[role="navigation"] span[aria-disabled] > span, .bookings-page nav[role="navigation"] span[aria-current] > span { display: inline-block; border: 1px solid var(--bk-line); border-radius: 6px; color: var(--convene-navy); text-decoration: none; }
 .bookings-page nav[role="navigation"] span[aria-current] > span { background: var(--convene-warm); }
+
+
+/* ---- Admin / Owner shell: follow the Dar theme (fonts, colours, radius) ---- */
+.convene-admin-ui .bookings-page,
+.convene-admin-ui .bookings-page :is(input, select, textarea, button) {
+    font-family: var(--admin-ui-body);
+}
+
+.convene-admin-ui .bookings-page :is(h1, h2, h3, .review-score strong) {
+    font-family: var(--admin-ui-heading);
+    font-weight: 600;
+}
+
+.convene-admin-ui .bookings-page .eyebrow {
+    color: var(--dar-brass, var(--convene-sage));
+    letter-spacing: .12em;
+}
+
+.convene-admin-ui .bookings-page :is(.info-item, .review-score, .empty-mark, .result-count) {
+    background: var(--dar-stone, var(--convene-cream));
+}
+
+.convene-admin-ui .bookings-page .info-item { border: 1px solid var(--admin-ui-border); }
+.convene-admin-ui .bookings-page .info-item span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--convene-sage);
+}
+.convene-admin-ui .bookings-page .info-item strong { font-weight: 600; font-size: 17px; }
+
+.convene-admin-ui .bookings-page .result-count {
+    padding: 0;
+    background: transparent;
+    color: var(--dar-brass, var(--convene-sage));
+    font-weight: 700;
+}
+
+.convene-admin-ui .bookings-page .data-table td { vertical-align: middle; }
+.convene-admin-ui .bookings-page .data-table td.amount { font-weight: 700; }
+
+/* Status badges: same pill used in the admin booking list */
+.convene-admin-ui .bookings-page .status-badge {
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+/* Money colours on the owner details page (replaces inline red/green) */
+.convene-admin-ui .bookings-page .info-item strong.amount--negative { color: #981d1d; }
+.convene-admin-ui .bookings-page .info-item strong.amount--positive { color: #2f6b4f; }
+
+.convene-admin-ui .bookings-page .admin-bookings-note { margin-top: 16px; }
+
+
+/* ---- Buttons: beat the generic "#172b3a" button rule in convene-admin-ui.css ---- */
+.convene-admin-ui #admin-content .bookings-page :is(a.button, button.button) {
+    min-height: 40px;
+    padding: 8px 20px;
+    border: 1px solid var(--convene-navy);
+    border-radius: 999px;
+    background: var(--convene-navy);
+    color: var(--dar-ivory, #fff);
+    font: 700 14px/1.4 var(--admin-ui-body);
+    transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.convene-admin-ui #admin-content .bookings-page :is(a.button, button.button):hover {
+    border-color: #33302d;
+    background: #33302d;
+    color: var(--dar-ivory, #fff);
+}
+
+/* secondary: "Back to bookings" */
+.convene-admin-ui #admin-content .bookings-page :is(a.button--quiet, button.button--quiet) {
+    border-color: var(--admin-ui-border);
+    background: var(--dar-ivory, var(--convene-white));
+    color: var(--convene-navy);
+}
+.convene-admin-ui #admin-content .bookings-page :is(a.button--quiet, button.button--quiet):hover {
+    border-color: var(--convene-sage);
+    background: var(--convene-cream);
+    color: var(--convene-navy);
+}
+
+/* destructive: "Reject booking", "Delete review" */
+.convene-admin-ui #admin-content .bookings-page :is(a.button--danger, button.button--danger) {
+    border-color: #881c24;
+    background: transparent;
+    color: #881c24;
+}
+.convene-admin-ui #admin-content .bookings-page :is(a.button--danger, button.button--danger):hover {
+    border-color: #881c24;
+    background: #fbeaec;
+    color: #6d161d;
+}
+
+.convene-admin-ui #admin-content .bookings-page .decision-actions form { margin: 0; }
+.convene-admin-ui #admin-content .bookings-page .decision-banner {
+    border-color: #e1cfb6;
+    background: var(--dar-brass-wash, #ffeedc);
+}
+.convene-admin-ui #admin-content .bookings-page .decision-banner > div:first-child strong {
+    font-family: var(--admin-ui-heading);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* ---- Tables: stop badges / dates / headers from breaking mid-word ---- */
+.convene-admin-ui .admin-bookings-page .data-table { min-width: 1000px; }
+.convene-admin-ui .admin-bookings-page .data-table thead th { white-space: nowrap; }
+.convene-admin-ui .admin-bookings-page .data-table td.amount,
+.convene-admin-ui .admin-bookings-page .data-table td:has(.status-badge) { white-space: nowrap; overflow-wrap: normal; }
+.convene-admin-ui .admin-bookings-page .data-table .status-badge { white-space: nowrap; overflow-wrap: normal; }
+.convene-admin-ui .admin-bookings-page .data-table td:nth-child(2) { min-width: 210px; }
+.convene-admin-ui .admin-bookings-page .data-table td .cell-secondary { overflow-wrap: anywhere; }
+.convene-admin-ui .admin-bookings-page .data-table td .booking-id {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    min-height: 0;
+    color: var(--dar-brass, var(--convene-navy));
+}
+
+.convene-admin-ui .admin-bookings-page .data-table td.nowrap { white-space: nowrap; overflow-wrap: normal; }
+
+
+/* =====================================================================
+   Owner booking details: two-column layout (content + sticky decision/earnings)
+   ===================================================================== */
+.owner-booking-page .bk-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: var(--admin-ui-gap, 20px);
+    align-items: start;
+}
+.owner-booking-page .bk-main,
+.owner-booking-page .bk-aside { display: grid; gap: var(--admin-ui-gap, 20px); min-width: 0; }
+.owner-booking-page .bk-aside { position: sticky; top: 16px; }
+
+@media (max-width: 1100px) {
+    .owner-booking-page .bk-layout { grid-template-columns: minmax(0, 1fr); }
+    /* decision first on small screens, nothing sticks */
+    .owner-booking-page .bk-aside { position: static; order: -1; }
+}
+
+/* Facts (organizer, email, date...) */
+.owner-booking-page .bk-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 18px 24px;
+    margin: 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-ui-border);
+}
+.owner-booking-page .bk-facts dt {
+    margin-bottom: 4px;
+    color: var(--convene-sage);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+.owner-booking-page .bk-facts dd { margin: 0; font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.owner-booking-page .bk-facts dd small { display: block; margin-top: 2px; color: var(--convene-sage); font-size: 13px; font-weight: 500; }
+.owner-booking-page .bk-facts a { color: var(--dar-brass, var(--convene-navy)); text-underline-offset: 3px; }
+
+/* Decision card */
+.owner-booking-page .bk-decision {
+    display: grid;
+    gap: 8px;
+    border-color: #e1cfb6;
+    background: var(--dar-brass-wash, #ffeedc);
+}
+.owner-booking-page .bk-decision h2 { font-size: 22px; }
+.owner-booking-page .bk-decision p:not(.eyebrow) { color: var(--convene-navy); font-size: 14px; }
+.owner-booking-page .bk-decision-actions { display: grid; gap: 8px; margin-top: 8px; }
+.owner-booking-page .bk-decision-actions form { margin: 0; }
+.convene-admin-ui #admin-content .owner-booking-page .bk-decision-actions .button { width: 100%; }
+
+/* Earnings summary */
+.owner-booking-page .bk-summary-list { display: grid; margin: 0; }
+.owner-booking-page .bk-summary-list > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--admin-ui-border);
+}
+.owner-booking-page .bk-summary-list > div:last-child { border-bottom: 0; }
+.owner-booking-page .bk-summary-list dt { color: var(--convene-sage); font-size: 13px; font-weight: 600; }
+.owner-booking-page .bk-summary-list dd { margin: 0; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.owner-booking-page .bk-summary-list .bk-summary-total { padding-block: 14px; }
+.owner-booking-page .bk-summary-list .bk-summary-total dt { color: var(--convene-navy); font-size: 14px; font-weight: 700; }
+.owner-booking-page .bk-summary-list .bk-summary-total dd { font-family: var(--admin-ui-heading); font-size: 22px; }
+.owner-booking-page .bk-summary-list dd.amount--negative { color: #981d1d; }
+.owner-booking-page .bk-summary-list dd.amount--positive { color: #2f6b4f; }
+
+/* Tables: no forced 1000px here, and they turn into cards on narrow screens */
+.convene-admin-ui .owner-booking-page .data-table { min-width: 0; }
+.owner-booking-page .bk-stack { container-type: inline-size; }
+
+@container (max-width: 640px) {
+    .owner-booking-page .bk-stack .data-table thead {
+        position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+    }
+    .owner-booking-page .bk-stack .data-table,
+    .owner-booking-page .bk-stack .data-table tbody { display: block; }
+    .convene-admin-ui .owner-booking-page .bk-stack .data-table tbody tr {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--admin-ui-border);
+        border-radius: var(--admin-ui-radius, 6px);
+    }
+    .convene-admin-ui .admin-content .owner-booking-page .bk-stack .data-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        height: auto;
+        padding: 4px 0;
+        border: 0;
+        text-align: right;
+    }
+    .owner-booking-page .bk-stack .data-table td[data-label]::before {
+        content: attr(data-label);
+        flex: none;
+        color: var(--convene-sage);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-align: left;
+        text-transform: uppercase;
+    }
+    .owner-booking-page .bk-stack .data-table td[colspan] { display: block; text-align: left; }
+}

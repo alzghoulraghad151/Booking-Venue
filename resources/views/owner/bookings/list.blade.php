@@ -5,27 +5,6 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-bookings.css') }}">
-    <style>
-        .convene-admin-ui #admin-content .admin-table-actions .admin-table-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 38px;
-            padding: 0 14px;
-            border: 1px solid var(--admin-ui-border);
-            border-radius: 10px;
-            background: var(--convene-cream);
-            color: var(--convene-navy);
-            font-weight: 700;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            text-decoration: none;
-        }
-        .convene-admin-ui #admin-content .admin-table-actions .admin-table-link:hover {
-            border-color: var(--convene-sage);
-            background: var(--convene-white);
-        }
-    </style>
 @endpush
 
 @section('content')
@@ -138,11 +117,15 @@
                                     <span class="cell-secondary">{{ $booking->customer?->email ?? 'No email' }}</span>
                                 </td>
                                 <td>{{ $booking->venue?->name ?? '—' }}</td>
-                                <td>{{ $eventStart?->format('d M Y') ?? '—' }}</td>
+                                <td class="nowrap">{{ $eventStart?->format('d M Y') ?? '—' }}</td>
                                 <td>{{ number_format($booking->details_count) }}</td>
-                                <td class="amount">{{ number_format((float) $booking->details_sum_total_price, 2) }}</td>
+                                <td class="amount">{{ number_format((float) $booking->details_sum_total_price, 2) }} JOD</td>
                                 <td><span class="status-badge status-badge--{{ $booking->status }}">{{ ucfirst($booking->status) }}</span></td>
-                                <td class="admin-table-actions"><a class="admin-table-link" href="{{ route('owner.bookings.show', $booking) }}" aria-label="View details for booking {{ $booking->id }}">View details</a></td>
+                                <td class="admin-table-actions">
+                                    <a class="admin-table-icon" href="{{ route('owner.bookings.show', $booking) }}" aria-label="View details for booking {{ $booking->id }}" title="View">
+                                        <x-admin.table-action-icon name="view" />
+                                    </a>
+                                </td>
                             </tr>
                         @empty
                             <tr>
