@@ -78,7 +78,7 @@ class StripeBookingCheckout
 
                 $session = $stripe->checkout->sessions->create([
                     'mode' => 'payment',
-                  
+
                     'line_items' => [[
                         'quantity' => 1,
                         'price_data' => [

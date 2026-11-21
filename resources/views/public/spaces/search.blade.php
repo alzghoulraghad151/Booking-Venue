@@ -82,6 +82,10 @@
             </div>
         </form>
 
+        @if (session('favourite_status'))
+            <p role="status">{{ session('favourite_status') }}</p>
+        @endif
+
         @if ($voiceSummary)
             <section class="places-voice-summary" aria-live="polite">
                 <p>{{ $voiceSummary }}</p>
@@ -146,6 +150,12 @@
                         @endif
 
                         <a class="place-card__action" href="{{ route('spaces.show', $space) }}">View space</a>
+                        @auth
+                            <form method="POST" action="{{ route('account.favourites.store', $space) }}">
+                                @csrf
+                                <button class="place-card__action" type="submit">Save to favourites</button>
+                            </form>
+                        @endauth
                     </div>
                 </article>
             @empty

@@ -11,11 +11,22 @@
         @endif
 
         <label for="event-type-name">Name</label>
-        <input id="event-type-name" type="text" name="name"
-               value="{{ old('name', $eventType->name) }}" required maxlength="100"
-               @error('name') aria-invalid="true" aria-describedby="event-type-name-error" @enderror>
+        <select id="event-type-name" name="name" required
+                @error('name') aria-invalid="true" aria-describedby="event-type-name-error" @enderror>
+            <option value="">Choose an approved type</option>
+            @foreach ($approvedNames as $name)
+                <option value="{{ $name }}" @selected(old('name', $eventType->name) === $name)>{{ $name }}</option>
+            @endforeach
+        </select>
         @error('name')
             <p id="event-type-name-error" class="event-types-error" role="alert">{{ $message }}</p>
+        @enderror
+
+        <label for="event-type-description">Description (optional)</label>
+        <textarea id="event-type-description" name="description" rows="4" maxlength="10000"
+                  @error('description') aria-invalid="true" aria-describedby="event-type-description-error" @enderror>{{ old('description', $eventType->description) }}</textarea>
+        @error('description')
+            <p id="event-type-description-error" class="event-types-error" role="alert">{{ $message }}</p>
         @enderror
 
         <div class="event-types-actions">

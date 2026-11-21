@@ -112,7 +112,7 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
 .event-types-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 12px; }
 .event-types-actions form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .event-types-actions input, .event-types-actions button, .event-types-delete button,
-.event-types-form input {
+.event-types-form :is(input, select, textarea) {
     max-width: 100%;
     min-height: 40px;
     padding: 8px 12px;
@@ -139,7 +139,7 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
 .event-types-delete form { margin-top: 6px; }
 .event-types-form { max-width: 640px; }
 .event-types-form label { display: block; margin-bottom: 6px; font-weight: 600; }
-.event-types-form input { width: 100%; margin-bottom: 12px; }
+.event-types-form :is(input, select, textarea) { width: 100%; margin-bottom: 12px; }
 .event-types-error, .event-types-delete button.event-types-error { color: #981d1d; }
 
 /* Owner booking calendar */

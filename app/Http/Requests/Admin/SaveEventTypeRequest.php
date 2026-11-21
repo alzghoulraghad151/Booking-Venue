@@ -23,7 +23,13 @@ class SaveEventTypeRequest extends FormRequest
         }
 
         return [
-            'name' => ['required', 'string', 'max:100', $uniqueName],
+            'name' => ['required', 'string', 'max:100', Rule::in(EventType::APPROVED_NAMES), $uniqueName],
+            'description' => ['nullable', 'string', 'max:10000'],
         ];
+    }
+
+    public function messages(): array
+    {
+        return ['name.in' => 'Choose one of the five approved event types.'];
     }
 }

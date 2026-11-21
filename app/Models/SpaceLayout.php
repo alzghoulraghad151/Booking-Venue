@@ -6,10 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SpaceLayout extends Model
 {
-    protected $fillable = ['space_id', 'name', 'capacity'];
+    use SoftDeletes;
+
+    protected $fillable = [
+        'space_id',
+        'name',
+        'capacity',
+    ];
 
     public function space(): BelongsTo
     {

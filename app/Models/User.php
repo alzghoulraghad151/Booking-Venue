@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -58,4 +60,10 @@ public function bookings(): HasMany
     {
         return $this->hasMany(Venue::class, 'owner_id');
     }
+
+public function favoriteSpaces(): BelongsToMany
+{
+    return $this->belongsToMany(Space::class, 'favourites')
+        ->withTimestamps();
+}
 }

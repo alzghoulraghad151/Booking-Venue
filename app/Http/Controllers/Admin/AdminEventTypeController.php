@@ -19,7 +19,7 @@ class AdminEventTypeController extends Controller
         abort_unless(is_string($search) && mb_strlen($search) <= 100, 422);
         $search = trim($search);
 
-        $eventTypes = EventType::query()
+        $eventTypes = EventType::withCount('bookingDetails')
             ->when($search !== '', fn ($query) => $query->whereLike('name', '%'.$search.'%'))
             ->orderBy('name')
             ->get();
@@ -31,6 +31,7 @@ class AdminEventTypeController extends Controller
     {
         return view('admin.event-types.form', [
             'eventType' => new EventType(),
+            'approvedNames' => EventType::APPROVED_NAMES,
         ]);
     }
 
@@ -49,6 +50,7 @@ class AdminEventTypeController extends Controller
     {
         return view('admin.event-types.form', [
             'eventType' => $eventType,
+            'approvedNames' => EventType::APPROVED_NAMES,
         ]);
     }
 
