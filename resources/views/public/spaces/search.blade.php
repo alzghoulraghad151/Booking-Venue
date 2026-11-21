@@ -12,9 +12,19 @@
 
         <form class="places-filters" action="{{ route('spaces.search') }}" method="GET">
             <div class="places-filters__grid">
+                <div class="places-filter-field places-filter-field--search">
+                    <label for="search">Search places</label>
+                    <input id="search" name="search" type="search" value="{{ $search }}" placeholder="Name, venue, event type, or details" autocomplete="off">
+                </div>
+
                 <div class="places-filter-field places-filter-field--address">
                     <label for="address">Address</label>
-                    <input id="address" name="address" type="search" value="{{ $address }}" placeholder="City, district, or address" autocomplete="street-address">
+                    <select id="address" name="address">
+                        <option value="">All addresses</option>
+                        @foreach ($venues->pluck('address')->filter()->unique()->sort() as $venueAddress)
+                            <option value="{{ $venueAddress }}" @selected($address === $venueAddress)>{{ $venueAddress }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="places-filter-field">
