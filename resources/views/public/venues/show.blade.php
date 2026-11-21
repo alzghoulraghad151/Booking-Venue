@@ -28,7 +28,7 @@
 
             @forelse ($venue->spaces as $space)
                 <article>
-                    <h3>{{ $space->name }}</h3>
+                    <h3><a href="{{ route('spaces.show', $space) }}">{{ $space->name }}</a></h3>
 
                    @foreach ($space->images as $image)
                        @if (\Illuminate\Support\Str::startsWith($image->image_url, 'https://'))

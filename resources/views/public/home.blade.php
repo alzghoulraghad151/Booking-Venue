@@ -1,16 +1,16 @@
-<!doctype html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.users')
+
+@section('title', "Find your space")
+
+@push('styles')
     <meta name="description" content="Find a venue for your next gathering. Explore event spaces by address and guest count with Convene.">
-    <title>Find your space | Convene</title>
-    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('css/convene-listing-cards.css') }}">
     <link rel="stylesheet" href="{{ asset('css/convene-landing.css') }}">
-</head>
-<body class="convene-landing">
-    <main>
+@endpush
+
+@section('content')
+    <div class="convene-landing">
+<div>
         <section class="landing-hero" aria-labelledby="landing-title">
             <div class="landing-hero__content">
                 <p class="landing-eyebrow">A space for every gathering</p>
@@ -71,7 +71,7 @@
 
             <div class="listing-card-grid landing-venue-grid">
                 @forelse ($featuredVenues as $venue)
-                    <a class="listing-card" href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}" style="background-image: url(&quot;{{ $venue->images->first()->image_url }}&quot;)">
+                    <a class="listing-card" href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}" style="background-image: url(&quot;{{ $venue->images->first()?->image_url }}&quot;)">
                         <div class="listing-card__body">
                             <h3 class="listing-card__title">{{ $venue->name }}</h3>
                             <p class="listing-card__location">{{ $venue->address }}</p>
@@ -98,7 +98,7 @@
 
             <div class="listing-card-grid">
                 @forelse ($latestPlaces as $place)
-                    <a class="listing-card" href="{{ route('public.venues.show', $place->venue) }}" style="background-image: url(&quot;{{ $place->images->first()->image_url }}&quot;)">
+                    <a class="listing-card" href="{{ route('spaces.show', $place) }}" style="background-image: url(&quot;{{ $place->images->first()?->image_url }}&quot;)">
                         <div class="listing-card__body">
                             <h3 class="listing-card__title">{{ $place->name }}</h3>
                             <p class="listing-card__location">{{ $place->venue->name }} · {{ $place->venue->address }}</p>
@@ -139,6 +139,6 @@
                 @endforelse
             </div>
         </section>
-    </main>
-</body>
-</html>
+    </div>
+    </div>
+@endsection

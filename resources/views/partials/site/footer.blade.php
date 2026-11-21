@@ -9,7 +9,7 @@
             <nav class="site-footer-group" aria-labelledby="site-footer-explore">
                 <h2 id="site-footer-explore">Explore</h2>
                 <ul>
-                    <li><a href="{{ route('spaces.search') }}">Browse spaces</a></li>
+                    <li><a href="{{ route('spaces.search') }}">Spaces</a></li>
                     @if (Route::has('home'))
                         <li><a href="{{ route('home') }}">Home</a></li>
                     @endif

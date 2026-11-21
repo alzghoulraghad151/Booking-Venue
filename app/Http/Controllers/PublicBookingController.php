@@ -29,11 +29,13 @@ class PublicBookingController extends Controller
         $image = $space->images->sortByDesc('is_primary')->first();
         $imageUrl = null;
 
-        if ($image) {
-            $imageUrl = str_starts_with($image->image_url, 'http')
-                ? $image->image_url
-                : Storage::disk('public')->url($image->image_url);
-        }
+       if ($image) {
+    $path = $image->image_url;
+
+    $imageUrl = str_starts_with($path, 'http') || str_starts_with($path, '/images/')
+        ? $path
+        : Storage::disk('public')->url($path);
+}
 
         return view('public.bookings.create', [
             'space' => $space,
@@ -41,7 +43,7 @@ class PublicBookingController extends Controller
             'eventType' => $selection['eventType'],
             'layout' => $selection['layout'],
             'package' => $selection['package'],
-            'guestCount' => $request->integer('guest_count'),
+            'guestCount' => $request->filled('guest_count') ? $request->integer('guest_count') : null,
             'imageUrl' => $imageUrl,
             'minDate' => CarbonImmutable::now(PublicBookingDetailsRequest::TIMEZONE)->toDateString(),
         ]);
@@ -85,7 +87,7 @@ class PublicBookingController extends Controller
                 'package_id' => $package?->getKey(),
                 'start_at' => $start,
                 'end_at' => $end,
-                'guest_count' => $request->integer('guest_count'),
+                'guest_count' => $request->filled('guest_count') ? $request->integer('guest_count') : null,
                 'pricing_type' => $price['pricing_type'],
                 'unit_price' => $price['unit_price'],
                 'total_price' => $price['total'],

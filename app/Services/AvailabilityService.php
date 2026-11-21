@@ -80,7 +80,7 @@ class AvailabilityService
             return "The selected layout does not belong to {$name}.";
         }
 
-        if ($detail->guest_count > $layout->capacity || $detail->guest_count > $space->capacity) {
+        if ($detail->guest_count !== null && ($detail->guest_count > $layout->capacity || $detail->guest_count > $space->capacity)) {
             return "The guest count exceeds the capacity of {$name} / its layout.";
         }
 
@@ -102,7 +102,8 @@ class AvailabilityService
                 return "The package '{$package->name}' does not belong to this venue owner.";
             }
 
-            if ($detail->guest_count < $package->min_guests || $detail->guest_count > $package->max_guests) {
+            if (($detail->guest_count !== null && ($detail->guest_count < $package->min_guests || $detail->guest_count > $package->max_guests))
+                || ($detail->guest_count === null && $package->min_guests > min($space->capacity, $layout->capacity))) {
                 return "The guest count is outside the range of the package '{$package->name}'.";
             }
 

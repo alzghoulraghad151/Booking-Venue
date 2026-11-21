@@ -58,7 +58,7 @@ class PublicBookingDetailsRequest extends FormRequest
             'event_type_id' => ['required', 'integer', 'exists:event_types,id'],
             'space_layout_id' => ['required', 'integer'],
             'package_id' => ['nullable', 'integer'],
-            'guest_count' => ['required', 'integer', 'min:1', 'max:100000'],
+            'guest_count' => ['nullable', 'integer', 'min:1', 'max:100000'],
 
             'date' => [$isStore ? 'required' : 'nullable', 'date_format:Y-m-d'],
             'start_time' => [$isStore ? 'required' : 'nullable', 'date_format:H:i'],
@@ -98,7 +98,7 @@ class PublicBookingDetailsRequest extends FormRequest
         $space->loadMissing('venue');
 
         $eventTypeId = $this->integer('event_type_id');
-        $guests = $this->integer('guest_count');
+        $guests = $this->filled('guest_count') ? $this->integer('guest_count') : null;
 
         $eventType = EventType::query()->find($eventTypeId);
 
@@ -115,12 +115,12 @@ class PublicBookingDetailsRequest extends FormRequest
                 $errors->add('space_layout_id', 'The selected layout does not support this event type.');
             }
 
-            if ($guests > $layout->capacity) {
+            if ($guests !== null && $guests > $layout->capacity) {
                 $errors->add('guest_count', "The guest count exceeds the capacity of the selected layout ({$layout->capacity}).");
             }
         }
 
-        if ($guests > $space->capacity) {
+        if ($guests !== null && $guests > $space->capacity) {
             $errors->add('guest_count', "The guest count exceeds the capacity of this space ({$space->capacity}).");
         }
 
@@ -138,7 +138,8 @@ class PublicBookingDetailsRequest extends FormRequest
             } elseif ($package->eventTypes()->exists()
                 && ! $package->eventTypes()->whereKey($eventTypeId)->exists()) {
                 $errors->add('package_id', "The package '{$package->name}' does not support this event type.");
-            } elseif ($guests < $package->min_guests || $guests > $package->max_guests) {
+            } elseif (($guests !== null && ($guests < $package->min_guests || $guests > $package->max_guests))
+                || ($guests === null && $layout && $package->min_guests > min($space->capacity, $layout->capacity))) {
                 $errors->add('package_id', "The package '{$package->name}' accepts {$package->min_guests} to {$package->max_guests} guests.");
             }
         }
@@ -200,8 +201,13 @@ class PublicBookingDetailsRequest extends FormRequest
         }
 
         // Failed GET: the selection itself is invalid, send the user back to the space page.
+        $prefill = array_filter(
+            $this->only(['date', 'start_time', 'end_time', 'guest_count']),
+            static fn ($value) => is_string($value) && $value !== ''
+        );
+
         return Route::has('spaces.show')
-            ? route('spaces.show', $space)
+            ? route('spaces.show', ['space' => $space] + $prefill)
             : url()->previous();
     }
 }
