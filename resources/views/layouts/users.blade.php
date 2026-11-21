@@ -6,6 +6,7 @@
     <title>@yield('title', 'Find event spaces') | Convene</title>
     <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('css/convene-site.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/convene-dar-chrome.css') }}">
     @stack('styles')
     <script src="{{ asset('js/convene-site-navigation.js') }}" defer></script>
     <link rel="stylesheet" href="{{ asset('css/convene-toasts.css') }}">

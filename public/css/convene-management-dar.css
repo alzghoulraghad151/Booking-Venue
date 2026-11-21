@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Raleway:wght@400;500;600;700&display=swap');
+
+.convene-admin.convene-dar-management {
+    --convene-navy: #1e1b19;
+    --convene-cream: #f1edec;
+    --convene-warm: #e8c08c;
+    --convene-sage: #615e5c;
+    --dar-ivory: #fdf8f7;
+    --dar-stone: #f7f3f1;
+    --dar-brass: #77592e;
+    --dar-brass-wash: #ffeedc;
+    --admin-ui-border: #d0c4be;
+    --admin-ui-hover: var(--dar-stone);
+    --admin-ui-radius: 6px;
+    --admin-ui-gap: 20px;
+    --admin-ui-shadow: none;
+    --admin-ui-body: 'Raleway', system-ui, sans-serif;
+    --admin-ui-heading: 'Playfair Display', Georgia, serif;
+    --admin-panel-padding: 22px;
+    --admin-sidebar-width: 248px;
+    background: var(--dar-ivory);
+    font: 500 14px/1.55 var(--admin-ui-body);
+    font-variant-numeric: tabular-nums;
+}
+
+.convene-dar-management .admin-content {
+    width: 100%;
+    max-width: 1480px;
+    margin-inline: auto;
+    padding: 32px clamp(24px, 3.1vw, 40px) 48px;
+}
+
+.convene-dar-management .admin-sidebar {
+    --rail-bg: var(--convene-navy);
+    --rail-ink: var(--dar-ivory);
+    --rail-muted: var(--convene-warm);
+    --rail-active: #33302d;
+    --rail-current: var(--convene-warm);
+    --rail-border: #4d4540;
+    padding: 24px 20px 20px;
+    background: var(--rail-bg);
+    color: var(--rail-ink);
+    border-inline-end: 1px solid var(--rail-border);
+}
+
+.convene-dar-management .admin-sidebar--owner {
+    --rail-bg: var(--dar-stone);
+    --rail-ink: var(--convene-navy);
+    --rail-muted: var(--dar-brass);
+    --rail-active: var(--convene-white);
+    --rail-current: var(--dar-brass);
+    --rail-border: var(--admin-ui-border);
+}
+
+.convene-dar-management .admin-brand {
+    min-height: 0;
+    padding: 0 0 20px;
+    border-color: var(--rail-border);
+}
+
+.convene-dar-management .admin-brand a {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.dar-sidebar-wordmark {
+    font: 600 24px/1.1 var(--admin-ui-heading);
+    letter-spacing: .12em;
+}
+
+.dar-sidebar-role,
+.convene-dar-management .admin-nav-group h2 {
+    color: var(--rail-muted);
+    font: 700 11px/1.4 var(--admin-ui-body);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management .admin-nav-group h2 { margin: 10px 12px 6px; }
+.convene-dar-management .admin-sidebar-account { border-top: 1px solid var(--rail-border); }
+
+.convene-admin-ui.convene-dar-management .admin-sidebar.admin-sidebar--management :is(a, button, span).admin-nav-item {
+    justify-content: flex-start;
+    gap: 10px;
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-inline-start: 2px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--rail-ink);
+    box-shadow: none;
+}
+
+.convene-admin-ui.convene-dar-management .admin-sidebar.admin-sidebar--management :is(a, button, span).admin-nav-item:is(:hover, [aria-current="page"]) {
+    border-inline-start-color: var(--rail-current);
+    background: var(--rail-active);
+    color: var(--rail-current);
+    box-shadow: none;
+}
+
+.convene-dar-management .admin-sidebar :focus-visible { outline-color: var(--rail-current); }
+.dar-nav-icon { flex: 0 0 16px; width: 16px; height: 16px; }
+
+.convene-dar-management .admin-content :is(h1, h2, h3) {
+    font-family: var(--admin-ui-heading);
+    font-weight: 600;
+}
+
+.convene-dar-management .admin-content h1 { font-size: clamp(28px, 3vw, 38px); }
+.convene-dar-management .admin-content .admin-page-subtitle { margin-top: -8px; }
+
+.convene-dar-management .admin-dashboard-stats > article {
+    border: 1px solid var(--admin-ui-border);
+    box-shadow: none;
+}
+
+.convene-dar-management .admin-dashboard-stats h2 {
+    font: 700 11px/1.5 var(--admin-ui-body);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management .admin-dashboard-stats strong { font-weight: 600; }
+.convene-dar-management .dashboard-quick-actions { background: var(--dar-stone); }
+
+.convene-dar-management .dashboard-quick-actions a {
+    border: 1px solid var(--admin-ui-border);
+    border-radius: 4px;
+    background: var(--convene-white);
+}
+
+.convene-dar-management .dashboard-quick-actions a:hover {
+    border-color: var(--dar-brass);
+    background: var(--dar-stone);
+}
+
+.dar-owner-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    margin-top: 20px;
+}
+.convene-dar-management .dar-owner-dashboard-grid > .dashboard-panel { margin-top: 0; }
+
+.convene-dar-management #admin-content :is(.dashboard-table-wrap, .table-wrap, .venue-card, .venue-table, .calendar-day) {
+    border-color: var(--admin-ui-border);
+    border-radius: var(--admin-ui-radius);
+}
+
+.convene-dar-management #admin-content :is(.dashboard-table, .venue-table, .bookings-page table) th {
+    letter-spacing: .045em;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.convene-dar-management #admin-content :is(input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea) {
+    border-color: var(--admin-ui-border);
+    border-radius: 4px;
+    font-family: var(--admin-ui-body);
+}
+
+.convene-dar-management #admin-content :is(input, select, textarea)[aria-invalid="true"] { border-color: #ba1a1a; }
+
+.convene-dar-management #admin-content .admin-button--primary {
+    --button-bg: var(--convene-navy);
+    --button-hover: #33302d;
+    --button-ink: var(--dar-ivory);
+}
+
+.convene-admin-ui.convene-dar-management #admin-content :is(.admin-button--primary, .admin-filter-submit, .admin-button--navy, .dashboard-panel-action, .calendar-controls button) {
+    background: var(--convene-navy);
+    color: var(--dar-ivory);
+    border-color: var(--convene-navy);
+}
+
+.convene-admin-ui.convene-dar-management #admin-content :is(.admin-button--primary, .admin-filter-submit, .admin-button--navy, .dashboard-panel-action, .calendar-controls button):hover {
+    background: #33302d;
+    border-color: #33302d;
+}
+
+.convene-dar-management #admin-content .admin-table-icon {
+    border-radius: 4px;
+}
+
+.convene-admin-ui.convene-dar-management #admin-content :is(.admin-filter-submit, .admin-filter-reset) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font: 700 12px/1.4 var(--admin-ui-body);
+    letter-spacing: .045em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.convene-admin-ui.convene-dar-management #admin-content .admin-filter-reset {
+    background: transparent;
+    border-color: transparent;
+    color: var(--dar-brass);
+}
+
+.convene-admin-ui.convene-dar-management #admin-content .admin-filter-reset:hover {
+    background: var(--dar-stone);
+    text-decoration: underline;
+}
+
+@media (pointer: coarse) {
+    .convene-admin-ui.convene-dar-management #admin-content :is(.admin-filter-submit, .admin-filter-reset) { min-height: 44px; }
+}
+
+.convene-dar-management #admin-content .management-dialog { border-radius: 8px; }
+.convene-dar-management #admin-content .management-dialog-footer { background: var(--dar-stone); }
+
+.convene-dar-management #admin-content .bookings-page { --bk-line: var(--admin-ui-border); }
+.convene-dar-management #admin-content .bookings-page :is(.metric-card, .info-item, .decision-banner, .owner-welcome) {
+    border-radius: var(--admin-ui-radius);
+}
+.convene-dar-management #admin-content .bookings-page .metric-card { border-top: 1px solid var(--admin-ui-border); }
+.convene-dar-management #admin-content .bookings-page .decision-banner { background: var(--dar-brass-wash); }
+.convene-dar-management #admin-content .venue-gallery img { background: var(--dar-stone); }
+
+.convene-dar-management #admin-content :is(.status-badge--pending, .calendar-status--pending, .venue-status--pending) {
+    background: var(--dar-brass-wash);
+    color: #604521;
+}
+
+@media (max-width: 1200px) {
+    .dar-owner-dashboard-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (pointer: coarse) {
+    .convene-admin-ui.convene-dar-management .admin-sidebar.admin-sidebar--management .admin-nav-item { min-height: 44px; }
+}
+
+@media (max-width: 991px) {
+    .convene-dar-management .admin-content { padding: 16px 20px 32px; }
+    .convene-dar-management .admin-sidebar { padding: 16px 16px 20px; }
+}
+@media (max-width: 480px) {
+    .convene-dar-management .admin-content { padding-inline: 12px; }
+    .convene-admin.convene-dar-management { --admin-panel-padding: 15px; }
+}
+
+.convene-admin-ui.convene-dar-management #admin-content .dar-admin-profile {
+    width: min(100%, 640px);
+    margin-inline: auto;
+}
+
+.dar-admin-profile-heading {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--admin-ui-border);
+}
+
+.convene-dar-management #admin-content .dar-admin-profile-heading h1 { margin: 8px 0 0; font-size: 32px; line-height: 38px; }
+
+.dar-admin-profile-heading p {
+    margin: 0;
+    color: var(--dar-brass);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .admin-edit-form {
+    display: grid;
+    gap: 20px;
+    margin-top: 0;
+    padding: 24px;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .admin-edit-form label {
+    color: var(--convene-sage);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .admin-edit-form input {
+    margin-bottom: 0;
+    background: var(--dar-ivory);
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions {
+    justify-content: flex-start;
+    gap: 16px;
+    padding-top: 16px;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions > .admin-button {
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions > .admin-button--outline {
+    color: var(--convene-navy);
+    border-color: var(--admin-ui-border);
+    background: var(--convene-white);
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions > .admin-button--outline:hover {
+    border-color: var(--dar-brass);
+    background: var(--dar-stone);
+}
+
+@media (min-width: 768px) {
+    .convene-dar-management #admin-content .dar-admin-profile-heading h1 { font-size: 36px; line-height: 42px; }
+    .convene-dar-management #admin-content .dar-admin-profile .admin-edit-form { padding: 32px; }
+}
+
+@media (min-width: 992px) {
+    .convene-dar-management .admin-content:has(> .dar-admin-profile) { padding-block: 40px; }
+}
+
+.convene-dar-management .admin-content:has(> .dar-admin-profile) > .admin-nav-toggle { margin-bottom: 32px; }

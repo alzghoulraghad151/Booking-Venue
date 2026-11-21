@@ -8,6 +8,7 @@
 
 .convene-landing {
     margin: 0;
+    padding-block-end: 80px;
     background: var(--landing-cream);
     color: var(--landing-navy);
     font: 400 16px/1.5 system-ui, sans-serif;
@@ -22,9 +23,11 @@
 
 .landing-hero {
     min-height: clamp(470px, 58vw, 680px);
-    display: flex;
-    align-items: center;
+    display: grid;
+    align-content: center;
+    gap: 24px;
     padding: clamp(42px, 8vw, 100px) max(24px, calc((100vw - 1180px) / 2));
+    padding-top: 50px;
     color: var(--landing-white);
     background:
         linear-gradient(90deg, rgb(23 43 58 / 88%) 0%, rgb(23 43 58 / 66%) 42%, rgb(23 43 58 / 8%) 100%),
@@ -32,7 +35,20 @@
         url('/images/convene-hero.jpg') center 55% / cover no-repeat;
 }
 
-.landing-hero__content { max-width: 620px; }
+.landing-hero__content { min-width: 0; max-width: 620px; }
+
+@media (min-width: 961px) {
+    .landing-hero {
+        min-height: clamp(470px, 54vw, 632px);
+        grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+        align-content: start;
+        align-items: center;
+        column-gap: clamp(24px, 5vw, 72px);
+    }
+
+    .landing-hero > .landing-voice { justify-self: end; }
+}
+
 .landing-eyebrow {
     margin: 0 0 12px;
     color: var(--landing-warm);
@@ -184,7 +200,6 @@
     gap: clamp(28px, 5vw, 64px);
     align-items: center;
     padding: clamp(28px, 5vw, 58px);
-    margin-bottom: 80px;
     border-radius: 18px;
     background: var(--landing-navy);
     color: var(--landing-white);
@@ -209,7 +224,7 @@
 .landing-occasion-card p { margin: 0; color: rgb(255 255 255 / 80%); font-size: 13px; }
 
 @media (max-width: 760px) {
-    .landing-hero { min-height: 490px; align-items: flex-end; padding: 48px 24px 76px; background-position: 58% center; }
+    .landing-hero { min-height: 490px; padding: 48px 24px 76px; background-position: 58% center; }
     .landing-search { grid-template-columns: 1fr 1fr; margin-top: -34px; padding: 12px; }
     .landing-search__field { padding: 8px; }
     .landing-search__field--guests { border-left: 1px solid #e5e2dc; }
@@ -295,8 +310,8 @@
 
 .landing-voice {
     width: min(100%, 560px);
-    margin-bottom: 10px;
-    padding: 20px clamp(14px, 4vw, 38px);
+    margin: 0;
+    padding: 20px clamp(14px, 3vw, 30px);
     border: 0;
     background: rgb(20 47 68 / 66%);
     color: #fff;

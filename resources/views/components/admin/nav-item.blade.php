@@ -3,10 +3,12 @@
 @if (Route::has($routeName))
     <a {{ $attributes->merge(['class' => 'admin-nav-item']) }} href="{{ route($routeName) }}"
         @if (request()->routeIs($activePattern)) aria-current="page" @endif>
+        <x-admin.management-nav-icon :name="explode('.', $routeName)[1] ?? ''" />
         {{ $label }}
     </a>
 @else
     <span class="admin-nav-item admin-nav-item--unavailable">
+        <x-admin.management-nav-icon :name="explode('.', $routeName)[1] ?? ''" />
         {{ $label }} <small>Coming soon</small>
     </span>
 @endif

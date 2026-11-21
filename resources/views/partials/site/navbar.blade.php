@@ -1,4 +1,4 @@
-<header class="site-header" data-site-header>
+<header class="site-header site-header--dar" data-site-header>
     <div class="site-container site-header-inner">
         @include('partials.site.brand')
 
@@ -12,7 +12,11 @@
                 @if (Route::has('home'))
                     <a class="site-link" href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif>Home</a>
                 @endif
-                <a class="site-link site-link--navy" href="{{ route('spaces.search') }}" @if (request()->routeIs('spaces.search', 'spaces.show')) aria-current="page" @endif>Spaces</a>
+                <a class="site-link" href="{{ route('spaces.search') }}" @if (request()->routeIs('spaces.search', 'spaces.show')) aria-current="page" @endif>Explore Spaces</a>
+                @if (Route::has('home'))
+                    <a class="site-link" href="{{ route('home') }}#event-types">Event Types</a>
+                    <a class="site-link" href="{{ route('home') }}#about">About</a>
+                @endif
                 @if (Route::has('bookings.from-invite'))
                     <a class="site-link" href="{{ route('bookings.from-invite') }}"   @if (request()->routeIs('bookings.from-invite*')) aria-current="page" @endif>AI Booking Assistant</a>
                 @endif
@@ -21,10 +25,10 @@
             <div class="site-nav-account">
                 @guest
                     @if (Route::has('login'))
-                        <a class="site-link site-link--navy" href="{{ route('login') }}">Sign in</a>
+                        <a class="site-link" href="{{ route('login') }}">Login</a>
                     @endif
                     @if (Route::has('register'))
-                        <a class="site-button" href="{{ route('register') }}">Create account</a>
+                        <a class="site-button" href="{{ route('register') }}">Sign Up</a>
                     @endif
                 @else
                     @if (auth()->user()->role === 'organizer')
