@@ -12,7 +12,7 @@
 .places-page * { box-sizing: border-box; }
 .places-page a { color: inherit; }
 .places-page :focus-visible { outline: 3px solid var(--places-warm); outline-offset: 3px; }
-.places-shell { width: min(1440px, 100%); margin: 0 auto; padding: 36px 28px 64px; }
+.places-shell { width: min(1440px, 100%); margin: 0 auto; padding: 20px 28px 64px; }
 .places-heading { margin: 0 0 24px; }
 .places-eyebrow { margin: 0 0 7px; color: var(--places-sage); font-size: 12px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
 .places-heading h1 { margin: 0; font-size: clamp(28px, 3.2vw, 40px); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; overflow-wrap: anywhere; }
@@ -88,17 +88,11 @@
 .places-empty h3 { margin: 0; font-size: 21px; }
 .places-empty p { margin: 8px 0 18px; color: var(--places-muted); }
 .places-empty .places-button { display: inline-flex; }
-.places-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin: 36px auto 0; }
-.places-pagination a,
-.places-pagination span { display: inline-flex; min-width: 40px; min-height: 40px; align-items: center; justify-content: center; padding: 0 12px; border: 1px solid var(--places-line); border-radius: 7px; background: #fff; color: var(--places-ink); font-size: 14px; text-decoration: none; }
-.places-pagination a:hover { border-color: var(--places-sage); background: var(--places-cream); }
-.places-pagination .is-current { border-color: var(--places-sage); background: var(--places-sage); color: #fff; }
-.places-pagination__disabled { color: #9aa2a6 !important; }
 .places-voice-search { margin-top: 28px; padding: 8px 12px; border: 1px solid var(--places-line); border-radius: 6px; background: #fff; color: var(--places-muted); cursor: pointer; }
 #voice-status, #voice-transcript { color: var(--places-muted); font-size: 13px; }
 
 /* Stitch-inspired search layout, using Convene's existing navy, cream and sage palette. */
-.places-shell { width: min(1320px, 100%); padding-top: 38px; }
+.places-shell { width: min(1320px, 100%); }
 .places-page { background: #fdf8f7; }
 .places-heading { margin: 0; padding: 0 0 25px; border-bottom: 1px solid var(--places-line); }
 .places-breadcrumb { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; color: var(--places-muted); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
@@ -114,7 +108,7 @@
 .places-filter-field input, .places-filter-field select { min-height: 40px; border-color: #d8d2c8; border-radius: 5px; background: #fff; font-size: 13px; transition: border-color .16s ease, box-shadow .16s ease; }
 .places-filter-field input:focus, .places-filter-field select:focus { border-color: var(--places-sage); box-shadow: 0 0 0 3px rgb(82 108 104 / 12%); outline: 0; }
 .places-filters__actions { min-height: 40px; gap: 9px; }
-.places-button { min-height: 40px; border-radius: 5px; background: var(--places-ink); }
+.places-button { min-height: 40px; border-radius: 5px; background:#1e1b19; }
 .places-button:hover { background: var(--places-sage); }
 .places-reset { font-size: 11px; }
 .places-results-heading { margin-bottom: 20px; }
@@ -141,17 +135,6 @@
 .place-card__action { min-height: 40px; margin-top: 0; border: 0; border-radius: 0; color: #77592e; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
 .place-card__action:hover { border-color: var(--places-sage); background: var(--places-cream); }
 .places-empty { border-radius: 7px; background: #faf9f6; }
-.places-pagination { justify-content: space-between; gap: 16px; margin-top: 34px; padding-top: 24px; border-top: 1px solid #d0c4be; }
-.places-pagination__summary { color: #4d4540; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
-.places-pagination__pages { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
-.places-pagination a, .places-pagination span { min-width: 36px; min-height: 36px; padding: 0 10px; border-color: #d0c4be; border-radius: 999px; color: #1c1b1b; font-size: 11px; }
-.places-pagination a:hover { border-color: #77592e; background: transparent; }
-.places-pagination .is-current { border-color: #1e1b19; background: #1e1b19; color: #fff; }
-.places-pagination .places-pagination__previous,
-.places-pagination .places-pagination__next { width: auto; border: 0; border-radius: 0; color: #77592e; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
-.places-pagination .places-pagination__previous:hover,
-.places-pagination .places-pagination__next:hover { background: transparent; color: #1e1b19; }
-.places-pagination .places-pagination__disabled { color: #9aa2a6; }
 
 @media (max-width: 1050px) {
     .places-results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
@@ -160,13 +143,11 @@
 }
 
 @media (max-width: 680px) {
-    .places-shell { padding: 24px 16px 44px; }
+    .places-shell { padding: 20px 16px 44px; }
     .places-filters { position: static; padding: 10px; margin-bottom: 24px; }
     .places-filters__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .places-filter-field--address { grid-column: 1 / -1; }
     .places-results-grid { gap: 14px; }
-    .places-pagination { align-items: flex-start; flex-direction: column; }
-    .places-pagination__pages { justify-content: flex-start; }
 }
 
 @media (max-width: 520px) {

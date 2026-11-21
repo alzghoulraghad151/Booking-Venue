@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{{ asset('css/convene-site.css') }}">
     <link rel="stylesheet" href="{{ asset('css/convene-dar-chrome.css') }}">
     @stack('styles')
+    @if (request()->routeIs('account.personal-details.edit', 'account.favourites.index', 'account.settings'))
+        <link rel="stylesheet" href="{{ asset('css/convene-my-bookings-dar.css') }}">
+    @endif
     <script src="{{ asset('js/convene-site-navigation.js') }}" defer></script>
     <link rel="stylesheet" href="{{ asset('css/convene-toasts.css') }}">
 </head>
