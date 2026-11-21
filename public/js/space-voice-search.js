@@ -1,7 +1,7 @@
 const button = document.getElementById('voice-search');
 const status = document.getElementById('voice-status');
 const transcript = document.getElementById('voice-transcript');
-const city = document.getElementById('city');
+const address = document.getElementById('address');
 const capacity = document.getElementById('capacity');
 
 let recorder;
@@ -81,13 +81,13 @@ button.addEventListener('click', async () => {
                     return;
                 }
 
-                city.value = result.filters.city ?? '';
+                address.value = result.filters.address ?? result.filters.city ?? '';
                 capacity.value = result.filters.capacity ?? '';
 
-                   if (city.value.trim() && capacity.value) {
+                   if (address.value.trim() && capacity.value) {
     status.textContent = 'جاري البحث عن المساحات المناسبة…';
 
-    const form = city.form;
+    const form = address.form;
 
     for (const [name, value] of Object.entries({
         voice: '1',
@@ -128,7 +128,7 @@ status.textContent = 'كمّلي الحقول الفارغة، وبعدها اض
 
         button.textContent = 'إيقاف وإرسال التسجيل';
         button.disabled = false;
-        status.textContent = 'جاري التسجيل. احكي المدينة وعدد الأشخاص.';
+            status.textContent = 'جاري التسجيل. احكي الموقع وعدد الأشخاص.';
     } catch {
         stream?.getTracks().forEach((track) => track.stop());
         status.textContent = 'تعذّر فتح الميكروفون. تأكدي من السماح باستخدامه.';

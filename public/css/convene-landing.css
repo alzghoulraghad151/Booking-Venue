@@ -1,0 +1,224 @@
+:root {
+    --landing-navy: #172B3A;
+    --landing-cream: #F5F2EC;
+    --landing-warm: #E5A66A;
+    --landing-white: #FFFFFF;
+    --landing-sage: #526C68;
+}
+
+.convene-landing {
+    margin: 0;
+    background: var(--landing-cream);
+    color: var(--landing-navy);
+    font: 400 16px/1.5 system-ui, sans-serif;
+}
+
+.convene-landing *,
+.convene-landing *::before,
+.convene-landing *::after { box-sizing: border-box; }
+
+.convene-landing a { color: inherit; }
+.convene-landing :focus-visible { outline: 3px solid var(--landing-warm); outline-offset: 3px; }
+
+.landing-hero {
+    min-height: clamp(470px, 58vw, 680px);
+    display: flex;
+    align-items: center;
+    padding: clamp(42px, 8vw, 100px) max(24px, calc((100vw - 1180px) / 2));
+    color: var(--landing-white);
+    background:
+        linear-gradient(90deg, rgb(23 43 58 / 88%) 0%, rgb(23 43 58 / 66%) 42%, rgb(23 43 58 / 8%) 100%),
+        linear-gradient(0deg, rgb(23 43 58 / 20%), rgb(23 43 58 / 5%)),
+        url('/images/convene-hero.jpg') center 55% / cover no-repeat;
+}
+
+.landing-hero__content { max-width: 620px; }
+.landing-eyebrow {
+    margin: 0 0 12px;
+    color: var(--landing-warm);
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+}
+.landing-eyebrow--sage { color: var(--landing-sage); }
+.landing-eyebrow--warm { color: var(--landing-warm); }
+.landing-hero h1 {
+    max-width: 600px;
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(42px, 6vw, 76px);
+    font-weight: 500;
+    letter-spacing: -.035em;
+    line-height: 1.02;
+}
+.landing-hero__intro {
+    max-width: 490px;
+    margin: 20px 0 28px;
+    color: rgb(255 255 255 / 88%);
+    font-size: clamp(16px, 1.8vw, 19px);
+}
+.landing-button {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .18s ease, filter .18s ease;
+}
+.landing-button:hover { transform: translateY(-2px); filter: brightness(.97); }
+.landing-button--warm { background: var(--landing-warm); color: var(--landing-navy); }
+.landing-button--navy { background: var(--landing-navy); color: var(--landing-white); }
+
+.landing-search {
+    position: relative;
+    z-index: 1;
+    width: min(1120px, calc(100% - 40px));
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(180px, .8fr) auto;
+    align-items: center;
+    gap: 12px;
+    margin: -38px auto 0;
+    padding: 14px;
+    border: 1px solid rgb(23 43 58 / 8%);
+    border-radius: 14px;
+    background: var(--landing-white);
+    box-shadow: 0 18px 48px rgb(23 43 58 / 15%);
+}
+.landing-search__field { min-width: 0; padding: 4px 16px; }
+.landing-search__field + .landing-search__field { border-left: 1px solid #e5e2dc; }
+.landing-search__field label { display: block; margin-bottom: 3px; color: var(--landing-navy); font-size: 12px; font-weight: 750; }
+.landing-search__field input {
+    width: 100%;
+    min-height: 28px;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--landing-navy);
+    font: inherit;
+    font-size: 14px;
+}
+.landing-search__field input::placeholder { color: #777f80; opacity: 1; }
+.landing-search__field input:focus-visible { outline: 2px solid var(--landing-sage); outline-offset: 2px; }
+.landing-search .landing-button { white-space: nowrap; }
+
+.landing-section,
+.landing-occasion {
+    width: min(1180px, calc(100% - 48px));
+    margin-inline: auto;
+}
+.landing-cities { padding-block: clamp(64px, 9vw, 108px) 76px; }
+.landing-section__heading { max-width: 620px; margin-bottom: 26px; }
+.landing-section h2,
+.landing-occasion h2 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 500;
+    letter-spacing: -.025em;
+    line-height: 1.12;
+}
+.landing-section__heading > p:last-child,
+.landing-occasion__intro > p:last-child {
+    margin: 12px 0 0;
+    color: #52616a;
+}
+.landing-city-grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 2px 2px 14px;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: rgb(82 108 104 / 55%) transparent;
+    scrollbar-width: thin;
+}
+.landing-city-card {
+    position: relative;
+    flex: 0 0 270px;
+    width: 270px;
+    height: 350px;
+    max-width: 75vw;
+    max-height: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 27px;
+    overflow: hidden;
+    border-radius: 7px;
+    color: var(--landing-white);
+    background-color: #9a9a9a;
+    background-position: 50%;
+    background-size: cover;
+    text-decoration: none !important;
+    text-align: center;
+    scroll-snap-align: start;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.landing-card-image { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.landing-city-card::before,
+.landing-occasion-card::after { position: absolute; z-index: 1; inset: 0; border-radius: inherit; background: linear-gradient(0deg, rgb(23 43 58 / 82%), rgb(23 43 58 / 5%) 75%); content: ''; }
+.landing-city-card::after { position: absolute; z-index: 3; top: 0; right: 0; bottom: 0; left: 0; content: ''; }
+.landing-city-card > :not(.landing-card-image),
+.landing-occasion-card > :not(.landing-card-image) { position: relative; z-index: 2; }
+.landing-city-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgb(23 43 58 / 10%); }
+.landing-city-card__content { display: flex; width: 100%; flex-direction: column; align-items: center; gap: 0; }
+.landing-city-card__name { margin-bottom: 10px; color: #fff; font-size: 24px; font-weight: 700; line-height: 1.2; text-shadow: 0 2px 20px rgb(0 0 0 / 50%); overflow-wrap: anywhere; }
+.landing-city-card__description { max-width: 100%; color: rgb(255 255 255 / 94%); font-size: 14px; line-height: 1.4; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+.landing-city-card__count { margin-top: 14px; color: rgb(255 255 255 / 90%); font-size: 14px; line-height: 1.4; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+
+.landing-venues { padding-block: 0 76px; }
+
+.landing-occasion {
+    display: grid;
+    grid-template-columns: minmax(220px, .8fr) minmax(0, 1.5fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+    padding: clamp(28px, 5vw, 58px);
+    margin-bottom: 80px;
+    border-radius: 18px;
+    background: var(--landing-navy);
+    color: var(--landing-white);
+}
+.landing-occasion__intro > p:last-child { color: rgb(255 255 255 / 72%); }
+.landing-occasion__cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.landing-occasion-card {
+    position: relative;
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 18px;
+    border-radius: 10px;
+    color: var(--landing-white);
+    background: var(--landing-navy);
+    text-decoration: none;
+    transition: transform .18s ease, filter .18s ease;
+}
+.landing-occasion-card:hover { transform: translateY(-3px); filter: brightness(1.06); }
+.landing-occasion-card h3 { margin: 22px 0 4px; font-family: Georgia, 'Times New Roman', serif; font-size: 26px; font-weight: 500; }
+.landing-occasion-card p { margin: 0; color: rgb(255 255 255 / 80%); font-size: 13px; }
+
+@media (max-width: 760px) {
+    .landing-hero { min-height: 490px; align-items: flex-end; padding: 48px 24px 76px; background-position: 58% center; }
+    .landing-search { grid-template-columns: 1fr 1fr; margin-top: -34px; padding: 12px; }
+    .landing-search__field { padding: 8px; }
+    .landing-search__field--guests { border-left: 1px solid #e5e2dc; }
+    .landing-search .landing-button { grid-column: 1 / -1; width: 100%; }
+    .landing-occasion { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .landing-city-card { padding: 22px; }
+    .landing-occasion { width: calc(100% - 28px); padding: 22px 16px; }
+    .landing-occasion__cards { grid-template-columns: 1fr; }
+    .landing-occasion-card { min-height: 150px; }
+}
