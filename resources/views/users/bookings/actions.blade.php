@@ -1,10 +1,8 @@
 <div class="site-booking-actions">
-    @if ($booking->has_paid_payment)
-        <p>Paid</p>
-    @elseif ($booking->status === 'confirmed' && $booking->details->isNotEmpty()
+    @if (! $booking->has_paid_payment && $booking->status === 'confirmed' && $booking->details->isNotEmpty()
         && str_starts_with((string) config('services.stripe.secret'), 'sk_test_')
         && filled(config('services.stripe.webhook_secret')))
-        <form method="POST" action="{{ route('my-bookings.checkout', $booking) }}">
+        <form class="site-booking-payment" method="POST" action="{{ route('my-bookings.checkout', $booking) }}">
             @csrf
             <button class="site-button" type="submit">Pay in USD · Sandbox</button>
             <small>Demo rate: 1 JOD = {{ \App\Services\StripeBookingCheckout::DEMO_USD_PER_JOD }} USD.</small>
@@ -15,22 +13,36 @@
             <summary>Booking details</summary>
             @foreach ($booking->details as $detail)
                 <dl class="site-booking-facts">
-                    <dt>Space</dt>
-                    <dd>{{ $detail->space?->name ?? 'Unavailable' }}</dd>
-                    <dt>Starts</dt>
-                    <dd>{{ $detail->start_at?->format('d M Y, H:i') ?? '—' }}</dd>
-                    <dt>Ends</dt>
-                    <dd>{{ $detail->end_at?->format('d M Y, H:i') ?? '—' }}</dd>
-                    <dt>Layout</dt>
-                    <dd>{{ $detail->spaceLayout?->name ?? '—' }}</dd>
+                    <div>
+                        <dt>Space</dt>
+                        <dd>{{ $detail->space?->name ?? 'Unavailable' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Starts</dt>
+                        <dd>{{ $detail->start_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Ends</dt>
+                        <dd>{{ $detail->end_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Layout</dt>
+                        <dd>{{ $detail->spaceLayout?->name ?? '—' }}</dd>
+                    </div>
                     @if ($detail->package)
-                        <dt>Package</dt>
-                        <dd>{{ $detail->package->name }}</dd>
+                        <div>
+                            <dt>Package</dt>
+                            <dd>{{ $detail->package->name }}</dd>
+                        </div>
                     @endif
-                    <dt>Guests</dt>
-                    <dd>{{ $detail->guest_count }}</dd>
-                    <dt>Price</dt>
-                    <dd>{{ number_format((float) $detail->total_price, 2) }} JOD</dd>
+                    <div>
+                        <dt>Guests</dt>
+                        <dd>{{ $detail->guest_count }}</dd>
+                    </div>
+                    <div>
+                        <dt>Price</dt>
+                        <dd>{{ number_format((float) $detail->total_price, 2) }} JOD</dd>
+                    </div>
                 </dl>
             @endforeach
         </details>
@@ -46,7 +58,8 @@
                 <input type="hidden" name="page" value="{{ $page }}">
 
                 <label for="rating-{{ $booking->id }}">Rating</label>
-                <select id="rating-{{ $booking->id }}" name="rating" required>
+                <select id="rating-{{ $booking->id }}" name="rating" required
+                        @if ($showReviewErrors && $errors->has('rating')) aria-invalid="true" aria-describedby="rating-error-{{ $booking->id }}" @endif>
                     <option value="">Select a rating</option>
                     @foreach (range(1, 5) as $rating)
                         <option value="{{ $rating }}" @selected($showReviewErrors && (string) old('rating') === (string) $rating)>{{ $rating }} / 5</option>
@@ -54,15 +67,16 @@
                 </select>
                 @if ($showReviewErrors)
                     @error('rating')
-                        <p role="alert">{{ $message }}</p>
+                        <p id="rating-error-{{ $booking->id }}" role="alert">{{ $message }}</p>
                     @enderror
                 @endif
 
                 <label for="comment-{{ $booking->id }}">Comment <small>(optional)</small></label>
-                <textarea id="comment-{{ $booking->id }}" name="comment" rows="3" maxlength="2000">{{ $showReviewErrors ? old('comment') : '' }}</textarea>
+                <textarea id="comment-{{ $booking->id }}" name="comment" rows="3" maxlength="2000"
+                          @if ($showReviewErrors && $errors->has('comment')) aria-invalid="true" aria-describedby="comment-error-{{ $booking->id }}" @endif>{{ $showReviewErrors ? old('comment') : '' }}</textarea>
                 @if ($showReviewErrors)
                     @error('comment')
-                        <p role="alert">{{ $message }}</p>
+                        <p id="comment-error-{{ $booking->id }}" role="alert">{{ $message }}</p>
                     @enderror
                 @endif
 

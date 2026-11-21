@@ -110,8 +110,7 @@ class PublicBookingDetailsRequest extends FormRequest
         if (! $layout) {
             $errors->add('space_layout_id', 'The selected layout does not belong to this space.');
         } else {
-            if ($layout->eventTypes()->exists()
-                && ! $layout->eventTypes()->whereKey($eventTypeId)->exists()) {
+            if (! $layout->eventTypes()->whereKey($eventTypeId)->exists()) {
                 $errors->add('space_layout_id', 'The selected layout does not support this event type.');
             }
 

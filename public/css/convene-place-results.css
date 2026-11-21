@@ -97,6 +97,62 @@
 .places-voice-search { margin-top: 28px; padding: 8px 12px; border: 1px solid var(--places-line); border-radius: 6px; background: #fff; color: var(--places-muted); cursor: pointer; }
 #voice-status, #voice-transcript { color: var(--places-muted); font-size: 13px; }
 
+/* Stitch-inspired search layout, using Convene's existing navy, cream and sage palette. */
+.places-shell { width: min(1320px, 100%); padding-top: 38px; }
+.places-page { background: #fdf8f7; }
+.places-heading { margin: 0; padding: 0 0 25px; border-bottom: 1px solid var(--places-line); }
+.places-breadcrumb { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; color: var(--places-muted); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+.places-breadcrumb a { text-decoration: none; }
+.places-breadcrumb a:hover { color: var(--places-sage); }
+.places-breadcrumb [aria-current="page"] { color: var(--places-sage); }
+.places-eyebrow { margin: 0 0 8px; color: var(--places-sage); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.places-heading h1 { margin: 0; color: var(--places-ink); font-family: Georgia, "Times New Roman", serif; font-size: clamp(32px, 4vw, 48px); font-weight: 500; letter-spacing: -.035em; line-height: 1.1; }
+.places-heading > p:last-child { max-width: 680px; margin: 12px 0 0; color: var(--places-muted); font-size: 15px; }
+.places-filters { position: static; margin: 20px 0 26px; padding: 17px; border-color: #ddd7cd; border-radius: 8px; background: var(--places-cream); box-shadow: 0 5px 18px rgb(23 43 58 / 5%); }
+.places-filters__grid { grid-template-columns: minmax(175px, 1.4fr) repeat(3, minmax(125px, 1fr)) minmax(95px, .7fr) minmax(145px, 1.1fr) minmax(140px, 1fr) auto; gap: 11px; }
+.places-filter-field label { color: #4e595f; font-size: 10px; letter-spacing: .075em; text-transform: uppercase; }
+.places-filter-field input, .places-filter-field select { min-height: 40px; border-color: #d8d2c8; border-radius: 5px; background: #fff; font-size: 13px; transition: border-color .16s ease, box-shadow .16s ease; }
+.places-filter-field input:focus, .places-filter-field select:focus { border-color: var(--places-sage); box-shadow: 0 0 0 3px rgb(82 108 104 / 12%); outline: 0; }
+.places-filters__actions { min-height: 40px; gap: 9px; }
+.places-button { min-height: 40px; border-radius: 5px; background: var(--places-ink); }
+.places-button:hover { background: var(--places-sage); }
+.places-reset { font-size: 11px; }
+.places-results-heading { margin-bottom: 20px; }
+.places-results-heading h2 { font-size: clamp(19px, 2.1vw, 25px); font-weight: 650; }
+.places-results-grid { gap: 22px; }
+.place-card { border-color: #dedbd5; border-radius: 7px; box-shadow: 0 3px 12px rgb(23 43 58 / 5%); }
+.place-card:hover { border-color: #c7b391; box-shadow: 0 11px 28px rgb(23 43 58 / 11%); }
+.place-card__photo-link, .place-card__media { aspect-ratio: 4 / 3; }
+.place-card__media { background: #e8e4dc; }
+.place-card__image { transition: transform .45s cubic-bezier(.2, 0, 0, 1); }
+.place-card__body { padding: 20px 22px 22px; gap: 12px; }
+.place-card__content { display: flex; flex-direction: column; gap: 6px; }
+.place-card__content h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 600; line-height: 1.25; }
+.place-card__content h3 a { color: #1c1b1b; text-decoration: none; }
+.place-card__content h3 a:hover { color: #77592e; }
+.place-card__venue { color: #77592e; font-size: 10px; font-weight: 700; letter-spacing: .075em; text-transform: uppercase; }
+.place-card__event-summary { margin: 0; color: #4d4540; font-size: 13px; }
+.place-card__address { margin-top: 5px; }
+.place-card__footer { display: flex; flex-direction: column; gap: 14px; margin-top: auto; padding-top: 16px; border-top: 1px solid #d0c4be; }
+.place-card__footer-details { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; color: #4d4540; font-size: 13px; }
+.place-card__footer-details strong { color: #1c1b1b; font-size: 14px; font-weight: 700; }
+.place-card__capacity { color: #4d4540; font-size: 13px; }
+.place-card__capacity span { font-size: 15px; }
+.place-card__action { min-height: 40px; margin-top: 0; border: 0; border-radius: 0; color: #77592e; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+.place-card__action:hover { border-color: var(--places-sage); background: var(--places-cream); }
+.places-empty { border-radius: 7px; background: #faf9f6; }
+.places-pagination { justify-content: space-between; gap: 16px; margin-top: 34px; padding-top: 24px; border-top: 1px solid #d0c4be; }
+.places-pagination__summary { color: #4d4540; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+.places-pagination__pages { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.places-pagination a, .places-pagination span { min-width: 36px; min-height: 36px; padding: 0 10px; border-color: #d0c4be; border-radius: 999px; color: #1c1b1b; font-size: 11px; }
+.places-pagination a:hover { border-color: #77592e; background: transparent; }
+.places-pagination .is-current { border-color: #1e1b19; background: #1e1b19; color: #fff; }
+.places-pagination .places-pagination__previous,
+.places-pagination .places-pagination__next { width: auto; border: 0; border-radius: 0; color: #77592e; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+.places-pagination .places-pagination__previous:hover,
+.places-pagination .places-pagination__next:hover { background: transparent; color: #1e1b19; }
+.places-pagination .places-pagination__disabled { color: #9aa2a6; }
+
 @media (max-width: 1050px) {
     .places-results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
     .places-filters__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -109,6 +165,8 @@
     .places-filters__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .places-filter-field--address { grid-column: 1 / -1; }
     .places-results-grid { gap: 14px; }
+    .places-pagination { align-items: flex-start; flex-direction: column; }
+    .places-pagination__pages { justify-content: flex-start; }
 }
 
 @media (max-width: 520px) {

@@ -8,7 +8,6 @@
         'owner.space-layouts.create' => 'owner.space-layouts.index',
         'owner.packages.create' => 'owner.packages.index',
 
-        'admin.profile.edit' => 'admin.dashboard',
         'admin.users.edit' => 'admin.users.index',
         'admin.event-types.edit' => 'admin.event-types.index',
         'owner.venues.edit' => 'owner.venues.index',
@@ -38,8 +37,9 @@
         <script src="{{ asset('js/convene-admin-actions.js') }}" defer></script>
     @endif
     <link rel="stylesheet" href="{{ asset('css/convene-toasts.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/convene-management-dar.css') }}">
 </head>
-<body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.profile.*', 'admin.bookings.*', 'owner.*') ? ' admin-warm-actions' : '' }}">
+<body class="convene-admin convene-admin-ui convene-dar-management{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.profile.*', 'admin.bookings.*', 'owner.*') ? ' admin-warm-actions' : '' }}">
     <a class="admin-skip" href="#admin-content">Skip to content</a>
 
     @section('sidebar')

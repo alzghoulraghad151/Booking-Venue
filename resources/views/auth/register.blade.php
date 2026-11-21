@@ -1,14 +1,8 @@
-@extends('layouts.users')
+@extends('layouts.auth')
 
 @section('title', "Create an account")
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
-@endpush
-
-@section('content')
-    <div class="auth-page">
-<div class="auth-card">
+@section('auth-form')
         <h1>Create an account</h1>
 
         <form method="POST" action="{{ route('register.store') }}">
@@ -51,7 +45,7 @@
            autocomplete="new-password" minlength="8" maxlength="64"
            aria-describedby="password-rules" required>
 
-    <ul id="password-rules" class="password-rules">
+    <ul id="password-rules" class="password-rules grid-cols-2">
         <li data-rule="length">At least 8 characters</li>
         <li data-rule="uppercase">At least one uppercase letter</li>
         <li data-rule="lowercase">At least one lowercase letter</li>
@@ -79,8 +73,6 @@
         </form>
 
         <a href="{{ route('login') }}">Back to sign in</a>
-    </div>
-    </div>
 @endsection
 
 @push('scripts')
