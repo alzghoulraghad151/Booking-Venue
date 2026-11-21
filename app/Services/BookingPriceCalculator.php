@@ -11,13 +11,17 @@ use Carbon\CarbonInterface;
  *
  * Without a package:
  *   total = space.hourly_rate x hours
- * With a package (fixed price, the space is included in it):
- *   total = package price      (the space is NOT charged on top)
+ * With a package (the package price already includes 1 hour of the space):
+ *   total = package price + space.hourly_rate x (hours - 1)
+ *   (never less than the package price: if hours <= 1 there are no extra hours)
  */
 class BookingPriceCalculator
 {
     /** Same platform commission used in OwnerBookingController. */
     public const COMMISSION_RATE = 10;
+
+    /** Hours of the space that are already included in a package price. */
+    public const PACKAGE_INCLUDED_HOURS = 1;
 
     /**
      * @return array{
@@ -40,12 +44,14 @@ class BookingPriceCalculator
         $hourlyRate = (float) $space->hourly_rate;
         $packagePrice = $package ? round((float) $package->price, 2) : 0.0;
 
-        // The space is included in the package price, so it is only charged without a package.
-        $spacePrice = $package ? 0.0 : round($hourlyRate * $hours, 2);
-        $total = $package ? $packagePrice : $spacePrice;
+        // With a package, the first hour of the space is included in the package price.
+        $billableHours = $package ? max(0.0, $hours - self::PACKAGE_INCLUDED_HOURS) : $hours;
+        $spacePrice = round($hourlyRate * $billableHours, 2);
+        $total = round($spacePrice + $packagePrice, 2);
 
         return [
             'hours' => round($hours, 2),
+            'billable_hours' => round($billableHours, 2),
             'hourly_rate' => $hourlyRate,
             'space_price' => $spacePrice,
             'package_price' => $packagePrice,
