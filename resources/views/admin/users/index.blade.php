@@ -118,7 +118,7 @@
                             <a class="admin-table-icon" href="{{ route('admin.users.show', $user) }}" aria-label="View {{ $user->name }}" title="View">
                                         <x-admin.table-action-icon name="view" />
                                     </a>
-                            <a class="admin-table-icon" href="{{ route('admin.users.edit', $user) }}" aria-label="Edit {{ $user->name }}" title="Edit">
+                            <a data-edit-dialog class="admin-table-icon" href="{{ route('admin.users.edit', $user) }}" aria-label="Edit {{ $user->name }}" title="Edit">
                                 <x-admin.table-action-icon name="edit" />
                             </a>
                             @if (auth()->id() !== $user->id && Route::has('admin.users.status'))

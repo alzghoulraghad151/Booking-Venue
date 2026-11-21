@@ -32,14 +32,10 @@
             <p class="admin-review-comment">{{ filled($review->comment) ? $review->comment : 'No written comment was provided.' }}</p>
         </section>
 
-        <details class="dashboard-panel">
-            <summary class="admin-button admin-button--danger">Delete review</summary>
-            <p>This permanently removes the organizer’s rating and comment. The booking will remain.</p>
-            <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST">
+        <form data-delete-message="This permanently removes the organizer’s rating and comment. The booking will remain." data-delete-action="Delete" onsubmit="return confirm('Delete this item?')" action="{{ route('admin.reviews.destroy', $review) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button class="admin-button admin-button--danger" type="submit">Confirm deletion</button>
+                <button class="admin-button admin-button--danger" type="submit">Delete review</button>
             </form>
-        </details>
     </div>
 @endsection

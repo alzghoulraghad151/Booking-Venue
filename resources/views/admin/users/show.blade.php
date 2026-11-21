@@ -27,8 +27,8 @@
             <a class="admin-button admin-button--outline" href="{{ route('admin.users.index') }}">
                 Back to Users
             </a>
-            <a class="admin-button admin-button--primary" href="{{ route('admin.users.edit', $user) }}">Edit user</a>
-            <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+            <a data-edit-dialog class="admin-button admin-button--primary" href="{{ route('admin.users.edit', $user) }}">Edit user</a>
+            <form data-delete-message="Move this user to trash? They will be hidden from active user lists." data-delete-action="Move to trash" action="{{ route('admin.users.destroy', $user) }}" method="POST"
                 onsubmit="return confirm('Move this user to trash? They will be hidden from active user lists.');">
                 @csrf
                 @method('DELETE')

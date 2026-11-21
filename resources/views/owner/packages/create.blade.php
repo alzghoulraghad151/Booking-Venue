@@ -6,7 +6,7 @@
 @section('content')
     <h1>Add Package</h1>
 
-    <form method="POST" action="{{ route('owner.packages.store') }}">
+    <form class="admin-edit-form owner-editor management-create-grid" method="POST" action="{{ route('owner.packages.store') }}">
         @csrf
 
         <div>
@@ -14,10 +14,6 @@
             <input id="name" name="name" type="text" maxlength="255" required>
         </div>
 
-        <div>
-            <label for="description">Description</label>
-            <textarea id="description" name="description"></textarea>
-        </div>
 
         <div>
             <label for="price">Price (JOD)</label>
@@ -39,7 +35,19 @@
             <input id="max_guests" name="max_guests" type="number" min="1" required>
         </div>
 
-        <fieldset aria-describedby="space_ids_hint">
+        <div>
+            <label for="service_name_0">Included service</label>
+            <input id="service_name_0" name="services[0][name]" type="text"
+                   value="{{ old('services.0.name') }}" maxlength="255"
+                   placeholder="e.g. Coffee service">
+        </div>
+
+        <div class="management-form-wide">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="2">{{ old('description') }}</textarea>
+        </div>
+
+        <fieldset @if ($spaces->isNotEmpty()) aria-describedby="space_ids_hint" @endif>
             <legend>Eligible Spaces</legend>
 
             @forelse ($spaces as $space)
@@ -54,9 +62,11 @@
                 <p>No spaces available. Add a space first.</p>
             @endforelse
 
+            @if ($spaces->isNotEmpty())
             <p id="space_ids_hint">
                 Select at least one eligible space to make this package bookable.
             </p>
+            @endif
 
             @error('space_ids')
                 <p role="alert">{{ $message }}</p>
@@ -72,13 +82,7 @@
             </select>
         </div>
 
-        <div>
-            <label for="service_name_0">Included service</label>
-            <input id="service_name_0" name="services[0][name]" type="text"
-                   value="{{ old('services.0.name') }}" maxlength="255"
-                   placeholder="e.g. Coffee service">
-        </div>
 
-        <button type="submit">Save Package</button>
+        <x-admin.edit-actions :back-url="route('owner.packages.index')" save-label="Add package" />
     </form>
 @endsection

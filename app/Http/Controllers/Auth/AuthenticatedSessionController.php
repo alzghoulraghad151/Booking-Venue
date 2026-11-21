@@ -7,6 +7,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 
 
@@ -34,6 +35,10 @@ class AuthenticatedSessionController extends Controller
     }
 
     $request->session()->regenerate();
+
+    if ($request->user()->role === 'organizer' && Route::has('my-bookings.index')) {
+        return redirect()->intended(route('my-bookings.index'));
+    }
 
     return redirect()->route(match ($request->user()->role) {
         'venue_owner' => 'owner.venues.index',

@@ -39,19 +39,19 @@
                             <th scope="row">{{ $eventType->name }}</th>
                             <td class="admin-table-actions">
                                 <div class="admin-table-action-group">
-                                    <a class="admin-table-icon" href="{{ route('admin.event-types.edit', $eventType) }}" aria-label="Edit {{ $eventType->name }}" title="Edit">
+                                    <a data-edit-dialog class="admin-table-icon" href="{{ route('admin.event-types.edit', $eventType) }}" aria-label="Edit {{ $eventType->name }}" title="Edit">
                                         <x-admin.table-action-icon name="edit" />
                                     </a>
-                                    <details class="event-types-delete">
-                                        <summary class="admin-table-icon admin-table-icon--danger" aria-label="Delete {{ $eventType->name }}" title="Delete">
+                                    <form action="{{ route('admin.event-types.destroy', $eventType) }}" method="POST"
+                                          data-delete-message="Delete the event type “{{ $eventType->name }}”?"
+                                          onsubmit="return confirm('Delete this event type?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="admin-button admin-table-icon admin-table-icon--danger"
+                                                aria-label="Delete {{ $eventType->name }}" title="Delete">
                                             <x-admin.table-action-icon name="delete" />
-                                        </summary>
-                                        <form action="{{ route('admin.event-types.destroy', $eventType) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="admin-button admin-button--danger admin-button--small event-types-error">Confirm delete: {{ $eventType->name }}</button>
-                                        </form>
-                                    </details>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

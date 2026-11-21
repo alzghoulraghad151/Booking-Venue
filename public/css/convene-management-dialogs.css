@@ -1,0 +1,130 @@
+.management-dialog {
+    width: min(780px, calc(100% - 32px));
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    padding: 0;
+    color: var(--convene-navy);
+    background: var(--convene-white);
+    border: 1px solid var(--admin-ui-border);
+    border-radius: 20px;
+    box-shadow: var(--admin-ui-shadow);
+    overflow: hidden;
+}
+
+.management-dialog[open] { display: flex; flex-direction: column; }
+.management-dialog::backdrop { background: rgb(23 43 58 / 40%); }
+body:has(.management-dialog[open]) { overflow: hidden; }
+.management-dialog--delete { width: min(480px, calc(100% - 32px)); }
+
+.management-dialog-header,
+.management-dialog-footer {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+}
+
+.management-dialog-header {
+    justify-content: space-between;
+    border-bottom: 1px solid var(--admin-ui-border);
+}
+
+.convene-admin-ui #admin-content .management-dialog-header h2 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.convene-admin-ui #admin-content .management-dialog-header [data-dialog-close] {
+    flex: 0 0 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    font: 24px/1 system-ui, sans-serif;
+    cursor: pointer;
+}
+
+.convene-admin-ui #admin-content .management-dialog-header [data-dialog-close]:hover { background: var(--convene-cream); }
+
+.management-dialog-body {
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 20px;
+}
+
+.management-dialog--delete .management-dialog-header { padding-block: 12px; }
+.management-dialog--delete .management-dialog-body { padding-block: 16px; }
+.management-dialog--delete p { margin: 0; }
+
+.management-dialog-footer {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    padding-block: 12px;
+    border-top: 1px solid var(--admin-ui-border);
+}
+
+.convene-admin-ui #admin-content .management-dialog [data-edit-page] h1 { display: none; }
+.convene-admin-ui #admin-content .management-dialog [data-edit-page] :is(.admin-edit-form, .event-types-form) {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+@media (max-width: 600px) {
+    .management-dialog { max-height: calc(100dvh - 32px); }
+    .management-dialog-header, .management-dialog-body, .management-dialog-footer { padding-inline: 16px; }
+    .convene-admin-ui #admin-content .management-dialog-header [data-dialog-close] { flex-basis: 44px; height: 44px; }
+}
+
+.management-edit-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.convene-admin-ui #admin-content .management-edit-actions {
+    justify-content: flex-end;
+    padding-top: 12px;
+    border-top: 1px solid var(--admin-ui-border);
+    align-self: stretch;
+}
+
+.convene-admin-ui #admin-content .management-edit-actions > .admin-button {
+    min-height: 40px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.convene-admin-ui #admin-content .management-dialog .management-user-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 255px), 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.convene-admin-ui #admin-content .management-dialog .management-user-fields :is(input, select) {
+    margin-bottom: 0;
+}
+
+.convene-admin-ui #admin-content .management-dialog [data-create-form] .management-create-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: 12px 16px;
+}
+
+.management-create-grid > .management-edit-actions,
+.management-create-grid > fieldset,
+.management-create-grid > .management-form-wide {
+    grid-column: 1 / -1;
+}
