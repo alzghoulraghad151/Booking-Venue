@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Owner\OwnerBookingController;
-
+use App\Http\Controllers\PublicBookingController;
 
 
 Route::prefix('admin')
@@ -11,11 +11,9 @@ Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
 
-       
         Route::get('/bookings', [AdminBookingController::class, 'index'])
             ->name('bookings.index');
 
-       
         Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])
             ->name('bookings.show');
 
@@ -24,15 +22,11 @@ Route::prefix('admin')
             ->name('bookings.review.destroy');
     });
 
-
-
-
 Route::prefix('owner')
     ->name('owner.')
     ->middleware(['auth', 'owner'])
     ->group(function () {
 
-    
         Route::get('/bookings', [OwnerBookingController::class, 'index'])
             ->name('bookings.index');
 
@@ -45,3 +39,13 @@ Route::prefix('owner')
         Route::patch('/bookings/{booking}/reject', [OwnerBookingController::class, 'reject'])
             ->name('bookings.reject');
     });
+
+Route::middleware(['auth', 'organizer'])->group(function () {
+
+    Route::get('/spaces/{space}/book', [PublicBookingController::class, 'create'])
+        ->name('bookings.create');
+
+    Route::post('/spaces/{space}/book', [PublicBookingController::class, 'store'])
+        ->middleware('throttle:10,1')
+        ->name('bookings.store');
+});
