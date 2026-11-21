@@ -38,13 +38,13 @@
                     <span>Confirming checks venue status, capacity, layout, package, and space availability.</span>
                 </div>
                 <div class="decision-actions">
-                    <form action="{{ route('owner.bookings.confirm', $booking) }}" method="POST" onsubmit="return confirm('Confirm this whole booking?');">
+                    <form action="{{ route('owner.bookings.confirm', $booking) }}" method="POST" data-delete-action="Confirm booking" data-delete-tone="primary" data-delete-message="Confirm this whole booking? The organizer will then be able to pay." onsubmit="return confirm('Confirm this whole booking?');">
                         @csrf
                         @method('PATCH')
                         <button class="button button--primary" type="submit">Confirm booking</button>
                     </form>
 
-                    <form action="{{ route('owner.bookings.reject', $booking) }}" method="POST" onsubmit="return confirm('Reject this whole booking?');">
+                    <form action="{{ route('owner.bookings.reject', $booking) }}" method="POST" data-delete-action="Reject booking" data-delete-message="Reject this whole booking? This cannot be undone." onsubmit="return confirm('Reject this whole booking?');">
                         @csrf
                         @method('PATCH')
                         <button class="button button--danger" type="submit">Reject booking</button>
@@ -58,7 +58,7 @@
                 <div>
                     <p class="eyebrow">BOOKING #{{ $booking->id }}</p>
                     <h2>{{ $booking->venue?->name ?? 'Venue unavailable' }}</h2>
-                    <p>Owner: {{ $owner->name }} · Created {{ $booking->created_at?->format('d M Y, H:i') ?? '—' }}</p>
+                    <p>Owner: {{ $owner->name }} · Created {{ $booking->created_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE)->format('d M Y, H:i') ?? '—' }}</p>
                 </div>
             </div>
 
@@ -82,6 +82,22 @@
                     <span>Booking status</span>
                     <strong>{{ ucfirst($booking->status) }}</strong>
                 </div>
+
+                <div class="info-item">
+                    <span>Total guests</span>
+                    <strong>{{ number_format($totals['guests']) }}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>Payment status</span>
+                    <strong>
+                        {{ match ($totals['payment_state']) {
+                            'paid' => 'Paid',
+                            'not_required' => 'Not required',
+                            default => $booking->status === 'pending' ? 'Awaiting your decision' : 'Awaiting payment',
+                        } }}
+                    </strong>
+                </div>
             </div>
         </section>
 
@@ -102,20 +118,27 @@
                             <th>Event type</th>
                             <th>Package / pricing</th>
                             <th>Date and time</th>
-                            <th>Guests</th>
-                            <th>Total</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @forelse ($booking->details->sortBy('start_at') as $detail)
+                            @php
+                                $detailStart = $detail->start_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE);
+                                $detailEnd = $detail->end_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE);
+                            @endphp
                             <tr>
                                 <td>
                                     <span class="cell-primary">{{ $detail->space?->name ?? '—' }}</span>
                                     <span class="cell-secondary">{{ $detail->space?->venue?->name ?? $booking->venue?->name ?? '—' }}</span>
                                 </td>
 
-                                <td>{{ $detail->spaceLayout?->name ?? '—' }}</td>
+                                <td>
+                                    <span class="cell-primary">{{ $detail->spaceLayout?->name ?? '—' }}</span>
+                                    @if ($detail->spaceLayout)
+                                        <span class="cell-secondary">Capacity {{ number_format((int) $detail->spaceLayout->capacity) }}</span>
+                                    @endif
+                                </td>
 
                                 <td>{{ $detail->eventType?->name ?? '—' }}</td>
 
@@ -125,17 +148,14 @@
                                 </td>
 
                                 <td>
-                                    <span class="cell-primary">{{ $detail->start_at?->format('d M Y') ?? '—' }}</span>
-                                    <span class="cell-secondary">{{ $detail->start_at?->format('H:i') ?? '—' }}–{{ $detail->end_at?->format('H:i') ?? '—' }}</span>
+                                    <span class="cell-primary">{{ $detailStart?->format('d M Y') ?? '—' }}</span>
+                                    <span class="cell-secondary">{{ $detailStart?->format('H:i') ?? '—' }}–{{ $detailEnd?->format('H:i') ?? '—' }}</span>
                                 </td>
 
-                                <td>{{ number_format((int) $detail->guest_count) }}</td>
-
-                                <td class="amount">{{ number_format((float) $detail->total_price, 2) }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7">
+                                <td colspan="5">
                                     <div class="empty-inline">No booking details are recorded.</div>
                                 </td>
                             </tr>
@@ -149,27 +169,59 @@
             <div class="panel-heading panel-heading--row">
                 <div>
                     <h2>Payment summary</h2>
-                    <p>Payments belong to the booking, not an individual detail.</p>
+                    <p>The organizer pays the full booking amount in one payment. Amounts are in JOD.</p>
                 </div>
 
-                <span class="result-count">Paid {{ number_format((float) $totals['paid'], 2) }}</span>
+                <span class="result-count">Paid {{ number_format($totals['paid'], 2) }}</span>
             </div>
 
             <div class="info-grid info-grid--compact">
                 <div class="info-item">
                     <span>Booking total</span>
-                    <strong>{{ number_format((float) $totals['amount'], 2) }}</strong>
+                    <strong>{{ number_format($totals['amount'], 2) }}</strong>
                 </div>
 
                 <div class="info-item">
-                    <span>Payments recorded</span>
-                    <strong>{{ number_format((float) $booking->payments->sum('amount'), 2) }}</strong>
+                    <span>Amount paid</span>
+                    <strong>{{ number_format($totals['paid'], 2) }}</strong>
                 </div>
+            </div>
 
-                <div class="info-item">
-                    <span>Payment records</span>
-                    <strong>{{ $booking->payments->count() }}</strong>
-                </div>
+            <div class="table-scroll dashboard-table-wrap" tabindex="0" role="region" aria-label="Payment">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Amount (JOD)</th>
+                            <th>Charged (USD)</th>
+                            <th>Reference</th>
+                            <th>Paid at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($booking->payments as $payment)
+                            <tr>
+                                <td class="amount">{{ number_format((float) $payment->amount, 2) }}</td>
+                                <td>{{ $payment->stripe_usd_cents !== null ? number_format($payment->stripe_usd_cents / 100, 2) : '—' }}</td>
+                                <td>{{ $payment->transaction_reference ?: '—' }}</td>
+                                <td>{{ $payment->paid_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE)->format('d M Y, H:i') ?? '—' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4">
+                                    <div class="empty-inline">
+                                        @if ($booking->status === 'pending')
+                                            No payment yet. The organizer can pay after you confirm the booking.
+                                        @elseif ($booking->status === 'rejected')
+                                            This booking was rejected, so no payment is required.
+                                        @else
+                                            Waiting for the organizer to complete the payment.
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -185,7 +237,7 @@
                 </div>
 
                 <span class="result-count">
-                    {{ $totals['commission_rate'] }}% Commission
+                    {{ rtrim(rtrim(number_format($totals['commission_rate'], 2), '0'), '.') }}% Commission
                 </span>
             </div>
 
@@ -194,31 +246,44 @@
                 <div class="info-item">
                     <span>Booking amount</span>
                     <strong>
-                        {{ number_format((float) $totals['amount'], 2) }} JOD
+                        {{ number_format($totals['amount'], 2) }} JOD
                     </strong>
                 </div>
 
                 <div class="info-item">
                     <span>
-                        Platform commission ({{ $totals['commission_rate'] }}%)
+                        Platform commission ({{ rtrim(rtrim(number_format($totals['commission_rate'], 2), '0'), '.') }}%)
                     </span>
                     <strong style="color: #b42318;">
-                        -{{ number_format((float) $totals['commission'], 2) }} JOD
+                        -{{ number_format($totals['commission'], 2) }} JOD
                     </strong>
                 </div>
 
                 <div class="info-item">
                     <span>Your net earnings</span>
                     <strong style="color: #16834a;">
-                        {{ number_format((float) $totals['owner_earnings'], 2) }} JOD
+                        {{ number_format($totals['owner_earnings'], 2) }} JOD
+                    </strong>
+                </div>
+
+                <div class="info-item">
+                    <span>Payout status</span>
+                    <strong>
+                        {{ match ($totals['payout']) {
+                            'released' => 'Transferred to you',
+                            'held' => 'Held until the event is completed',
+                            default => $booking->status === 'rejected' ? 'Not applicable' : 'Not paid yet',
+                        } }}
                     </strong>
                 </div>
 
             </div>
 
             <p class="cell-secondary" style="margin-top: 16px;">
-                @if (in_array($booking->status, ['cancelled', 'rejected']))
-                    No platform commission is charged for cancelled or rejected bookings.
+                @if ($booking->status === 'rejected')
+                    No platform commission is charged for rejected bookings.
+                @elseif ($totals['payout'] === 'released')
+                    The commission was deducted and your share has been transferred.
                 @else
                     Commission is calculated from the total booking amount.
                     It is an estimate until the booking payment is collected.

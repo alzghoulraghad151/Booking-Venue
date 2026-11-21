@@ -9,8 +9,10 @@ use Carbon\CarbonInterface;
 /**
  * Single source of truth for the price of one booking detail.
  *
- *   space price = space.hourly_rate x hours
- *   total       = space price + package price (if a package is selected)
+ * Without a package:
+ *   total = space.hourly_rate x hours
+ * With a package (fixed price, the space is included in it):
+ *   total = package price      (the space is NOT charged on top)
  */
 class BookingPriceCalculator
 {
@@ -36,9 +38,11 @@ class BookingPriceCalculator
         $hours = $seconds / 3600;
 
         $hourlyRate = (float) $space->hourly_rate;
-        $spacePrice = round($hourlyRate * $hours, 2);
         $packagePrice = $package ? round((float) $package->price, 2) : 0.0;
-        $total = round($spacePrice + $packagePrice, 2);
+
+        // The space is included in the package price, so it is only charged without a package.
+        $spacePrice = $package ? 0.0 : round($hourlyRate * $hours, 2);
+        $total = $package ? $packagePrice : $spacePrice;
 
         return [
             'hours' => round($hours, 2),
