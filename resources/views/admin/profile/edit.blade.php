@@ -6,7 +6,7 @@
 @section('content')
     <div class="admin-record dar-admin-profile">
         <header class="dar-admin-profile-heading">
-            <p>Account settings</p>
+            <p>Administrator account</p>
             <h1>My profile</h1>
         </header>
 
@@ -19,7 +19,7 @@
             @method('PATCH')
 
             <div class="dar-profile-field">
-                <label for="profile-name">Name <span aria-hidden="true">*</span></label>
+                <label for="profile-name">Full name</label>
                 <input id="profile-name" name="name" autocomplete="name" value="{{ old('name', $admin->name) }}"
                        required maxlength="255" @error('name') aria-invalid="true" aria-describedby="profile-name-error" @enderror>
                 @error('name')
@@ -28,7 +28,7 @@
             </div>
 
             <div class="dar-profile-field">
-                <label for="profile-email">Email <span aria-hidden="true">*</span></label>
+                <label for="profile-email">Email address</label>
                 <input id="profile-email" name="email" type="email" autocomplete="email" value="{{ old('email', $admin->email) }}"
                        required maxlength="255" @error('email') aria-invalid="true" aria-describedby="profile-email-error" @enderror>
                 @error('email')
@@ -37,20 +37,11 @@
             </div>
 
             <div class="dar-profile-field">
-                <label for="profile-phone">Phone <small>(optional)</small></label>
+                <label for="profile-phone">Phone number <small>(optional)</small></label>
                 <input id="profile-phone" name="phone" type="tel" autocomplete="tel" value="{{ old('phone', $admin->phone) }}"
                        maxlength="20" @error('phone') aria-invalid="true" aria-describedby="profile-phone-error" @enderror>
                 @error('phone')
                     <p id="profile-phone-error" role="alert">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="dar-profile-field">
-                <label for="profile-current-password">Current password <small>(required if changing email)</small></label>
-                <input id="profile-current-password" name="current_password" type="password" autocomplete="current-password"
-                       @error('current_password') aria-invalid="true" aria-describedby="profile-password-error" @enderror>
-                @error('current_password')
-                    <p id="profile-password-error" role="alert">{{ $message }}</p>
                 @enderror
             </div>
 

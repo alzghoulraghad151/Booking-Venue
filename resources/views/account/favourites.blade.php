@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/favourites.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/convene-pagination.css') }}">
 @endpush
 
 @section('content')
@@ -20,7 +21,7 @@
             @if ($spaces->isNotEmpty())
                 <div class="favourites-heading">
                     <h2>Event Spaces</h2>
-                    <p>{{ $spaces->count() }} {{ $spaces->count() === 1 ? 'space' : 'spaces' }}</p>
+                    <p>{{ $spaces->total() }} {{ $spaces->total() === 1 ? 'space' : 'spaces' }}</p>
                 </div>
 
                 <div class="favourites-list">
@@ -69,6 +70,8 @@
                         </article>
                     @endforeach
                 </div>
+
+                @include('partials.site.pagination', ['paginator' => $spaces, 'label' => 'Favourite spaces pages'])
 
                 <div class="favourites-footer">
                     <a class="favourites-link" href="{{ route('spaces.search') }}">

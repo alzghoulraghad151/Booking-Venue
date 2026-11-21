@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 
 class FavouriteController extends Controller
 {
-public function index(Request $request): View
+public function index(Request $request): View|RedirectResponse
 {
     $spaces = $request->user()->favoriteSpaces()
         ->where('spaces.status', 'active')
@@ -26,7 +26,12 @@ public function index(Request $request): View
                 ->orderBy('id'),
         ])
         ->orderBy('spaces.name')
-        ->get();
+        ->orderBy('spaces.id')
+        ->paginate(5);
+
+    if ($spaces->currentPage() > $spaces->lastPage()) {
+        return redirect()->to($spaces->url($spaces->lastPage()));
+    }
 
     return view('account.favourites', compact('spaces'));
 }

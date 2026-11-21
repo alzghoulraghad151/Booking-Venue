@@ -13,10 +13,6 @@
                     <a class="site-link" href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif>Home</a>
                 @endif
                 <a class="site-link" href="{{ route('spaces.search') }}" @if (request()->routeIs('spaces.search', 'spaces.show')) aria-current="page" @endif>Explore Spaces</a>
-                @if (Route::has('home'))
-                    <a class="site-link" href="{{ route('home') }}#event-types">Event Types</a>
-                    <a class="site-link" href="{{ route('home') }}#about">About</a>
-                @endif
                 @if (Route::has('bookings.from-invite'))
                     <a class="site-link" href="{{ route('bookings.from-invite') }}"   @if (request()->routeIs('bookings.from-invite*')) aria-current="page" @endif>AI Booking Assistant</a>
                 @endif
