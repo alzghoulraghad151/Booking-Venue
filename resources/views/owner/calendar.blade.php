@@ -34,7 +34,7 @@
                     @endforeach
                 </select>
             </label>
-            <button type="submit">Apply filters</button>
+            <button class="admin-filter-submit" type="submit">Apply filters</button>
         </form>
     </section>
 

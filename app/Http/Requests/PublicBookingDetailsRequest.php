@@ -15,16 +15,17 @@ use Illuminate\Support\Facades\Route;
  * Used by BOTH bookings.create (GET) and bookings.store (POST).
  *
  * GET : validates what the space details page sent
- *       (event_type_id, space_layout_id, package_id, guest_count).
+ *       (event_type_id, space_layout_id, package_id). The guest count is NOT sent:
+ *       it is taken from the capacity of the selected space layout.
  * POST: validates the same fields again + date, start_time, end_time.
  */
 class PublicBookingDetailsRequest extends FormRequest
 {
     public const TIMEZONE = 'Asia/Amman';
 
-    private const SELECTION_FIELDS = ['event_type_id', 'space_layout_id', 'package_id', 'guest_count'];
+    private const SELECTION_FIELDS = ['event_type_id', 'space_layout_id', 'package_id'];
 
-    /** @var array{space: Space, layout: SpaceLayout, eventType: EventType, package: ?Package, start: ?CarbonImmutable, end: ?CarbonImmutable}|null */
+    /** @var array{space: Space, layout: SpaceLayout, eventType: EventType, package: ?Package, guestCount: int, start: ?CarbonImmutable, end: ?CarbonImmutable}|null */
     private ?array $resolved = null;
 
     public function authorize(): bool
@@ -58,7 +59,6 @@ class PublicBookingDetailsRequest extends FormRequest
             'event_type_id' => ['required', 'integer', 'exists:event_types,id'],
             'space_layout_id' => ['required', 'integer'],
             'package_id' => ['nullable', 'integer'],
-            'guest_count' => ['nullable', 'integer', 'min:1', 'max:100000'],
 
             'date' => [$isStore ? 'required' : 'nullable', 'date_format:Y-m-d'],
             'start_time' => [$isStore ? 'required' : 'nullable', 'date_format:H:i'],
@@ -81,7 +81,7 @@ class PublicBookingDetailsRequest extends FormRequest
     /**
      * The validated objects (call only after validation passed).
      *
-     * @return array{space: Space, layout: SpaceLayout, eventType: EventType, package: ?Package, start: ?CarbonImmutable, end: ?CarbonImmutable}
+     * @return array{space: Space, layout: SpaceLayout, eventType: EventType, package: ?Package, guestCount: int, start: ?CarbonImmutable, end: ?CarbonImmutable}
      */
     public function resolved(): array
     {
@@ -98,7 +98,7 @@ class PublicBookingDetailsRequest extends FormRequest
         $space->loadMissing('venue');
 
         $eventTypeId = $this->integer('event_type_id');
-        $guests = $this->filled('guest_count') ? $this->integer('guest_count') : null;
+        $guests = 0; // taken from the layout capacity below
 
         $eventType = EventType::query()->find($eventTypeId);
 
@@ -114,13 +114,12 @@ class PublicBookingDetailsRequest extends FormRequest
                 $errors->add('space_layout_id', 'The selected layout does not support this event type.');
             }
 
-            if ($guests !== null && $guests > $layout->capacity) {
-                $errors->add('guest_count', "The guest count exceeds the capacity of the selected layout ({$layout->capacity}).");
-            }
-        }
+            // The guest count of the booking = the capacity of the selected layout.
+            $guests = (int) $layout->capacity;
 
-        if ($guests !== null && $guests > $space->capacity) {
-            $errors->add('guest_count', "The guest count exceeds the capacity of this space ({$space->capacity}).");
+            if ($guests > $space->capacity) {
+                $errors->add('space_layout_id', "The capacity of the selected layout ({$guests}) exceeds the capacity of this space ({$space->capacity}).");
+            }
         }
 
         // Package is optional.
@@ -137,9 +136,8 @@ class PublicBookingDetailsRequest extends FormRequest
             } elseif ($package->eventTypes()->exists()
                 && ! $package->eventTypes()->whereKey($eventTypeId)->exists()) {
                 $errors->add('package_id', "The package '{$package->name}' does not support this event type.");
-            } elseif (($guests !== null && ($guests < $package->min_guests || $guests > $package->max_guests))
-                || ($guests === null && $layout && $package->min_guests > min($space->capacity, $layout->capacity))) {
-                $errors->add('package_id', "The package '{$package->name}' accepts {$package->min_guests} to {$package->max_guests} guests.");
+            } elseif ($layout && ($guests < $package->min_guests || $guests > $package->max_guests)) {
+                $errors->add('package_id', "The package '{$package->name}' accepts {$package->min_guests} to {$package->max_guests} guests, but the selected layout holds {$guests}.");
             }
         }
 
@@ -185,6 +183,7 @@ class PublicBookingDetailsRequest extends FormRequest
             'layout' => $layout,
             'eventType' => $eventType,
             'package' => $package,
+            'guestCount' => $guests,
             'start' => $start ?: null,
             'end' => $end ?: null,
         ];
@@ -200,13 +199,8 @@ class PublicBookingDetailsRequest extends FormRequest
         }
 
         // Failed GET: the selection itself is invalid, send the user back to the space page.
-        $prefill = array_filter(
-            $this->only(['date', 'start_time', 'end_time', 'guest_count']),
-            static fn ($value) => is_string($value) && $value !== ''
-        );
-
         return Route::has('spaces.show')
-            ? route('spaces.show', ['space' => $space] + $prefill)
+            ? route('spaces.show', $space)
             : url()->previous();
     }
 }

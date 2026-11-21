@@ -20,6 +20,7 @@ class PublicHomeController extends Controller
                 ->where('status', 'active')
                 ->whereHas('images'))
             ->whereHas('images')
+            ->withCount(['spaces as active_spaces_count' => fn ($query) => $query->where('status', 'active')])
             ->with([
                 'images' => fn ($query) => $query->orderByDesc('is_primary')->orderBy('id'),
             ])
@@ -34,9 +35,10 @@ class PublicHomeController extends Controller
                     'address' => $venue->address,
                     'image_url' => $venue->images->first()->image_url,
                     'description' => $venue->description,
-                    'venue_count' => $venues->count(),
+                    'space_count' => $venues->sum('active_spaces_count'),
                 ];
             })
+            ->take(6)
             ->values();
 
         $eventTypes = EventType::query()
@@ -82,6 +84,7 @@ class PublicHomeController extends Controller
         $featuredVenues = Venue::query()
             ->where('status', 'approved')
             ->where('is_active_by_owner', true)
+            ->whereHas('spaces', fn ($query) => $query->where('status', 'active'))
             ->whereHas('images')
             ->with([
                 'images' => fn ($query) => $query->orderByDesc('is_primary')->orderBy('id'),
@@ -90,7 +93,7 @@ class PublicHomeController extends Controller
                 'spaces as active_spaces_count' => fn ($query) => $query->where('status', 'active'),
             ])
             ->latest()
-            ->limit(8)
+            ->limit(6)
             ->get();
 
         $latestPlaces = Space::query()
@@ -104,7 +107,7 @@ class PublicHomeController extends Controller
                 'images' => fn ($query) => $query->orderByDesc('is_primary')->orderBy('id'),
             ])
             ->latest()
-            ->limit(8)
+            ->limit(6)
             ->get();
 
         return view('public.home', [
