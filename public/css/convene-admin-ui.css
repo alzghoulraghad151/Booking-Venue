@@ -48,7 +48,7 @@
 .convene-admin-ui .admin-page-subtitle { margin: -12px 0 var(--admin-ui-gap); color: var(--convene-sage); }
 .convene-admin-ui .admin-dashboard-stats h2 { font: 700 13px/1.4 var(--admin-ui-body); }
 .convene-admin-ui .admin-dashboard-stats strong { font-family: var(--admin-ui-heading); }
-.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) a { text-underline-offset: 3px; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) a { text-underline-offset: 3px; text-decoration: none;}
 
 .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.dashboard-panel, .admin-list-panel, .admin-edit-form, .admin-record dl, .admin-venue-record section, .admin-venue-record ul) {
     min-width: 0;
