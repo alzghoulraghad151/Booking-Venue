@@ -9,7 +9,7 @@
 
 @section('content')
 <div class="venue-page">
-        <a href="{{ route('owner.venues.index') }}">Back to My Venues</a>
+        <a class="admin-button admin-button--navy" href="{{ route('owner.venues.index') }}">Back to My Venues</a>
 
         <h1>{{ $venue->name }}</h1>
 
@@ -42,7 +42,7 @@
             <p>Your venue is awaiting approval. Customers cannot see it yet.</p>
         @endif
 
-        <a class="venue-button venue-button--primary" href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
+        <a class="admin-button admin-button--primary admin-button--page" href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
 
 
         @if (session('success'))
@@ -63,7 +63,7 @@
         <input type="hidden" name="is_active_by_owner"
                value="{{ $venue->is_active_by_owner ? '0' : '1' }}">
 
-        <button type="submit">
+        <button class="admin-button admin-button--outline" type="submit">
             {{ $venue->is_active_by_owner ? 'Deactivate' : 'Activate' }}
         </button>
     </form>
@@ -78,7 +78,7 @@
     @csrf
     @method('DELETE')
 
-    <button class="venue-button--danger" type="submit">Archive Venue</button>
+    <button class="admin-button admin-button--danger" type="submit">Archive Venue</button>
 </form>
         <h2>Spaces</h2>
 

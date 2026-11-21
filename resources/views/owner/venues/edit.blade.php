@@ -11,7 +11,7 @@
 <div class="venue-page">
         <h1>Edit Venue</h1>
 
-        <form class="venue-card venue-form" method="POST" action="{{ route('owner.venues.update', $venue) }}">
+        <form class="admin-edit-form owner-editor venue-card venue-form" method="POST" action="{{ route('owner.venues.update', $venue) }}">
             @csrf
             @method('PATCH')
 
@@ -53,7 +53,7 @@
                 @enderror
             </div>
 
-            <button class="venue-button--primary" type="submit">Save Changes</button>
+            <button class="admin-button admin-button--primary admin-button--page" type="submit">Save Changes</button>
         </form>
 
 
@@ -85,7 +85,7 @@
               action="{{ route('owner.venues.images.primary', [$venue, $image->id]) }}">
             @csrf
             @method('PATCH')
-            <button type="submit">Make primary</button>
+            <button class="admin-button admin-button--outline" type="submit">Make primary</button>
         </form>
     @endif
 </figcaption>
@@ -97,7 +97,7 @@
           onsubmit="return confirm('Delete this image?')">
         @csrf
         @method('DELETE')
-        <button type="submit">Delete image</button>
+        <button class="admin-button admin-button--danger" type="submit">Delete image</button>
     </form>
 @endif
 
@@ -110,7 +110,7 @@
 </section>
 
 
-          <form class="venue-card venue-form" method="POST" action="{{ route('owner.venues.images.store', $venue) }}"
+          <form class="admin-edit-form owner-editor venue-card venue-form" method="POST" action="{{ route('owner.venues.images.store', $venue) }}"
                   enctype="multipart/form-data">
                 <h2>Add venue image</h2>
                 @csrf
@@ -138,8 +138,8 @@
 @error('images.*')
     <p role="alert">{{ $message }}</p>
 @enderror
-              <button type="submit" @disabled($remainingImages === 0)>Upload images</button>
+              <button class="admin-button admin-button--primary admin-button--page" type="submit" @disabled($remainingImages === 0)>Upload images</button>
             </form>
-        <a href="{{ route('owner.venues.index') }}">Back to My Venues</a>
+        <a class="admin-button admin-button--navy" href="{{ route('owner.venues.index') }}">Back to My Venues</a>
     </div>
 @endsection

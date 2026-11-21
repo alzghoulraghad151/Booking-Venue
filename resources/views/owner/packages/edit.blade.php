@@ -6,7 +6,7 @@
 @section('content')
     <h1>Edit Package</h1>
 
-    <form method="POST" action="{{ route('owner.packages.update', ['id' => $package->id]) }}">
+    <form class="admin-edit-form owner-editor" method="POST" action="{{ route('owner.packages.update', ['id' => $package->id]) }}">
         @csrf
         @method('PATCH')
 
@@ -109,6 +109,6 @@
             </div>
         </fieldset>
 
-        <button type="submit">Save</button>
+        <button class="admin-button admin-button--primary admin-button--page" type="submit">Save</button>
     </form>
 @endsection

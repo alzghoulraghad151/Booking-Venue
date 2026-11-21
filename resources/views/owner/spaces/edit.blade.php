@@ -7,7 +7,7 @@
 <div>
         <h1>Edit {{ $space->name }}</h1>
         <p>Venue: {{ $space->venue->name }}</p>
-        <a href="{{ route('owner.spaces.index') }}">Back to My Spaces</a>
+        <a class="admin-button admin-button--navy" href="{{ route('owner.spaces.index') }}">Back to My Spaces</a>
         @include('owner.spaces._form', ['editing' => true])
     </div>
 @endsection

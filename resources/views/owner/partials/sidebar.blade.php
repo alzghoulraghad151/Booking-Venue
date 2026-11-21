@@ -1,4 +1,4 @@
-<aside class="admin-sidebar">
+<aside class="admin-sidebar admin-sidebar--management">
     <div class="admin-brand">
         <a href="{{ route('owner.dashboard') }}">
             <span class="admin-mark" aria-hidden="true">C</span>
@@ -18,4 +18,8 @@
             <x-admin.nav-item label="Calendar" route-name="owner.calendar.index" active-pattern="owner.calendar.*" />
         </div>
     </nav>
+    <form class="admin-sidebar-logout" method="POST" action="{{ route('admin.logout') }}">
+        @csrf
+        <button class="admin-nav-item" type="submit">Logout</button>
+    </form>
 </aside>

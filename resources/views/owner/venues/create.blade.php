@@ -9,7 +9,7 @@
 
 
 
-        <form method="POST" action="{{ route('owner.venues.store') }}" enctype="multipart/form-data">
+        <form class="admin-edit-form owner-editor" method="POST" action="{{ route('owner.venues.store') }}" enctype="multipart/form-data">
     @csrf
 
     <div>
@@ -48,10 +48,10 @@
         @enderror
     </div>
 
-    <button type="submit">Save Venue</button>
+    <button class="admin-button admin-button--primary admin-button--page" type="submit">Save Venue</button>
 </form>
 
        
-        <a href="{{ route('owner.venues.index') }}">Back to My Venues</a>
+        <a class="admin-button admin-button--navy" href="{{ route('owner.venues.index') }}">Back to My Venues</a>
     </div>
 @endsection

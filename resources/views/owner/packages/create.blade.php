@@ -6,7 +6,7 @@
 @section('content')
     <h1>Add Package</h1>
 
-    <form method="POST" action="{{ route('owner.packages.store') }}">
+    <form class="admin-edit-form owner-editor" method="POST" action="{{ route('owner.packages.store') }}">
         @csrf
 
         <div>
@@ -79,6 +79,6 @@
                    placeholder="e.g. Coffee service">
         </div>
 
-        <button type="submit">Save Package</button>
+        <button class="admin-button admin-button--primary admin-button--page" type="submit">Save Package</button>
     </form>
 @endsection

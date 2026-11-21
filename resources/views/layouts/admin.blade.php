@@ -1,4 +1,4 @@
-@php($adminActions = request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*'))
+@php($adminActions = request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'owner.*'))
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,6 +7,9 @@
     <title>@yield('title', 'Admin') | Convene</title>
     <link rel="stylesheet" href="{{ asset('css/convene-admin.css') }}">
     <link rel="stylesheet" href="{{ asset('css/convene-admin-lists.css') }}">
+    @if (request()->routeIs('owner.*'))
+        <link rel="stylesheet" href="{{ asset('css/convene-owner.css') }}">
+    @endif
     @stack('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-admin-ui.css') }}">
     <script src="{{ asset('js/convene-admin-navigation.js') }}" defer></script>
@@ -15,7 +18,7 @@
         <script src="{{ asset('js/convene-admin-actions.js') }}" defer></script>
     @endif
 </head>
-<body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.bookings.*') ? ' admin-warm-actions' : '' }}">
+<body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.bookings.*', 'owner.*') ? ' admin-warm-actions' : '' }}">
     <a class="admin-skip" href="#admin-content">Skip to content</a>
 
     @section('sidebar')
@@ -26,7 +29,7 @@
         <button class="admin-nav-close" type="button" autofocus>Close menu</button>
     </dialog>
 
-    <main id="admin-content" class="admin-content{{ request()->routeIs('admin.venues.index', 'admin.users.index', 'admin.event-types.index', 'admin.reviews.index') ? ' admin-management-list' : '' }}" tabindex="-1">
+    <main id="admin-content" class="admin-content{{ request()->routeIs('admin.venues.index', 'admin.users.index', 'admin.event-types.index', 'admin.reviews.index', 'owner.venues.index', 'owner.spaces.index', 'owner.space-layouts.index', 'owner.packages.index') ? ' admin-management-list' : '' }}" tabindex="-1">
         <button class="admin-nav-toggle" type="button" aria-haspopup="dialog" aria-controls="admin-nav-drawer" hidden>
             <span aria-hidden="true">☰</span> Menu
         </button>
