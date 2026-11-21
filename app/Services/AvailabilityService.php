@@ -84,8 +84,7 @@ class AvailabilityService
             return "The guest count exceeds the capacity of {$name} / its layout.";
         }
 
-        if ($layout->eventTypes()->exists()
-            && ! $layout->eventTypes()->whereKey($detail->event_type_id)->exists()) {
+        if (! $layout->eventTypes()->whereKey($detail->event_type_id)->exists()) {
             return "The selected layout of {$name} does not support this event type.";
         }
 
