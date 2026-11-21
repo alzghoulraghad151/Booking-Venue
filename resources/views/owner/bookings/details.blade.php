@@ -38,13 +38,13 @@
                     <span>Confirming checks venue status, capacity, layout, package, and space availability.</span>
                 </div>
                 <div class="decision-actions">
-                    <form action="{{ route('owner.bookings.confirm', $booking) }}" method="POST" onsubmit="return confirm('Confirm this whole booking?');">
+                    <form action="{{ route('owner.bookings.confirm', $booking) }}" method="POST" data-delete-action="Confirm booking" data-delete-tone="primary" data-delete-message="Confirm this whole booking? The organizer will then be able to pay." onsubmit="return confirm('Confirm this whole booking?');">
                         @csrf
                         @method('PATCH')
                         <button class="button button--primary" type="submit">Confirm booking</button>
                     </form>
 
-                    <form action="{{ route('owner.bookings.reject', $booking) }}" method="POST" onsubmit="return confirm('Reject this whole booking?');">
+                    <form action="{{ route('owner.bookings.reject', $booking) }}" method="POST" data-delete-action="Reject booking" data-delete-message="Reject this whole booking? This cannot be undone." onsubmit="return confirm('Reject this whole booking?');">
                         @csrf
                         @method('PATCH')
                         <button class="button button--danger" type="submit">Reject booking</button>
@@ -118,8 +118,6 @@
                             <th>Event type</th>
                             <th>Package / pricing</th>
                             <th>Date and time</th>
-                            <th>Guests</th>
-                            <th>Total</th>
                         </tr>
                     </thead>
 
@@ -154,13 +152,10 @@
                                     <span class="cell-secondary">{{ $detailStart?->format('H:i') ?? '—' }}–{{ $detailEnd?->format('H:i') ?? '—' }}</span>
                                 </td>
 
-                                <td>{{ number_format($detail->guests) }}</td>
-
-                                <td class="amount">{{ number_format((float) $detail->total_price, 2) }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7">
+                                <td colspan="5">
                                     <div class="empty-inline">No booking details are recorded.</div>
                                 </td>
                             </tr>
@@ -197,7 +192,6 @@
                     <thead>
                         <tr>
                             <th>Amount (JOD)</th>
-                            <th>Method</th>
                             <th>Charged (USD)</th>
                             <th>Reference</th>
                             <th>Paid at</th>
@@ -207,14 +201,13 @@
                         @forelse ($booking->payments as $payment)
                             <tr>
                                 <td class="amount">{{ number_format((float) $payment->amount, 2) }}</td>
-                                <td>{{ ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</td>
                                 <td>{{ $payment->stripe_usd_cents !== null ? number_format($payment->stripe_usd_cents / 100, 2) : '—' }}</td>
                                 <td>{{ $payment->transaction_reference ?: '—' }}</td>
                                 <td>{{ $payment->paid_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE)->format('d M Y, H:i') ?? '—' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5">
+                                <td colspan="4">
                                     <div class="empty-inline">
                                         @if ($booking->status === 'pending')
                                             No payment yet. The organizer can pay after you confirm the booking.

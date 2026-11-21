@@ -53,15 +53,9 @@ class OwnerBookingController extends Controller
 
             'sort' => [
                 'nullable',
-                'in:newest,oldest,event_date_asc,event_date_desc,total_desc,total_asc,guests_desc',
+                'in:newest,oldest,event_date_asc,event_date_desc,total_desc,total_asc',
             ],
         ]);
-
-        // Guests of a booking = sum of the capacities of the layouts chosen in its details.
-        $guestsSubquery = BookingDetail::query()
-            ->selectRaw('COALESCE(SUM(COALESCE(space_layouts.capacity, booking_details.guest_count)), 0)')
-            ->leftJoin('space_layouts', 'space_layouts.id', '=', 'booking_details.space_layout_id')
-            ->whereColumn('booking_details.booking_id', 'bookings.id');
 
         $query = Booking::query()
             ->select('bookings.*')
@@ -69,7 +63,6 @@ class OwnerBookingController extends Controller
             ->withCount('details')
             ->withMin('details', 'start_at')
             ->withSum('details', 'total_price')
-            ->addSelect(['guests_total' => $guestsSubquery])
             ->whereHas('venue', fn (Builder $venue) =>
                 $venue->where('owner_id', $owner->getKey())
             );
@@ -130,10 +123,6 @@ class OwnerBookingController extends Controller
 
             'total_asc' => $query
                 ->orderBy('details_sum_total_price')
-                ->orderByDesc('id'),
-
-            'guests_desc' => $query
-                ->orderByDesc('guests_total')
                 ->orderByDesc('id'),
 
             default => $query
