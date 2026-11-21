@@ -23,11 +23,6 @@ class AdminProfileController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($admin)],
             'phone' => ['nullable', 'string', 'max:20'],
-            'current_password' => [
-                Rule::requiredIf(fn () => $request->input('email') !== $admin->email),
-                'nullable',
-                'current_password:web',
-            ],
         ]);
 
         $admin->fill([

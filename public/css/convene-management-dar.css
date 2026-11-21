@@ -164,6 +164,12 @@
 
 .convene-dar-management #admin-content :is(input, select, textarea)[aria-invalid="true"] { border-color: #ba1a1a; }
 
+.convene-dar-management:has(> .admin-sidebar--admin) #admin-content
+    :is(input:not([type="checkbox"], [type="radio"], [type="hidden"], [type="button"], [type="submit"], [type="reset"]), select, textarea):focus-visible {
+    outline: 2px solid var(--dar-brass);
+    outline-offset: 2px;
+}
+
 .convene-dar-management #admin-content .admin-button--primary {
     --button-bg: var(--convene-navy);
     --button-hover: #33302d;
@@ -252,12 +258,12 @@
 }
 
 .dar-admin-profile-heading {
-    margin-bottom: 32px;
-    padding-bottom: 24px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--admin-ui-border);
 }
 
-.convene-dar-management #admin-content .dar-admin-profile-heading h1 { margin: 8px 0 0; font-size: 32px; line-height: 38px; }
+.convene-dar-management #admin-content .dar-admin-profile-heading h1 { margin-block: 8px; font-size: 32px; line-height: 38px; }
 
 .dar-admin-profile-heading p {
     margin: 0;
@@ -270,16 +276,17 @@
 
 .convene-dar-management #admin-content .dar-admin-profile .admin-edit-form {
     display: grid;
-    gap: 20px;
+    gap: 16px;
     margin-top: 0;
     padding: 24px;
 }
 
 .convene-dar-management #admin-content .dar-admin-profile .admin-edit-form label {
-    color: var(--convene-sage);
-    font-size: 11px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    color: var(--convene-navy);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 .convene-dar-management #admin-content .dar-admin-profile .admin-edit-form input {
@@ -288,8 +295,8 @@
 }
 
 .convene-dar-management #admin-content .dar-admin-profile .management-edit-actions {
-    justify-content: flex-start;
-    gap: 16px;
+    justify-content: flex-end;
+    gap: 8px;
     padding-top: 16px;
 }
 
@@ -317,7 +324,14 @@
 }
 
 @media (min-width: 992px) {
+    .convene-dar-management:has(> .admin-sidebar--admin) > .admin-content {
+        padding-block-start: 22px;
+    }
+
     .convene-dar-management .admin-content:has(> .dar-admin-profile) { padding-block: 40px; }
+    .convene-dar-management:has(> .admin-sidebar--admin) > .admin-content:has(> .dar-admin-profile) {
+        padding-block-start: 30px;
+    }
 }
 
 .convene-dar-management .admin-content:has(> .dar-admin-profile) > .admin-nav-toggle { margin-bottom: 32px; }

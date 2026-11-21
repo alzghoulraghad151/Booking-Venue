@@ -24,17 +24,18 @@
             <form id="landing-search" class="home-search" action="{{ route('spaces.search') }}" method="GET" aria-label="Search event spaces">
                 <div class="home-search__location">
                     <label for="landing-address">Location / Address</label>
-                    <div class="home-search__input-row">
+                    <div class="home-address">
                         <input id="landing-address" name="address" type="text" list="landing-locations" placeholder="Choose an address" autocomplete="street-address" required>
                         <datalist id="landing-locations">
                             @foreach ($locations as $location)
                                 <option value="{{ $location['address'] }}"></option>
                             @endforeach
                         </datalist>
-                        <button type="button" id="voice-search" class="home-search__voice" title="Arabic voice search" aria-label="Search by voice" data-url="{{ route('spaces.search.voice') }}" data-csrf="{{ csrf_token() }}">
-                            <span class="material-symbols-outlined" aria-hidden="true">mic</span>
-                            <span data-voice-label>ابدأ التسجيل</span>
-                        </button>
+                        <span class="home-address__chevron" aria-hidden="true"></span>
+                        <div class="home-address__menu" id="landing-address-menu" hidden>
+                            <ul role="listbox" id="landing-address-options" aria-label="Addresses"></ul>
+                            <p role="status" hidden></p>
+                        </div>
                     </div>
                 </div>
                 <div class="home-search__guests">
@@ -42,8 +43,6 @@
                     <input id="landing-capacity" name="capacity" type="number" min="1" placeholder="Any group size">
                 </div>
                 <button class="home-button home-button--dark" type="submit"><span class="material-symbols-outlined" aria-hidden="true">search</span> Search spaces</button>
-                <p id="voice-status" class="home-search__feedback" role="status" dir="auto"></p>
-                <p id="voice-transcript" class="home-search__feedback" dir="auto"></p>
             </form>
         </div>
     </section>
@@ -195,10 +194,35 @@
             </div>
         </div>
     </section>
+    <div class="home-voice-widget" data-home-voice-widget lang="ar" dir="rtl">
+        <div class="home-voice-widget__intro" data-voice-intro hidden>
+            <button class="home-voice-widget__dismiss" type="button" data-dismiss-voice-intro aria-label="إغلاق التعريف">×</button>
+            <p class="home-voice-widget__title">مرحباً، أنا مساعد البحث الصوتي</p>
+            <p>اضغط واحكي وين بدك تحجز ولكم شخص.</p>
+        </div>
+        <div class="home-voice-widget__feedback">
+            <p id="voice-status" role="status" dir="auto"></p>
+            <p id="voice-transcript" dir="auto"></p>
+        </div>
+        <button type="button" id="voice-search" form="landing-search" class="home-voice-widget__button"
+                data-url="{{ route('spaces.search.voice') }}" data-csrf="{{ csrf_token() }}">
+            <svg class="home-voice-widget__mic" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+                <rect x="9" y="2" width="6" height="12" rx="3"/>
+                <path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/>
+            </svg>
+            <svg class="home-voice-widget__stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2"/>
+            </svg>
+            <span class="home-voice-widget__label" data-voice-label>ابدأ البحث بصوتك</span>
+        </button>
+        <p class="home-voice-widget__hint" aria-hidden="true">ابحث عن مساحة بصوتك</p>
+    </div>
 </div>
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('js/home-address-menu.js') }}" defer></script>
     <script src="{{ asset('js/space-voice-search.js') }}" defer></script>
     <script src="{{ asset('js/home-carousels.js') }}" defer></script>
 @endpush

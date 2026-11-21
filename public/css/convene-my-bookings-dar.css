@@ -1,15 +1,29 @@
-.site-bookings {
+:is(.site-bookings, .account-page:has(:is(.account-profile, .account-settings)), .favourites-page) {
     --booking-ink: #1e1b19;
     --booking-ivory: #fdf8f7;
     --booking-stone: #f7f3f1;
     --booking-brass: #77592e;
     --booking-border: #d0c4be;
     --booking-muted: #615e5c;
-    width: min(100%, 1160px);
-    padding: 20px 20px;
     color: var(--booking-ink);
     font-family: 'Raleway', system-ui, sans-serif;
+}
+
+.site-bookings {
     font-variant-numeric: tabular-nums;
+}
+
+.site-bookings,
+.account-page .account-layout:has(> :is(.account-profile, .account-settings)),
+.favourites-page .favourites-page__content {
+    width: min(100%, 1160px);
+    padding: 20px;
+}
+
+.convene-site .site-main:has(> :is(.account-page:has(:is(.account-profile, .account-settings)), .favourites-page)),
+.account-page:has(:is(.account-profile, .account-settings)),
+.favourites-page {
+    background: var(--booking-ivory, #fdf8f7);
 }
 
 .convene-site .site-main:has(> .site-bookings) {
@@ -17,19 +31,26 @@
     background: #fdf8f7;
 }
 
-.site-bookings .site-bookings-heading {
+.site-bookings .site-bookings-heading,
+:is(.account-profile .profile-heading, .account-settings .settings-heading),
+.favourites-page .favourites-page__heading {
     margin-bottom: 18px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--booking-border);
 }
 
-.site-bookings :is(h1, h2) {
+.site-bookings :is(h1, h2),
+.account-profile :is(.profile-heading h1, .account-photo > h2),
+.account-settings :is(.settings-heading h1, .settings-card h2, dialog h2),
+.favourites-page :is(h1, h2, h3) {
     color: var(--booking-ink);
     font-family: 'Playfair Display', Georgia, serif;
     font-weight: 600;
 }
 
-.site-bookings h1 { margin-block: 8px; font-size: 32px; line-height: 38px; }
+.site-bookings h1,
+:is(.account-profile .profile-heading, .account-settings .settings-heading) h1,
+.favourites-page .favourites-page__heading h1 { margin-block: 8px; font-size: 32px; line-height: 38px; }
 .site-bookings .site-bookings-heading p { margin: 0; }
 .site-bookings :is(.site-booking-card h2, .site-bookings-empty h2) { font-size: clamp(22px, 3vw, 28px); }
 .site-bookings :is(.site-bookings-heading p, .site-booking-reference, .site-bookings-empty p) { color: var(--booking-muted); }
@@ -129,8 +150,62 @@
 .site-bookings .site-booking-pagination [rel="next"] { margin-inline-start: auto; }
 .site-bookings .site-booking-notice { border-color: var(--booking-brass); background: var(--booking-stone); }
 
+.account-profile .profile-heading__label {
+    margin: 0 0 6px;
+    color: var(--booking-brass);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: .08em;
+}
+
+.account-settings { --settings-border: var(--booking-border); }
+.account-profile { --profile-border: var(--booking-border); }
+.favourites-page { --favourites-border: var(--booking-border); }
+.favourites-page :is(.favourite-card__details, .favourites-empty) { padding: 24px; }
+.favourites-page :is(.favourites-heading, .favourites-empty) { margin-block-start: 0; }
+.favourites-page :is(.favourites-heading p, .favourite-card__address) { color: var(--booking-muted); }
+.account-layout:has(> :is(.account-profile, .account-settings)) > .account-nav {
+    border-color: var(--booking-border);
+    background: var(--booking-stone);
+}
+
+.account-layout:has(> :is(.account-profile, .account-settings)) > .account-nav a,
+.favourites-page :is(.favourites-link, .favourite-card__remove) { color: var(--booking-ink); }
+.account-layout:has(> :is(.account-profile, .account-settings)) > .account-nav a[aria-current="page"],
+.account-content.account-profile button[type="submit"],
+.account-content.account-settings dialog button[type="submit"],
+.account-content.account-settings #open-password-dialog,
+.favourites-page .favourites-link--primary {
+    border-color: var(--booking-ink);
+    background: var(--booking-ink);
+    color: var(--booking-ivory);
+}
+
+.account-content.account-profile form:has(input[name="_method"][value="DELETE"]) button {
+    background: #fff;
+    color: var(--booking-ink);
+}
+
+.account-content.account-settings .settings-card button[type="submit"] {
+    border-color: #8c2424;
+    background: #8c2424;
+    color: #fff;
+}
+
+.account-settings .settings-card p { color: var(--booking-muted); }
+.account-settings dialog { color: var(--booking-ink); }
+
+:is(.account-profile, .account-settings) :focus-visible,
+.favourites-page :is(a, button):focus-visible { outline-color: var(--booking-brass); }
+
 @media (min-width: 768px) {
-    .site-bookings { padding-inline: 40px; }
-    .site-bookings h1 { font-size: 36px; line-height: 42px; }
+    .site-bookings,
+    .account-page .account-layout:has(> :is(.account-profile, .account-settings)),
+    .favourites-page .favourites-page__content { padding-inline: 40px; }
+    .site-bookings h1,
+    :is(.account-profile .profile-heading, .account-settings .settings-heading) h1,
+    .favourites-page .favourites-page__heading h1 { font-size: 36px; line-height: 42px; }
+    .favourites-page :is(.favourite-card__details, .favourites-empty) { padding: 32px; }
     .site-bookings :is(.site-booking-card, .site-bookings-empty) { padding: 32px; }
 }
