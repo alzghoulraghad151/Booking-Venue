@@ -1,6 +1,7 @@
 @extends('layouts.owner')
 
 @section('title', 'Booking Calendar')
+@section('subtitle', 'Check scheduled bookings across your spaces.')
 
 @section('content')
     <section class="dashboard-panel" aria-labelledby="calendar-filters">

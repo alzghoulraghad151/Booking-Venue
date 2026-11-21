@@ -6,8 +6,8 @@ use Illuminate\Foundation\Configuration\Middleware;
 
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnerMiddleware;
-use App\Http\Middleware\OrganizerMiddleware;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\OrganizerMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => AdminMiddleware::class,
             'owner' => OwnerMiddleware::class,
-            'organizer' =>OrganizerMiddleware::class,
+            'organizer' => OrganizerMiddleware::class,
         ]);
 
         $middleware->prependToPriorityList(
@@ -37,7 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
     return match ($request->user()?->role) {
         'venue_owner' => route('owner.venues.index'),
         'admin' => route('admin.dashboard'),
-        default => route('account.signed-in'),
+        default => route('home'),
     };
 });
     })

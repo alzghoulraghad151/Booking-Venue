@@ -1,22 +1,42 @@
 @extends('layouts.admin')
 
 @section('title', 'Admin Dashboard')
+@section('subtitle', 'Track platform activity and see which bookings and venues need attention.')
 
 @section('content')
-    <div class="dashboard-stats" aria-label="Platform statistics">
-        <article><h2>Total Users</h2><p>{{ $totalUsers }}</p></article>
-        <article><h2>Total Venues</h2><p>{{ $totalVenues }}</p></article>
-        <article><h2>Total Bookings</h2><p>{{ $totalBookings }}</p></article>
-        <article><h2>Venue Owners</h2><p>{{ $totalOwners }}</p></article>
-        <article><h2>Pending Venues</h2><p>{{ $pendingVenues }}</p></article>
-        <article><h2>Pending Bookings</h2><p>{{ $pendingBookings }}</p></article>
+    <div class="dashboard-stats admin-dashboard-stats" aria-label="Platform statistics">
+        <article>
+            <h2>Total Users</h2>
+            <strong>{{ number_format($totalUsers) }}</strong>
+            <p>{{ number_format($totalOwners) }} venue owners</p>
+        </article>
+        <article>
+            <h2>Total Venues</h2>
+            <strong>{{ number_format($totalVenues) }}</strong>
+            <p>Across all venue statuses</p>
+        </article>
+        <article>
+            <h2>Total Bookings</h2>
+            <strong>{{ number_format($totalBookings) }}</strong>
+            <p>Across all booking statuses</p>
+        </article>
+        <article>
+            <h2>Pending Bookings</h2>
+            <strong>{{ number_format($pendingBookings) }}</strong>
+            <p>Requests awaiting a decision</p>
+        </article>
     </div>
+
+    @include('admin.partials.quick-actions')
 
     <section class="dashboard-panel" aria-labelledby="recent-bookings-title">
         <header class="dashboard-panel-header">
-            <h2 id="recent-bookings-title">Recent Bookings</h2>
+            <div>
+                <h2 id="recent-bookings-title">Recent Bookings</h2>
+                <p class="admin-description">See the latest requests, who made them, and their current status.</p>
+            </div>
             @if (Route::has('admin.bookings.index'))
-                <a href="{{ route('admin.bookings.index') }}">View all bookings</a>
+                <a class="admin-button admin-button--primary admin-button--small dashboard-panel-action" href="{{ route('admin.bookings.index') }}">View all bookings</a>
             @endif
         </header>
         <div class="dashboard-table-wrap" tabindex="0" role="region" aria-labelledby="recent-bookings-title">
@@ -56,9 +76,12 @@
     <div class="dashboard-summary-grid">
         <section class="dashboard-panel" aria-labelledby="venues-review-title">
             <header class="dashboard-panel-header">
-                <h2 id="venues-review-title">Venues Awaiting Review</h2>
+                <div>
+                    <h2 id="venues-review-title">Venues Awaiting Review <span class="dashboard-badge">{{ $pendingVenues }}</span></h2>
+                    <p class="admin-description">Open pending listings to check their details before making a decision.</p>
+                </div>
                 @if (Route::has('admin.venues.index'))
-                    <a href="{{ route('admin.venues.index', ['status' => 'pending']) }}">Manage venues</a>
+                    <a class="admin-button admin-button--primary admin-button--small dashboard-panel-action" href="{{ route('admin.venues.index', ['status' => 'pending']) }}">Manage venues</a>
                 @endif
             </header>
 
@@ -82,12 +105,15 @@
 
         <section class="dashboard-panel" aria-labelledby="payments-title">
             <h2 id="payments-title">Payments &amp; Commission</h2>
+            <p class="admin-description">See this month’s paid totals and commission, plus payment counts across all time.</p>
+            <p class="dashboard-note">{{ $monthLabel }} · Asia/Amman</p>
             <dl class="dashboard-metrics">
-                <div><dt>Total Paid</dt><dd>{{ number_format($totalPaid, 2) }} JOD</dd></div>
-                <div><dt>Total Commission</dt><dd>{{ number_format($totalCommission, 2) }} JOD</dd></div>
+                <div><dt>Paid This Month</dt><dd>{{ number_format($monthlyPaid, 2) }} JOD</dd></div>
+                <div><dt>Commission This Month</dt><dd>{{ number_format($monthlyCommission, 2) }} JOD</dd></div>
             </dl>
-            <p class="dashboard-note">Commission on confirmed and completed bookings.</p>
+            <p class="dashboard-note">Paid totals use the payment date. Commission uses the start date of each confirmed or completed booking detail.</p>
 
+            <p class="dashboard-note">Payment counts · all time</p>
             <dl class="dashboard-metrics">
                 <div><dt>Pending</dt><dd>{{ $paymentCounts['pending'] ?? 0 }}</dd></div>
                 <div><dt>Paid</dt><dd>{{ $paymentCounts['paid'] ?? 0 }}</dd></div>

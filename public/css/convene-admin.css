@@ -112,7 +112,7 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
 .event-types-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 12px; }
 .event-types-actions form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .event-types-actions input, .event-types-actions button, .event-types-delete button,
-.event-types-form select, .event-types-form textarea {
+.event-types-form :is(input, select, textarea) {
     max-width: 100%;
     min-height: 40px;
     padding: 8px 12px;
@@ -139,7 +139,7 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
 .event-types-delete form { margin-top: 6px; }
 .event-types-form { max-width: 640px; }
 .event-types-form label { display: block; margin-bottom: 6px; font-weight: 600; }
-.event-types-form :is(select, textarea) { width: 100%; margin-bottom: 12px; }
+.event-types-form :is(input, select, textarea) { width: 100%; margin-bottom: 12px; }
 .event-types-error, .event-types-delete button.event-types-error { color: #981d1d; }
 
 /* Owner booking calendar */
@@ -170,6 +170,147 @@ a.admin-nav-item:hover, .admin-nav-item[aria-current="page"] { background: var(-
     .calendar-days--week, .calendar-days--month { grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
     .calendar-day-spacer { display: none; }
 }
+
+/* Admin dashboard quick actions */
+.dashboard-quick-actions {
+    padding: 20px;
+}
+
+.dashboard-quick-actions ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dashboard-quick-actions a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    height: 100%;
+    min-height: 76px;
+    padding: 12px 38px 12px 14px;
+    border: 1px solid #dedbd5;
+    border-radius: 8px;
+    background: var(--convene-cream);
+    text-decoration: none;
+}
+
+.dashboard-quick-actions a::after {
+    content: '';
+    position: absolute;
+    inset-inline-end: 17px;
+    top: calc(50% - 4px);
+    width: 7px;
+    height: 7px;
+    transform: rotate(-45deg);
+    border-right: 2px solid var(--convene-navy);
+    border-bottom: 2px solid var(--convene-navy);
+}
+
+.dashboard-quick-actions a:hover {
+    border-color: var(--convene-sage);
+    background: var(--convene-white);
+}
+
+.dashboard-quick-actions a span {
+    color: var(--convene-sage);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+@media (max-width: 600px) {
+    .dashboard-quick-actions { padding: 12px; }
+    .dashboard-quick-actions a { padding-inline: 10px 28px; }
+    .dashboard-quick-actions a::after { inset-inline-end: 11px; }
+}
+
+/* Admin dashboard summary cards */
+.admin-dashboard-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    grid-auto-rows: 1fr;
+}
+
+.admin-dashboard-stats > article {
+    display: grid;
+    grid-template-rows: minmax(32px, auto) auto 1fr;
+    gap: 2px;
+    align-content: start;
+    padding: 12px 16px;
+    border-top: 1px solid #dedbd5;
+    box-shadow: 0 2px 6px rgb(23 43 58 / 6%);
+}
+
+.admin-dashboard-stats > article h2 {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.admin-dashboard-stats > article strong {
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.admin-dashboard-stats > article p {
+    margin: 2px 0 0;
+    color: var(--convene-sage);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+@media (max-width: 1199px) {
+    .admin-dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 575px) {
+    .admin-dashboard-stats { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Admin sidebar session action */
+.admin-sidebar--management {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar-account {
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.admin-sidebar-account .admin-sidebar-logout {
+    margin-top: 0;
+    padding-top: 8px;
+}
+
+.admin-sidebar-logout {
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.admin-sidebar-logout button {
+    width: 100%;
+    border: 1px solid rgb(255 255 255 / 30%);
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.admin-sidebar-logout button:hover {
+    border-color: var(--convene-warm);
+    background: var(--convene-sage);
+}
+
 /* Admin user list pagination (Laravel's default Tailwind view without Tailwind). */
 .admin-user-pagination { margin-top: 16px; }
 .admin-user-pagination nav > div:first-child { display: none; }

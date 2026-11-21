@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset password | Convene</title>
+@extends('layouts.users')
 
-    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+@section('title', "Reset password")
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
-    <script src="{{ asset('js/auth-submit.js') }}" defer></script>
-</head>
-<body class="auth-page">
-    <main class="auth-card">
+@endpush
+
+@section('content')
+    <div class="auth-page">
+<div class="auth-card">
         <h1>Reset password</h1>
 
         <form method="POST" action="{{ route('password.update') }}">
@@ -53,6 +51,10 @@
 
         <p><a href="{{ route('password.request') }}">Request a new reset link</a></p>
         <a href="{{ route('login') }}">Back to sign in</a>
-    </main>
-</body>
-</html>
+    </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="{{ asset('js/auth-submit.js') }}" defer></script>
+@endpush

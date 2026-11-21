@@ -19,4 +19,17 @@ async function playSummary() {
 }
 
 playButton.addEventListener('click', playSummary);
-playSummary();
+playButton.hidden = false;
+
+let shouldAutoplay = false;
+
+try {
+    shouldAutoplay = sessionStorage.getItem('play-space-summary-once') === '1';
+    sessionStorage.removeItem('play-space-summary-once');
+} catch {
+    // Leave the manual play button available.
+}
+
+if (shouldAutoplay) {
+    playSummary();
+}

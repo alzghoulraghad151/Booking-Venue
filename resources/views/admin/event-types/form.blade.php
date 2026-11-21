@@ -30,8 +30,11 @@
         @enderror
 
         <div class="event-types-actions">
-            <button class="event-types-primary" type="submit">Save event type</button>
-            <a href="{{ route('admin.event-types.index') }}">Cancel</a>
+            @if ($eventType->exists)
+                <x-admin.edit-actions :back-url="route('admin.event-types.index')" back-label="Cancel" save-label="Save event type" />
+            @else
+                <x-admin.edit-actions :back-url="route('admin.event-types.index')" save-label="Add event type" />
+            @endif
         </div>
     </form>
 @endsection

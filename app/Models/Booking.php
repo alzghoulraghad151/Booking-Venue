@@ -13,7 +13,7 @@ class Booking extends Model
         'status',
     ];
 
-   
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
@@ -22,7 +22,8 @@ class Booking extends Model
 
     public function venue(): BelongsTo
     {
-        return $this->belongsTo(Venue::class);
+
+        return $this->belongsTo(Venue::class)->withTrashed();
     }
 
 
@@ -36,7 +37,7 @@ class Booking extends Model
     return $this->hasMany(Payment::class);
 }
 
-   
+
     public function review(): HasOne
     {
         return $this->hasOne(Review::class);

@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 use Throwable;
 
@@ -142,10 +143,27 @@ class OwnerSpaceController extends Controller
             $uploadedImages = $imageStorage->upload($request->file('images', []), (int) $space->getKey());
 
             DB::transaction(function () use ($space, $attributes, $data, $uploadedImages, &$removedImages): void {
+                $space = Space::query()->lockForUpdate()->findOrFail($space->getKey());
+                $removeIds = $data['remove_images'] ?? [];
+                $imagesToRemove = $space->images()->whereKey($removeIds)->get();
+
+                if ($imagesToRemove->count() !== count($removeIds)) {
+                    throw ValidationException::withMessages([
+                        'images' => 'One or more selected images are no longer available for removal.',
+                    ]);
+                }
+
+                $finalCount = $space->images()->count() - $imagesToRemove->count() + count($uploadedImages);
+
+                if ($finalCount < 1 || $finalCount > 3) {
+                    throw ValidationException::withMessages([
+                        'images' => 'A space must have between 1 and 3 images after saving.',
+                    ]);
+                }
+
                 $space->update($attributes);
 
-                foreach ($data['remove_images'] ?? [] as $imageId) {
-                    $image = $space->images()->findOrFail($imageId);
+                foreach ($imagesToRemove as $image) {
                     $removedImages[] = [
                         'image_url' => $image->image_url,
                         'cloudinary_public_id' => $image->cloudinary_public_id,

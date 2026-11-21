@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Controllers\Owner\OwnerVenueImageController;
@@ -15,18 +16,18 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\SpaceVoiceSearchController;
+use App\Http\Controllers\BookingInvitationController;
+use App\Http\Controllers\PublicVenueController;
 
+use App\Http\Controllers\PublicSpaceDetailsController;
 
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->name('login');
-    Route::post('/register', [RegisteredUserController::class, 'store'])
-        ->name('register.store');
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 
         Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware('throttle:5,1')
@@ -49,14 +50,28 @@ Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']
     ->name('password.update');
 });
 
-
 Route::get('/account/signed-in', fn () => response('Signed in successfully.'))
     ->middleware('auth')
     ->name('account.signed-in');
 
 
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
 
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::patch('/users/{user}/status', [AdminUserController::class, 'updateStatus'])->name('users.status');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
+    Route::get('/venues', [AdminVenueController::class, 'index'])->name('venues.index');
+    Route::get('/venues/{venue}', [AdminVenueController::class, 'show'])->name('venues.show');
+    Route::patch('/venues/{venue}/approve', [AdminVenueController::class, 'approve'])->name('venues.approve');
+    Route::patch('/venues/{venue}/reject', [AdminVenueController::class, 'reject'])->name('venues.reject');
+    Route::patch('/venues/{venue}/status', [AdminVenueController::class, 'updateStatus'])->name('venues.status');
+});
 
 Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
     ->name('spaces.search');
@@ -72,40 +87,13 @@ Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
     ->name('spaces.search.summary-audio');
 
 
-    Route::prefix('admin')
-    ->name('admin.')
-    ->middleware(['auth', 'admin'])
-    ->group(function () {
-        Route::prefix('users')->name('users.')->group(function () {
-            Route::get('/', [AdminUserController::class, 'index'])->name('index');
-            Route::get('/create', [AdminUserController::class, 'create'])->name('create');
-            Route::post('/', [AdminUserController::class, 'store'])->name('store');
-            Route::get('/{user}', [AdminUserController::class, 'show'])->name('show');
-            Route::get('/{user}/edit', [AdminUserController::class, 'edit'])->name('edit');
-            Route::put('/{user}', [AdminUserController::class, 'update'])->name('update');
-            Route::delete('/{user}', [AdminUserController::class, 'destroy'])->name('destroy');
-        });
+ Route::get('/spaces/{space}', [PublicSpaceDetailsController::class, 'show'])
+    ->whereNumber('space')
+    ->name('spaces.show');
 
-        Route::prefix('venues')->name('venues.')->group(function () {
-            Route::get('/', [AdminVenueController::class, 'index'])->name('index');
-            Route::get('/{venue}', [AdminVenueController::class, 'show'])->name('show');
-            Route::patch('/{venue}/approve', [AdminVenueController::class, 'approve'])->name('approve');
-            Route::patch('/{venue}/reject', [AdminVenueController::class, 'reject'])->name('reject');
-            Route::patch('/{venue}/status', [AdminVenueController::class, 'updateStatus'])->name('status');
-        });
-    });
-
-
-
-
-
-
-
-
-
-
-
-
+Route::get('/venues/{venue}', [PublicVenueController::class, 'show'])
+    ->whereNumber('venue')
+    ->name('public.venues.show');
 
 
 Route::prefix('owner')
@@ -142,6 +130,31 @@ Route::prefix('owner')
                 ->name('images.destroy');
         });
     });
+
+
+
+
+Route::middleware('auth')->group(function (): void {
+    Route::view('/booking-assistant', 'public.bookings.from-invite')
+        ->name('bookings.from-invite');
+
+    Route::post('/booking-assistant', [BookingInvitationController::class, 'analyze'])
+        ->middleware('throttle:5,1')
+        ->name('bookings.from-invite.analyze');
+    Route::post('/booking-assistant/suggestions', [BookingInvitationController::class, 'suggest'])
+        ->middleware('throttle:15,1')
+        ->name('bookings.from-invite.suggest');
+});
+
+
+
+Route::post('/my-bookings/{booking}/checkout', \App\Http\Controllers\Users\StripeCheckoutController::class)
+    ->middleware(['auth', 'organizer', 'throttle:10,1'])
+    ->whereNumber('booking')
+    ->name('my-bookings.checkout');
+
+Route::post('/stripe/booking-webhook', \App\Http\Controllers\StripeBookingWebhookController::class)
+    ->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
 
 require __DIR__ . '/zaid.php';
 require __DIR__ . '/omar.php';

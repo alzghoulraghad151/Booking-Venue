@@ -4,10 +4,11 @@
 @section('hide-layout-heading', '1')
 
 @section('content')
-<div>
-        <a href="{{ route('admin.venues.index') }}">Back to Manage Venues</a>
+<div class="admin-record admin-venue-record">
+        <a class="admin-button admin-button--outline" href="{{ route('admin.venues.index') }}">Back to Manage Venues</a>
 
         <h1>{{ $venue->name }}</h1>
+        <p class="admin-description">Check the listing details and decide whether it should be available for bookings.</p>
 
         <dl>
             <dt>Owner</dt>
@@ -27,6 +28,7 @@
 
         <section>
     <h2>Venue photos</h2>
+    <p class="admin-description">Review photos uploaded for this listing and see which one is primary.</p>
 
     @forelse ($venue->images as $image)
         <figure>
@@ -60,7 +62,7 @@
         @csrf
         @method('PATCH')
 
-        <button type="submit">Approve</button>
+        <button class="admin-button admin-button--primary" type="submit">Approve</button>
     </form>
 
     <form method="POST" action="{{ route('admin.venues.reject', $venue) }}"
@@ -68,13 +70,14 @@
         @csrf
         @method('PATCH')
 
-        <button type="submit">Reject</button>
+        <button class="admin-button admin-button--danger" type="submit">Reject</button>
     </form>
 @endif
 
 
 
         <h2>Spaces</h2>
+        <p class="admin-description">See the spaces listed at this venue and their guest capacities.</p>
 
 
         @error('status')
@@ -87,7 +90,7 @@
         @csrf
         @method('PATCH')
 
-        <button type="submit" name="status"
+        <button class="admin-button admin-button--outline" type="submit" name="status"
                 value="{{ $venue->status === 'approved' ? 'inactive' : 'approved' }}">
             {{ $venue->status === 'approved' ? 'Deactivate' : 'Activate' }}
         </button>

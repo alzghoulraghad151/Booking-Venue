@@ -6,7 +6,6 @@
 @section('content')
 <div>
         <h1>Add a space</h1>
-        <a href="{{ route('owner.spaces.index') }}">Back to My Spaces</a>
         @if ($venues->isEmpty())
             <p>You need an existing venue before adding a space.</p>
         @else

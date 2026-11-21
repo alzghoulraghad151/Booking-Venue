@@ -2,13 +2,22 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEventTypeController;
+use App\Http\Controllers\Admin\AdminLogoutController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Owner\OwnerCalendarController;
 use App\Http\Controllers\Owner\OwnerDashboardController;
+use App\Http\Controllers\Users\BookingReviewController;
+use App\Http\Controllers\Users\MyBookingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth', 'admin'])
     ->name('admin.dashboard');
+
+Route::post('/admin/logout', AdminLogoutController::class)
+    ->middleware('auth')
+    ->name('admin.logout');
 
 Route::get('/admin/event-types', [AdminEventTypeController::class, 'index'])
     ->middleware(['auth', 'admin'])
@@ -34,6 +43,18 @@ Route::delete('/admin/event-types/{eventType}', [AdminEventTypeController::class
     ->middleware(['auth', 'admin'])
     ->name('admin.event-types.destroy');
 
+Route::get('/admin/reviews', [AdminReviewController::class, 'index'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.reviews.index');
+
+Route::get('/admin/reviews/{review}', [AdminReviewController::class, 'show'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.reviews.show');
+
+Route::delete('/admin/reviews/{review}', [AdminReviewController::class, 'destroy'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.reviews.destroy');
+
 Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index'])
     ->middleware(['auth', 'owner'])
     ->name('owner.dashboard');
@@ -41,3 +62,20 @@ Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index'])
 Route::get('/owner/calendar', [OwnerCalendarController::class, 'index'])
     ->middleware(['auth', 'owner'])
     ->name('owner.calendar.index');
+
+Route::get('/my-bookings', [MyBookingController::class, 'index'])
+    ->middleware('auth')
+    ->name('my-bookings.index');
+
+Route::post('/my-bookings/{booking}/review', [BookingReviewController::class, 'store'])
+    ->middleware('auth')
+    ->whereNumber('booking')
+    ->name('my-bookings.reviews.store');
+
+Route::get('/admin/profile', [AdminProfileController::class, 'edit'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.profile.edit');
+
+Route::patch('/admin/profile', [AdminProfileController::class, 'update'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.profile.update');

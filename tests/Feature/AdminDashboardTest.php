@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -11,6 +12,7 @@ class AdminDashboardTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        CarbonImmutable::setTestNow('2026-11-21 12:00:00');
 
         config([
             'database.default' => 'dashboard_test',
@@ -25,14 +27,20 @@ class AdminDashboardTest extends TestCase
             'users (id INTEGER PRIMARY KEY, name TEXT, role TEXT, deleted_at TEXT)',
             'venues (id INTEGER PRIMARY KEY, name TEXT, status TEXT, created_at TEXT, deleted_at TEXT)',
             'bookings (id INTEGER PRIMARY KEY, customer_id INTEGER, venue_id INTEGER, status TEXT, created_at TEXT)',
-            'booking_details (id INTEGER PRIMARY KEY, booking_id INTEGER, commission_amount DECIMAL)',
-            'payments (id INTEGER PRIMARY KEY, status TEXT, amount DECIMAL)',
+            'booking_details (id INTEGER PRIMARY KEY, booking_id INTEGER, commission_amount DECIMAL, start_at TEXT)',
+            'payments (id INTEGER PRIMARY KEY, status TEXT, amount DECIMAL, paid_at TEXT)',
             'reviews (id INTEGER PRIMARY KEY, booking_id INTEGER, rating INTEGER, comment TEXT, created_at TEXT)',
         ] as $table) {
             DB::statement('CREATE TABLE '.$table);
         }
 
         $this->actingAs((new User())->forceFill(['role' => 'admin', 'status' => 'active']));
+    }
+
+    protected function tearDown(): void
+    {
+        CarbonImmutable::setTestNow();
+        parent::tearDown();
     }
 
     public function test_dashboard_renders_empty_sections(): void
@@ -58,12 +66,12 @@ class AdminDashboardTest extends TestCase
                 'status' => $status,
                 'created_at' => '2026-11-19 10:00:00',
             ]);
-            DB::table('booking_details')->insert(['booking_id' => $id, 'commission_amount' => $id * 10]);
+            DB::table('booking_details')->insert(['booking_id' => $id, 'commission_amount' => $id * 10, 'start_at' => '2026-11-19 10:00:00']);
         }
 
         DB::table('payments')->insert([
-            ['status' => 'paid', 'amount' => 120],
-            ['status' => 'pending', 'amount' => 65],
+            ['status' => 'paid', 'amount' => 120, 'paid_at' => '2026-11-19 10:00:00'],
+            ['status' => 'pending', 'amount' => 65, 'paid_at' => null],
         ]);
         DB::table('reviews')->insert([
             'booking_id' => 2,
@@ -74,8 +82,8 @@ class AdminDashboardTest extends TestCase
 
         $this->get(route('admin.dashboard'))
             ->assertOk()
-            ->assertViewHas('totalCommission', fn ($total) => (float) $total === 30.0)
-            ->assertViewHas('totalPaid', fn ($total) => (float) $total === 120.0)
+            ->assertViewHas('monthlyCommission', fn ($total) => (float) $total === 30.0)
+            ->assertViewHas('monthlyPaid', fn ($total) => (float) $total === 120.0)
             ->assertViewHas('paymentCounts', fn ($counts) => (int) $counts['pending'] === 1)
             ->assertSee('Average rating: 4.0 / 5')
             ->assertSee('Good space for a workshop.')

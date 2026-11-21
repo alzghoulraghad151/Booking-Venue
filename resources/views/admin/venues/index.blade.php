@@ -21,8 +21,8 @@
 @endpush
 
 @section('content')
-<div>
-        <h1>Manage Venues</h1>
+<x-admin.list-heading title="Manage Venues" description="Find venues and review pending listings before approving or rejecting them." />
+    <div>
 
 
         <form method="GET" action="{{ route('admin.venues.index') }}">
@@ -45,11 +45,15 @@
         <p>{{ $message }}</p>
     @enderror
 
-    <button type="submit">Apply filters</button>
-    <a href="{{ route('admin.venues.index') }}">Clear filters</a>
+    <div class="admin-venue-filter-actions">
+        <button class="admin-button admin-filter-submit" type="submit">Apply filters</button>
+        <a class="admin-filter-reset" href="{{ route('admin.venues.index') }}">Reset</a>
+    </div>
 </form>
 
 
+    <div class="admin-list-panel">
+        <div class="dashboard-table-wrap" tabindex="0" role="region" aria-label="Venues table">
         <table>
             <thead>
                 <tr>
@@ -58,7 +62,7 @@
                     <th scope="col">Address</th>
                     <th scope="col">Registered on</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col" class="admin-table-actions">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,9 +77,11 @@
         {{ ucfirst($venue->status) }}
     </span>
 </td>
-                        <td>
-    <a href="{{ route('admin.venues.show', $venue) }}">View</a>
-</td>
+                        <td class="admin-table-actions">
+                            <a class="admin-table-icon" href="{{ route('admin.venues.show', $venue) }}" aria-label="View {{ $venue->name }}" title="View">
+                                    <x-admin.table-action-icon name="view" />
+                                </a>
+                        </td>
                     </tr>
                 @empty
                     <tr>
@@ -84,7 +90,8 @@
                 @endforelse
             </tbody>
         </table>
-
-        {{ $venues->links() }}
+        </div>
+        {{ $venues->links('components.admin.pagination') }}
+    </div>
     </div>
 @endsection

@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Review;
 use App\Models\Venue;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminBookingController extends Controller
@@ -16,6 +16,7 @@ class AdminBookingController extends Controller
             'venue_id' => ['nullable', 'integer', 'exists:venues,id'],
             'date' => ['nullable', 'date'],
             'organizer' => ['nullable', 'string', 'max:100'],
+            'sort' => ['nullable', 'in:newest,oldest,event_date_asc,event_date_desc,total_desc,total_asc,guests_desc'],
         ]);
 
         $query = Booking::query()->with([
@@ -25,7 +26,10 @@ class AdminBookingController extends Controller
             'details.spaceLayout',
             'details.eventType',
             'details.package',
-        ])->withCount('details');
+        ])->withCount('details')
+            ->withMin('details', 'start_at')
+            ->withSum('details', 'total_price')
+            ->withSum('details', 'guest_count');
 
         if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
@@ -49,19 +53,23 @@ class AdminBookingController extends Controller
             });
         }
 
-        $bookings = $query->orderByDesc('created_at')
-            ->paginate(10)
+        match ($filters['sort'] ?? 'newest') {
+            'oldest' => $query->orderBy('created_at')->orderBy('id'),
+            'event_date_asc' => $query->orderBy('details_min_start_at')->orderByDesc('id'),
+            'event_date_desc' => $query->orderByDesc('details_min_start_at')->orderByDesc('id'),
+            'total_desc' => $query->orderByDesc('details_sum_total_price')->orderByDesc('id'),
+            'total_asc' => $query->orderBy('details_sum_total_price')->orderByDesc('id'),
+            'guests_desc' => $query->orderByDesc('details_sum_guest_count')->orderByDesc('id'),
+            default => $query->orderByDesc('created_at')->orderByDesc('id'),
+        };
+
+        $bookings = $query->paginate(10)
             ->withQueryString();
 
-        $venues = Venue::query()->orderBy('name')->get(['id', 'name']);
-        $summary = [
-            'total' => Booking::count(),
-            'pending' => Booking::where('status', 'pending')->count(),
-            'confirmed' => Booking::where('status', 'confirmed')->count(),
-            'completed' => Booking::where('status', 'completed')->count(),
-        ];
+        // withTrashed(): venues deleted later can still be used to filter their old bookings.
+        $venues = Venue::withTrashed()->orderBy('name')->get(['id', 'name']);
 
-        return view('admin.bookings.list', compact('bookings', 'venues', 'summary', 'filters'));
+        return view('admin.bookings.list', compact('bookings', 'venues', 'filters'));
     }
 
     public function show(Booking $booking)
@@ -84,5 +92,20 @@ class AdminBookingController extends Controller
         ];
 
         return view('admin.bookings.details', compact('booking', 'totals'));
+    }
+
+    public function destroyReview(Booking $booking): RedirectResponse
+    {
+        $review = Review::where('booking_id', $booking->id)->first();
+
+        if (! $review) {
+            return redirect()->route('admin.bookings.show', $booking)
+                ->withErrors(['review' => 'This booking has no review to delete.']);
+        }
+
+        $review->delete();
+
+        return redirect()->route('admin.bookings.show', $booking)
+            ->with('success', 'Review deleted successfully.');
     }
 }

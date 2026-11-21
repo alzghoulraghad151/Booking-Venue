@@ -1,7 +1,7 @@
 @props(['label', 'routeName', 'activePattern'])
 
 @if (Route::has($routeName))
-    <a class="admin-nav-item" href="{{ route($routeName) }}"
+    <a {{ $attributes->merge(['class' => 'admin-nav-item']) }} href="{{ route($routeName) }}"
         @if (request()->routeIs($activePattern)) aria-current="page" @endif>
         {{ $label }}
     </a>

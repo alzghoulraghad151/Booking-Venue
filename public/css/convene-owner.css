@@ -1,0 +1,111 @@
+
+/* Owner pages share the admin shell, panels, buttons and table controls. */
+.convene-admin-ui #admin-content .venue-page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+.convene-admin-ui #admin-content .venue-page :is(.venue-card, .venue-table) {
+    border-color: var(--admin-ui-border);
+    border-radius: var(--admin-ui-radius);
+}
+
+.convene-admin-ui #admin-content .venue-card {
+    padding: var(--admin-panel-padding);
+    box-shadow: var(--admin-ui-shadow);
+}
+
+.convene-admin-ui #admin-content .venue-page .admin-list-heading h1 { margin: 0; }
+.convene-admin-ui #admin-content .venue-page button:hover { filter: none; }
+.convene-admin-ui #admin-content .venue-page .venue-button--primary {
+    border-color: transparent;
+    background: var(--convene-warm);
+    color: var(--convene-navy);
+}
+.convene-admin-ui #admin-content .venue-page .venue-button--primary:hover {
+    background: color-mix(in srgb, var(--convene-warm) 75%, var(--convene-white));
+}
+
+.convene-admin-ui #admin-content .owner-filter-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+.owner-filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-inline-start: auto;
+}
+
+.convene-admin-ui #admin-content .owner-filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 165px), 1fr));
+    gap: 12px;
+}
+
+.convene-admin-ui #admin-content .owner-filter-form label {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.convene-admin-ui #admin-content .owner-filter-form :is(input, select) {
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+}
+
+.convene-admin-ui #admin-content .owner-editor {
+    display: grid;
+    gap: 12px;
+    max-width: 780px;
+}
+
+.convene-admin-ui #admin-content .owner-editor :is(fieldset, input, select, textarea) { min-width: 0; }
+.convene-admin-ui #admin-content .owner-editor :is(input:not([type="hidden"], [type="checkbox"], [type="radio"], [type="file"]), select, textarea) {
+    display: block;
+    width: 100%;
+    margin: 0;
+}
+.convene-admin-ui #admin-content .owner-editor :is(input[type="file"], textarea) { max-width: 100%; }
+.convene-admin-ui #admin-content .owner-editor textarea { resize: vertical; }
+.convene-admin-ui #admin-content .owner-editor :is(input[type="checkbox"], input[type="radio"]) {
+    accent-color: var(--convene-sage);
+}
+.convene-admin-ui #admin-content .owner-editor fieldset {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--admin-ui-border);
+    border-radius: 10px;
+}
+.convene-admin-ui #admin-content .owner-editor fieldset label:has(input[type="checkbox"]) { margin: 0; }
+.convene-admin-ui #admin-content .owner-editor button[type="submit"] { justify-self: start; }
+.convene-admin-ui #admin-content .owner-editor [role="alert"] { margin: 4px 0 0; }
+.convene-admin-ui #admin-content .owner-record .dashboard-panel h2 { margin-bottom: 8px; }
+.convene-admin-ui #admin-content .owner-record .dashboard-panel ul { margin: 0; padding-inline-start: 20px; }
+.convene-admin-ui #admin-content .owner-record .dashboard-panel > p { margin: 0 0 8px; }
+.convene-admin-ui #admin-content .owner-record .dashboard-panel > p:last-child { margin-bottom: 0; }
+.convene-admin-ui #admin-content .owner-record > .admin-button { margin-top: 16px; }
+.convene-admin-ui #admin-content .admin-dashboard-stats > article { grid-template-rows: auto 1fr; }
+.convene-admin-ui #admin-content .dashboard-quick-actions a { min-height: 60px; }
+.convene-admin-ui #admin-content .calendar-controls button { border-radius: 10px; }
+
+.convene-admin-ui #admin-content .owner-filter-form--compact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.owner-filter-form--compact > div:first-child { flex: 2 1 220px; min-width: 0; }
+.owner-filter-form--compact > div:nth-child(2) { flex: 1 1 150px; min-width: 0; }
+
+.owner-filter-form:not(.owner-filter-form--compact) > .owner-filter-actions {
+    grid-column: -2 / -1;
+    align-self: end;
+    justify-content: flex-end;
+}

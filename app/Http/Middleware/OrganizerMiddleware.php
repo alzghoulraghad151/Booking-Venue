@@ -8,14 +8,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrganizerMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-         abort_unless($request->user()?->role === 'organizer', 403);
+        $user = $request->user();
+
+        abort_unless(
+            $user?->role === 'organizer' && $user->status === 'active',
+            403,
+            'Permission Denied'
+        );
+
         return $next($request);
     }
 }

@@ -4,7 +4,7 @@
 @section('hide-layout-heading', '1')
 
 @section('content')
-
+    <div class="admin-record">
 
         @if (session('success'))
             <p role="status">{{ session('success') }}</p>
@@ -17,18 +17,22 @@
             </ul>
         @endif
 
-        <header class="page-header">
-            <h1>User Details</h1>
+        <header class="admin-record-header">
+            <div>
+                <h1>User Details</h1>
+                <p class="admin-description">Review the account’s contact details, access role, and current status.</p>
+            </div>
 
-            <a href="{{ route('admin.users.index') }}">
+
+            <a class="admin-button admin-button--outline" href="{{ route('admin.users.index') }}">
                 Back to Users
             </a>
-            <a href="{{ route('admin.users.edit', $user) }}">Edit user</a>
-            <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+            <a data-edit-dialog class="admin-button admin-button--primary" href="{{ route('admin.users.edit', $user) }}">Edit user</a>
+            <form data-delete-message="Move this user to trash? They will be hidden from active user lists." data-delete-action="Move to trash" action="{{ route('admin.users.destroy', $user) }}" method="POST"
                 onsubmit="return confirm('Move this user to trash? They will be hidden from active user lists.');">
                 @csrf
                 @method('DELETE')
-                <button type="submit">Move to trash</button>
+                <button class="admin-button admin-button--danger" type="submit">Move to trash</button>
             </form>
         </header>
 
@@ -61,4 +65,5 @@
 
         </section>
 
+    </div>
 @endsection
