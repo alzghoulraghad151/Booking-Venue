@@ -9,6 +9,10 @@
 @section('content')
     <div class="places-page">
 <div class="places-shell">
+        <header class="places-heading">
+            <h1>Explore Spaces</h1>
+            <p>Browse bookable spaces across our partner venues, filtered by address, capacity, event type, and hourly rate.</p>
+        </header>
 
         <form class="places-filters" action="{{ route('spaces.search') }}" method="GET">
             <div class="places-filters__grid">
@@ -98,8 +102,7 @@
         @endif
 
         <div class="places-results-heading">
-            <h2>{{ number_format($spaces->total()) }} {{ \Illuminate\Support\Str::plural('place', $spaces->total()) }}</h2>
-            <span>Page {{ $spaces->currentPage() }} of {{ max(1, $spaces->lastPage()) }}</span>
+            <h2>Showing {{ number_format($spaces->count()) }} of {{ number_format($spaces->total()) }} {{ \Illuminate\Support\Str::plural('space', $spaces->total()) }}</h2>
         </div>
 
         <section class="places-results-grid" aria-label="Available places">
@@ -108,16 +111,13 @@
                 @php($imageUrls = $space->images->pluck('image_url')->values())
                 @php($isFavorite = in_array($space->id, $favoriteSpaceIds))
                 @php($eventLabels = $space->spaceLayouts->flatMap(fn ($layout) => $layout->eventTypes)->unique('id')->take(4))
-                <article class="place-card">
+                <article class="place-card" data-component-id="card-action" data-component-type="card" data-component-variant="action">
                     <div class="place-card__media" data-card-images='@json($imageUrls)'>
                         <a class="place-card__photo-link" href="{{ route('spaces.show', $space) }}" aria-label="View {{ $space->name }} at {{ $space->venue->name }}">
                             @if ($image)
                                 <img class="place-card__image" src="{{ $image->image_url }}" alt="{{ $space->name }}" loading="lazy">
                             @else
                                 <span class="place-card__image place-card__image--empty" aria-hidden="true"></span>
-                            @endif
-                            @if ($space->hourly_rate !== null)
-                                <span class="place-card__price">From <strong>{{ number_format((float) $space->hourly_rate, 2) }} JOD</strong><small>per hour</small></span>
                             @endif
                         </a>
 
@@ -143,13 +143,13 @@
                     </div>
 
                     <div class="place-card__body">
-                        <div class="place-card__title-row">
-                            <div>
-                                <h3><a href="{{ route('spaces.show', $space) }}">{{ $space->name }}</a></h3>
-                                <p class="place-card__venue">{{ $space->venue->name }}</p>
-                            </div>
-                            <span class="place-card__capacity"><span aria-hidden="true">♙</span> {{ $space->capacity }}</span>
-                        </div>
+                        <header class="place-card__content">
+                            <span class="place-card__venue">{{ $space->venue->name }}@if ($space->venue->address) · {{ $space->venue->address }}@endif</span>
+                            <h3><a href="{{ route('spaces.show', $space) }}">{{ $space->name }}</a></h3>
+                            @if ($space->description)
+                                <p class="place-card__description">{{ \Illuminate\Support\Str::limit($space->description, 145) }}</p>
+                            @endif
+                        </header>
 
                         @if ((int) $space->venue_review_count > 0)
                             <div class="place-card__rating" aria-label="Rated {{ number_format((float) $space->venue_average_rating, 1) }} out of 5 from {{ $space->venue_review_count }} reviews">
@@ -159,21 +159,15 @@
                             </div>
                         @endif
 
-                        <p class="place-card__address">{{ $space->venue->address }}</p>
-
-                        @if ($space->description)
-                            <p class="place-card__description">{{ \Illuminate\Support\Str::limit($space->description, 145) }}</p>
-                        @endif
-
-                        @if ($eventLabels->isNotEmpty())
-                            <div class="place-card__tags" aria-label="Suitable for">
-                                @foreach ($eventLabels as $eventLabel)
-                                    <span>{{ $eventLabel->name }}</span>
-                                @endforeach
+                        <footer class="place-card__footer">
+                            <div class="place-card__footer-details">
+                                <span class="place-card__capacity"><span aria-hidden="true">♙</span> {{ $space->capacity }} Guests</span>
+                                @if ($space->hourly_rate !== null)
+                                    <strong>{{ number_format((float) $space->hourly_rate, 2) }} JOD / hr</strong>
+                                @endif
                             </div>
-                        @endif
-
-                        <a class="place-card__action" href="{{ route('spaces.show', $space) }}">View space</a>
+                            <a class="place-card__action" href="{{ route('spaces.show', $space) }}">View space details</a>
+                        </footer>
                     </div>
                 </article>
             @empty
@@ -187,10 +181,12 @@
 
         @if ($spaces->hasPages())
             <nav class="places-pagination" aria-label="Places pages">
+                <span class="places-pagination__summary">Page {{ $spaces->currentPage() }} of {{ max(1, $spaces->lastPage()) }}</span>
+                <div class="places-pagination__pages">
                 @if ($spaces->onFirstPage())
-                    <span class="places-pagination__disabled" aria-disabled="true">Previous</span>
+                    <span class="places-pagination__disabled places-pagination__previous" aria-disabled="true">← Previous</span>
                 @else
-                    <a href="{{ $spaces->previousPageUrl() }}">Previous</a>
+                    <a class="places-pagination__previous" href="{{ $spaces->previousPageUrl() }}">← Previous</a>
                 @endif
 
                 @foreach ($spaces->getUrlRange(max(1, $spaces->currentPage() - 2), min($spaces->lastPage(), $spaces->currentPage() + 2)) as $page => $url)
@@ -202,16 +198,13 @@
                 @endforeach
 
                 @if ($spaces->hasMorePages())
-                    <a href="{{ $spaces->nextPageUrl() }}">Next</a>
+                    <a class="places-pagination__next" href="{{ $spaces->nextPageUrl() }}">Next →</a>
                 @else
-                    <span class="places-pagination__disabled" aria-disabled="true">Next</span>
+                    <span class="places-pagination__disabled places-pagination__next" aria-disabled="true">Next →</span>
                 @endif
+                </div>
             </nav>
         @endif
-
-        <button type="button" id="voice-search" class="places-voice-search" data-url="{{ route('spaces.search.voice') }}" data-csrf="{{ csrf_token() }}">ابحث بصوتك</button>
-        <p id="voice-status" role="status" aria-live="polite"></p>
-        <p id="voice-transcript" dir="auto"></p>
     </div>
     </div>
 @endsection
