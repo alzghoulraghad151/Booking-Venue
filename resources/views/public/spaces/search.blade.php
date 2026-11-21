@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-place-results.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/convene-pagination.css') }}">
 @endpush
 
 @section('content')
@@ -179,32 +180,7 @@
             @endforelse
         </section>
 
-        @if ($spaces->hasPages())
-            <nav class="places-pagination" aria-label="Places pages">
-                <span class="places-pagination__summary">Page {{ $spaces->currentPage() }} of {{ max(1, $spaces->lastPage()) }}</span>
-                <div class="places-pagination__pages">
-                @if ($spaces->onFirstPage())
-                    <span class="places-pagination__disabled places-pagination__previous" aria-disabled="true">← Previous</span>
-                @else
-                    <a class="places-pagination__previous" href="{{ $spaces->previousPageUrl() }}">← Previous</a>
-                @endif
-
-                @foreach ($spaces->getUrlRange(max(1, $spaces->currentPage() - 2), min($spaces->lastPage(), $spaces->currentPage() + 2)) as $page => $url)
-                    @if ($page === $spaces->currentPage())
-                        <span class="is-current" aria-current="page">{{ $page }}</span>
-                    @else
-                        <a href="{{ $url }}" aria-label="Page {{ $page }}">{{ $page }}</a>
-                    @endif
-                @endforeach
-
-                @if ($spaces->hasMorePages())
-                    <a class="places-pagination__next" href="{{ $spaces->nextPageUrl() }}">Next →</a>
-                @else
-                    <span class="places-pagination__disabled places-pagination__next" aria-disabled="true">Next →</span>
-                @endif
-                </div>
-            </nav>
-        @endif
+        @include('partials.site.pagination', ['paginator' => $spaces, 'label' => 'Places pages'])
     </div>
     </div>
 @endsection
@@ -213,4 +189,5 @@
     <script type="module" src="{{ asset('js/space-search-summary-audio.js') }}"></script>
     <script src="{{ asset('js/space-voice-search.js') }}" defer></script>
     <script src="{{ asset('js/space-card-gallery.js') }}" defer></script>
+    <script src="{{ asset('js/space-favorites.js') }}" defer></script>
 @endpush

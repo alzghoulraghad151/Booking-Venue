@@ -6,6 +6,32 @@ const idleLabel = label.textContent;
 const address = button.form?.elements.namedItem('address') ?? document.getElementById('address');
 const capacity = button.form?.elements.namedItem('capacity') ?? document.getElementById('capacity');
 
+const intro = button.closest('[data-home-voice-widget]')?.querySelector('[data-voice-intro]');
+
+if (intro) {
+    const introKey = 'convene-voice-intro-dismissed';
+    try {
+        intro.hidden = sessionStorage.getItem(introKey) === '1';
+    } catch {
+        intro.hidden = false;
+    }
+
+    const hideIntro = () => {
+        intro.hidden = true;
+        try {
+            sessionStorage.setItem(introKey, '1');
+        } catch {
+            // The introduction can still be dismissed on this page.
+        }
+    };
+
+    intro.querySelector('[data-dismiss-voice-intro]').addEventListener('click', () => {
+        hideIntro();
+        button.focus();
+    });
+    button.addEventListener('click', hideIntro);
+}
+
 let recorder;
 
 button.addEventListener('click', async () => {
