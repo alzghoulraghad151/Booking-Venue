@@ -1,4 +1,18 @@
 (() => {
+    const reviewComment = document.querySelector('#admin-review-comment-dialog');
+    if (typeof reviewComment?.showModal === 'function') {
+        const commentBody = reviewComment.querySelector('[data-review-comment-body]');
+        for (const preview of document.querySelectorAll('[data-review-comment]')) {
+            preview.setAttribute('aria-haspopup', 'dialog');
+            preview.addEventListener('click', (event) => {
+                if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+                event.preventDefault();
+                commentBody.textContent = preview.dataset.reviewComment;
+                reviewComment.showModal();
+            });
+        }
+    }
+
     const edit = document.querySelector('#management-edit-dialog');
     const deletion = document.querySelector('#management-delete-dialog');
     if (typeof edit?.showModal !== 'function' || !deletion) return;

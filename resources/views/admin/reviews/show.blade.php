@@ -7,7 +7,7 @@
     <div class="admin-record admin-review-detail">
         <header class="admin-record-header">
             <div>
-                <h1>Review for booking #{{ $review->booking_id }}</h1>
+                <h1>Review for booking {{ $review->booking_id }}</h1>
                 <p class="admin-description">Read the organizer’s feedback and review the linked booking.</p>
             </div>
             <a class="admin-button admin-button--outline" href="{{ route('admin.reviews.index') }}">Back to reviews</a>
@@ -22,7 +22,7 @@
             <dt>Venue</dt>
             <dd>{{ $review->booking?->venue?->name ?? 'Unavailable' }}</dd>
             <dt>Rating</dt>
-            <dd>{{ $review->rating }} / 5</dd>
+            <dd>{{ $review->rating }}</dd>
             <dt>Reviewed on</dt>
             <dd>{{ $review->created_at?->format('d M Y') ?? 'Unavailable' }}</dd>
         </dl>
