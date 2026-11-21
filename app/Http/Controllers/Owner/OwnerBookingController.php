@@ -40,7 +40,7 @@ class OwnerBookingController extends Controller
             'date' => ['nullable', 'date'],
             'organizer' => ['nullable', 'string', 'max:100'],
 
-
+           
             'space_id' => [
                 'nullable',
                 'integer',

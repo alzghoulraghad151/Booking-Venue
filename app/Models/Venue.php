@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Venue extends Model
 {
@@ -32,11 +31,6 @@ class Venue extends Model
   public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
-    }
-
-    public function reviews(): HasManyThrough
-    {
-        return $this->hasManyThrough(Review::class, Booking::class);
     }
 
     protected function casts(): array

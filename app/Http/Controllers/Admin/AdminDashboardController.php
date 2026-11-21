@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\Review;
 use Carbon\CarbonImmutable;
 use App\Models\User;
 use App\Models\Venue;
@@ -56,12 +55,6 @@ class AdminDashboardController extends Controller
             ->where('booking_details.start_at', '<', $monthEnd->utc())
             ->sum('booking_details.commission_amount');
 
-        $averageRating = Review::avg('rating');
-        $reviews = Review::with(['booking.customer', 'booking.venue'])
-            ->latest()
-            ->orderByDesc('id')
-            ->simplePaginate(5, ['*'], 'reviews_page');
-
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalVenues',
@@ -75,8 +68,6 @@ class AdminDashboardController extends Controller
             'paymentCounts',
             'monthlyCommission',
             'monthLabel',
-            'averageRating',
-            'reviews',
         ));
     }
 }

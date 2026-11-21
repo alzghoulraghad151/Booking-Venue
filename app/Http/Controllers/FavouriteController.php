@@ -44,7 +44,7 @@ public function store(Request $request, string $space): RedirectResponse
     try {
         $request->user()->favoriteSpaces()->syncWithoutDetaching([$space->id]);
     } catch (UniqueConstraintViolationException) {
-       
+
     }
 
     return back()->with('favourite_status', 'Space saved to favourites.');

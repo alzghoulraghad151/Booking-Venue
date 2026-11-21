@@ -112,7 +112,7 @@
         <section class="bc-panel" aria-labelledby="bc-price-heading">
             <div class="bc-panel-row">
                 <h2 id="bc-price-heading">Price summary</h2>
-
+           
             </div>
 
             <dl class="bc-price">
@@ -137,7 +137,7 @@
             </dl>
 
             <p id="bc-price-hint" class="bc-muted" aria-live="polite">Choose a start and end time to see the total.</p>
-
+      
         </section>
 
         <div class="bc-actions">

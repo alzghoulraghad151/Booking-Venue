@@ -43,6 +43,21 @@
 .place-card { display: flex; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid var(--places-line); border-radius: 9px; background: #fff; box-shadow: 0 2px 7px rgb(23 43 58 / 4%); transition: transform .18s ease, box-shadow .18s ease; }
 .place-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(23 43 58 / 10%); }
 .place-card__photo-link { position: relative; display: block; overflow: hidden; aspect-ratio: 1.5; background: #e5e2dc; text-decoration: none; }
+.place-card__media { position: relative; overflow: hidden; aspect-ratio: 1.5; background: #e5e2dc; }
+.place-card__media .place-card__photo-link { height: 100%; }
+.place-card__favorite-form { position: absolute; top: 12px; right: 12px; z-index: 3; margin: 0; }
+.place-card__favorite { position: absolute; top: 12px; right: 12px; z-index: 3; display: grid; width: 40px; height: 40px; place-items: center; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / 94%); color: #33424b; box-shadow: 0 2px 8px rgb(0 0 0 / 22%); cursor: pointer; transition: transform .18s ease, color .18s ease, background .18s ease; }
+.place-card__favorite-form .place-card__favorite { position: static; }
+.place-card__favorite:hover { transform: scale(1.08); color: #d74343; }
+.place-card__favorite.is-active { color: #d74343; }
+.place-card__favorite svg { width: 21px; height: 21px; fill: transparent; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.place-card__favorite.is-active svg { fill: currentColor; }
+.place-card__image-arrow { position: absolute; top: 50%; z-index: 2; display: grid; width: 38px; height: 48px; place-items: center; padding: 0; transform: translateY(-50%); border: 0; border-radius: 5px; background: rgb(12 18 22 / 48%); color: #fff; font-size: 39px; line-height: 1; opacity: 0; cursor: pointer; transition: opacity .18s ease, background .18s ease; }
+.place-card__image-arrow:hover { background: rgb(12 18 22 / 75%); }
+.place-card__image-arrow--previous { left: 10px; }
+.place-card__image-arrow--next { right: 10px; }
+.place-card__media:hover .place-card__image-arrow, .place-card__media:focus-within .place-card__image-arrow { opacity: 1; }
+.place-card__media:has(.place-card__image-arrow:focus) .place-card__image-arrow { opacity: 1; }
 .place-card__image { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
 .place-card:hover .place-card__image { transform: scale(1.025); }
 .place-card__image--empty { background: linear-gradient(135deg, #e8e4dd, #d7e0dc); }
@@ -104,6 +119,8 @@
     .places-filters__actions .places-button { flex: 1; }
     .place-card__photo-link { aspect-ratio: 1.5; }
 }
+
+@media (hover: none) { .place-card__image-arrow { opacity: .9; } }
 
 @media (prefers-reduced-motion: reduce) {
     .place-card, .place-card__image, .places-button { transition: none; }
