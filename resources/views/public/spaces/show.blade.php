@@ -23,7 +23,14 @@
         </section>
 
         <header class="space-details__header">
-            <h1>{{ $space->name }}</h1>
+            <div class="space-details__title-row">
+                <h1>{{ $space->name }}</h1>
+                <button class="space-booking-options__submit"
+                        type="submit" form="space-booking-form"
+                        @disabled($layouts->isEmpty() || $eventTypes->isEmpty())>
+                    Book Now
+                </button>
+            </div>
 
             <p>
                 {{ $venue->name }}
@@ -58,7 +65,7 @@
             </dl>
         </section>
 
-        <form class="space-booking-options"
+        <form id="space-booking-form" class="space-booking-options"
               method="GET"
               action="{{ route('bookings.create', ['space' => $space]) }}">
             <section aria-labelledby="event-type-heading">
@@ -185,11 +192,6 @@
                 @enderror
             </section>
 
-            <button class="space-booking-options__submit"
-                    type="submit"
-                    @disabled($layouts->isEmpty() || $eventTypes->isEmpty())>
-                Book Now
-            </button>
         </form>
 
         <section aria-labelledby="reviews-heading">
@@ -197,7 +199,14 @@
 
             @forelse ($reviews->take(5) as $review)
                 <article>
-                    <p>Rating: {{ $review->rating }} / 5</p>
+                    <div class="space-review__byline">
+                        <strong>{{ $review->booking?->customer?->name ?? 'Guest' }}</strong>
+                        <span class="space-review__stars" role="img" aria-label="{{ $review->rating }} out of 5 stars">
+                            @for ($star = 1; $star <= 5; $star++)
+                                <span aria-hidden="true" @class(['space-review__star--filled' => $star <= $review->rating])>★</span>
+                            @endfor
+                        </span>
+                    </div>
 
                     @if (filled($review->comment))
                         <p>{{ $review->comment }}</p>
@@ -221,7 +230,14 @@
                     </header>
                     @foreach ($reviews as $review)
                         <article>
-                            <p>Rating: {{ $review->rating }} / 5</p>
+                            <div class="space-review__byline">
+                                <strong>{{ $review->booking?->customer?->name ?? 'Guest' }}</strong>
+                                <span class="space-review__stars" role="img" aria-label="{{ $review->rating }} out of 5 stars">
+                                    @for ($star = 1; $star <= 5; $star++)
+                                        <span aria-hidden="true" @class(['space-review__star--filled' => $star <= $review->rating])>★</span>
+                                    @endfor
+                                </span>
+                            </div>
                             @if (filled($review->comment))
                                 <p>{{ $review->comment }}</p>
                             @endif

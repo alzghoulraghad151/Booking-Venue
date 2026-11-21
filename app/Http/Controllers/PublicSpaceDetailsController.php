@@ -47,11 +47,12 @@ $packages = Package::query()
     ->get();
 
     $reviews = Review::query()
+    ->with('booking.customer:id,name')
     ->whereHas('booking.details', function ($details) use ($space) {
         $details->where('space_id', $space->getKey());
     })
     ->orderByDesc('id')
-    ->get(['id', 'rating', 'comment']);
+    ->get(['id', 'booking_id', 'rating', 'comment']);
 
 return view('public.spaces.show', compact(
     'space', 'venue', 'images', 'layouts', 'packages', 'reviews','eventTypes'

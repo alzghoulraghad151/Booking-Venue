@@ -179,13 +179,13 @@
 
 .package-options__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 17rem));
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
 }
 
 .package-options__grid > .package-option {
     margin: 0;
-    padding: .875rem;
+    padding: 1rem;
     border: 1px solid var(--color-sage);
     border-radius: .75rem;
 }
@@ -313,4 +313,47 @@
 
 .space-reviews-dialog header button {
     margin: 0;
+}
+
+.space-details__title-row,
+.space-review__byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+}
+
+.space-details__title-row {
+    justify-content: space-between;
+}
+
+.space-details__title-row .space-booking-options__submit {
+    margin: 0;
+}
+
+.space-review__stars {
+    display: inline-flex;
+    gap: .125rem;
+    color: var(--color-sage);
+    font-size: .75rem;
+}
+
+.space-review__stars span {
+    opacity: .35;
+}
+
+.space-review__stars .space-review__star--filled {
+    opacity: 1;
+}
+
+@media (min-width: 36rem) {
+    .package-options__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 56rem) {
+    .package-options__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
