@@ -101,18 +101,42 @@
         <section class="places-results-grid" aria-label="Available places">
             @forelse ($spaces as $space)
                 @php($image = $space->images->first())
+                @php($imageUrls = $space->images->pluck('image_url')->values())
+                @php($isFavorite = in_array($space->id, $favoriteSpaceIds))
                 @php($eventLabels = $space->spaceLayouts->flatMap(fn ($layout) => $layout->eventTypes)->unique('id')->take(4))
                 <article class="place-card">
-                    <a class="place-card__photo-link" href="{{ route('spaces.show', $space) }}" aria-label="View {{ $space->name }} at {{ $space->venue->name }}">
-                        @if ($image)
-                            <img class="place-card__image" src="{{ $image->image_url }}" alt="{{ $space->name }}" loading="lazy">
+                    <div class="place-card__media" data-card-images='@json($imageUrls)'>
+                        <a class="place-card__photo-link" href="{{ route('spaces.show', $space) }}" aria-label="View {{ $space->name }} at {{ $space->venue->name }}">
+                            @if ($image)
+                                <img class="place-card__image" src="{{ $image->image_url }}" alt="{{ $space->name }}" loading="lazy">
+                            @else
+                                <span class="place-card__image place-card__image--empty" aria-hidden="true"></span>
+                            @endif
+                            @if ($space->hourly_rate !== null)
+                                <span class="place-card__price">From <strong>{{ number_format((float) $space->hourly_rate, 2) }} JOD</strong><small>per hour</small></span>
+                            @endif
+                        </a>
+
+                        @if ($space->images->count() > 1)
+                            <button class="place-card__image-arrow place-card__image-arrow--previous" type="button" aria-label="Previous image"><span aria-hidden="true">‹</span></button>
+                            <button class="place-card__image-arrow place-card__image-arrow--next" type="button" aria-label="Next image"><span aria-hidden="true">›</span></button>
+                        @endif
+
+                        @auth
+                            @if (auth()->user()->role === 'organizer')
+                                <form class="place-card__favorite-form" action="{{ route('spaces.favorite.toggle', $space) }}" method="POST">
+                                    @csrf
+                                    <button class="place-card__favorite @if ($isFavorite) is-active @endif" type="submit" aria-label="{{ $isFavorite ? 'Remove from favorites' : 'Add to favorites' }}" aria-pressed="{{ $isFavorite ? 'true' : 'false' }}">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+                                    </button>
+                                </form>
+                            @else
+                                <a class="place-card__favorite" href="{{ route('login') }}" aria-label="Sign in to add to favorites"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></a>
+                            @endif
                         @else
-                            <span class="place-card__image place-card__image--empty" aria-hidden="true"></span>
-                        @endif
-                        @if ($space->hourly_rate !== null)
-                            <span class="place-card__price">From <strong>{{ number_format((float) $space->hourly_rate, 2) }} JOD</strong><small>per hour</small></span>
-                        @endif
-                    </a>
+                            <a class="place-card__favorite" href="{{ route('login') }}" aria-label="Sign in to add to favorites"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></a>
+                        @endauth
+                    </div>
 
                     <div class="place-card__body">
                         <div class="place-card__title-row">
@@ -191,4 +215,5 @@
 @push('scripts')
     <script type="module" src="{{ asset('js/space-search-summary-audio.js') }}"></script>
     <script src="{{ asset('js/space-voice-search.js') }}" defer></script>
+    <script src="{{ asset('js/space-card-gallery.js') }}" defer></script>
 @endpush

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\FavoriteSpaceController;
 use App\Http\Controllers\Owner\OwnerSpaceController;
 use App\Http\Controllers\Owner\OwnerVenueController;
 use App\Http\Controllers\PublicHomeController;
@@ -13,6 +14,10 @@ Route::get('/', [PublicHomeController::class, 'index'])->name('home');
 
 Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
     ->name('spaces.search');
+
+Route::post('/spaces/{space}/favorite', [FavoriteSpaceController::class, 'toggle'])
+    ->middleware(['auth', 'organizer'])
+    ->name('spaces.favorite.toggle');
 
 Route::post('/spaces/search/voice', [SpaceVoiceSearchController::class, 'transcribe'])
     ->middleware('throttle:5,1')

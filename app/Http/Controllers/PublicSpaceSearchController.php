@@ -107,6 +107,11 @@ class PublicSpaceSearchController extends Controller
             ->paginate(9)
             ->withQueryString();
 
+        $favoriteSpaceIds = $request->user()?->favoriteSpaces()
+            ->whereIn('spaces.id', $spaces->getCollection()->pluck('id'))
+            ->pluck('spaces.id')
+            ->all() ?? [];
+
         $venues = Venue::query()
             ->where('status', 'approved')
             ->where('is_active_by_owner', true)
@@ -172,6 +177,7 @@ class PublicSpaceSearchController extends Controller
             'sort',
             'searched',
             'spaces',
+            'favoriteSpaceIds',
             'venues',
             'eventTypes',
             'selectedVenue',
