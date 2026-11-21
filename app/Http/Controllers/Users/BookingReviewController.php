@@ -14,22 +14,39 @@ class BookingReviewController extends Controller
 {
     public function store(Request $request, int $booking): RedirectResponse
     {
+        return $this->saveReview($request, $booking, editing: false);
+    }
+
+    public function update(Request $request, int $booking): RedirectResponse
+    {
+        return $this->saveReview($request, $booking, editing: true);
+    }
+
+    private function saveReview(Request $request, int $booking, bool $editing): RedirectResponse
+    {
         $customerId = $request->user()->getKey();
 
         try {
-            DB::transaction(function () use ($request, $booking, $customerId) {
+            DB::transaction(function () use ($request, $booking, $customerId, $editing) {
                 $ownedBooking = Booking::query()
                     ->where('customer_id', $customerId)
                     ->lockForUpdate()
                     ->findOrFail($booking);
 
-                if ($ownedBooking->status !== 'completed') {
+                if ($ownedBooking->status !== 'completed'
+                    || ! $ownedBooking->payments()->where('status', 'paid')->exists()) {
                     throw ValidationException::withMessages([
-                        'review' => 'You can review this booking once it is completed.',
+                        'review' => 'You can review this booking once it is completed and paid.',
                     ]);
                 }
 
-                if ($ownedBooking->review()->exists()) {
+                $existingReview = $ownedBooking->review()->first();
+
+                if ($editing && ! $existingReview) {
+                    abort(404);
+                }
+
+                if (! $editing && $existingReview) {
                     throw ValidationException::withMessages([
                         'review' => 'You have already reviewed this booking.',
                     ]);
@@ -40,7 +57,11 @@ class BookingReviewController extends Controller
                     'comment' => ['nullable', 'string', 'max:2000'],
                 ]);
 
-                $ownedBooking->review()->create($review);
+                if ($existingReview) {
+                    $existingReview->update($review);
+                } else {
+                    $ownedBooking->review()->create($review);
+                }
             });
         } catch (UniqueConstraintViolationException) {
             throw ValidationException::withMessages([
@@ -51,6 +72,6 @@ class BookingReviewController extends Controller
         $page = $request->integer('page');
 
         return to_route('my-bookings.index', $page > 1 ? ['page' => $page] : [])
-            ->with('success', 'Your review was submitted.');
+            ->with('success', $editing ? 'Your review was updated.' : 'Your review was submitted.');
     }
 }
