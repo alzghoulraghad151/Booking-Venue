@@ -8,6 +8,7 @@
 
 .convene-landing {
     margin: 0;
+    padding-block-end: 80px;
     background: var(--landing-cream);
     color: var(--landing-navy);
     font: 400 16px/1.5 system-ui, sans-serif;
@@ -184,7 +185,6 @@
     gap: clamp(28px, 5vw, 64px);
     align-items: center;
     padding: clamp(28px, 5vw, 58px);
-    margin-bottom: 80px;
     border-radius: 18px;
     background: var(--landing-navy);
     color: var(--landing-white);

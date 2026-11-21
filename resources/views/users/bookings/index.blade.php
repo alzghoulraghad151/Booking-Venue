@@ -2,10 +2,15 @@
 
 @section('title', 'My bookings')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/convene-my-bookings-dar.css') }}">
+@endpush
+
 @section('content')
     <div class="site-container site-page site-bookings">
         <header class="site-bookings-heading">
             <div>
+                <p class="site-bookings-eyebrow">Organizer dashboard</p>
                 <h1>My bookings</h1>
                 <p>Track the status of your venue bookings.</p>
             </div>
@@ -31,7 +36,12 @@
                         <p class="site-booking-reference">Your rating: {{ $booking->review->rating }} / 5</p>
                     @endif
                 </div>
-                <span @class(['site-booking-status', 'site-booking-status--' . $booking->status])>{{ ucfirst($booking->status) }}</span>
+                <div class="site-booking-indicators">
+                    @if ($booking->has_paid_payment)
+                        <span class="site-booking-status site-booking-status--paid">Paid</span>
+                    @endif
+                    <span @class(['site-booking-status', 'site-booking-status--' . $booking->status])>{{ ucfirst($booking->status) }}</span>
+                </div>
                 @if ($booking->details->isNotEmpty() || ($booking->status === 'completed' && ! $booking->review))
                     @include('users.bookings.actions', ['booking' => $booking, 'page' => $bookings->currentPage()])
                 @endif
@@ -52,10 +62,10 @@
         @if ($bookings->hasPages())
             <nav class="site-booking-pagination" aria-label="Booking pages">
                 @if ($bookings->previousPageUrl())
-                    <a class="site-link site-account-link" href="{{ $bookings->previousPageUrl() }}" rel="prev">Previous</a>
+                    <a class="site-link site-account-link" href="{{ $bookings->previousPageUrl() }}" rel="prev"><span aria-hidden="true">←</span> Previous</a>
                 @endif
                 @if ($bookings->nextPageUrl())
-                    <a class="site-link site-account-link" href="{{ $bookings->nextPageUrl() }}" rel="next">Next</a>
+                    <a class="site-link site-account-link" href="{{ $bookings->nextPageUrl() }}" rel="next">Next <span aria-hidden="true">→</span></a>
                 @endif
             </nav>
         @endif

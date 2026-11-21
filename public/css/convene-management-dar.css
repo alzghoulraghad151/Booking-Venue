@@ -245,3 +245,79 @@
     .convene-dar-management .admin-content { padding-inline: 12px; }
     .convene-admin.convene-dar-management { --admin-panel-padding: 15px; }
 }
+
+.convene-admin-ui.convene-dar-management #admin-content .dar-admin-profile {
+    width: min(100%, 640px);
+    margin-inline: auto;
+}
+
+.dar-admin-profile-heading {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--admin-ui-border);
+}
+
+.convene-dar-management #admin-content .dar-admin-profile-heading h1 { margin: 8px 0 0; font-size: 32px; line-height: 38px; }
+
+.dar-admin-profile-heading p {
+    margin: 0;
+    color: var(--dar-brass);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .admin-edit-form {
+    display: grid;
+    gap: 20px;
+    margin-top: 0;
+    padding: 24px;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .admin-edit-form label {
+    color: var(--convene-sage);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .admin-edit-form input {
+    margin-bottom: 0;
+    background: var(--dar-ivory);
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions {
+    justify-content: flex-start;
+    gap: 16px;
+    padding-top: 16px;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions > .admin-button {
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions > .admin-button--outline {
+    color: var(--convene-navy);
+    border-color: var(--admin-ui-border);
+    background: var(--convene-white);
+}
+
+.convene-dar-management #admin-content .dar-admin-profile .management-edit-actions > .admin-button--outline:hover {
+    border-color: var(--dar-brass);
+    background: var(--dar-stone);
+}
+
+@media (min-width: 768px) {
+    .convene-dar-management #admin-content .dar-admin-profile-heading h1 { font-size: 36px; line-height: 42px; }
+    .convene-dar-management #admin-content .dar-admin-profile .admin-edit-form { padding: 32px; }
+}
+
+@media (min-width: 992px) {
+    .convene-dar-management .admin-content:has(> .dar-admin-profile) { padding-block: 40px; }
+}
+
+.convene-dar-management .admin-content:has(> .dar-admin-profile) > .admin-nav-toggle { margin-bottom: 32px; }

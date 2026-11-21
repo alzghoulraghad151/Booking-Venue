@@ -22,7 +22,7 @@
 
     <div class="admin-sidebar-account">
         <nav aria-label="Account">
-            <x-admin.nav-item data-edit-dialog label="My profile" route-name="admin.profile.edit" active-pattern="admin.profile.*" />
+            <x-admin.nav-item label="My profile" route-name="admin.profile.edit" active-pattern="admin.profile.*" />
         </nav>
         <form class="admin-sidebar-logout" method="POST" action="{{ route('admin.logout') }}">
             @csrf

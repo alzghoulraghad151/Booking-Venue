@@ -8,7 +8,6 @@
         'owner.space-layouts.create' => 'owner.space-layouts.index',
         'owner.packages.create' => 'owner.packages.index',
 
-        'admin.profile.edit' => 'admin.dashboard',
         'admin.users.edit' => 'admin.users.index',
         'admin.event-types.edit' => 'admin.event-types.index',
         'owner.venues.edit' => 'owner.venues.index',
