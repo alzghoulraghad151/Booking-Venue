@@ -18,6 +18,9 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\SpaceVoiceSearchController;
 
 
+use App\Http\Controllers\PublicSpaceDetailsController;
+
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
@@ -83,7 +86,9 @@ Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
     ->name('spaces.search.summary-audio');
 
 
- 
+ Route::get('/spaces/{space}', [PublicSpaceDetailsController::class, 'show'])
+    ->whereNumber('space')
+    ->name('spaces.show');
 
 
 Route::prefix('owner')
