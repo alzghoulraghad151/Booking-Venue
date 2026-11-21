@@ -32,7 +32,7 @@
                 <div>
                     <p class="eyebrow">BOOKING #{{ $booking->id }}</p>
                     <h2>{{ $booking->venue?->name ?? 'Venue unavailable' }}</h2>
-                    <p>Created {{ $booking->created_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE)->format('d M Y, H:i') ?? '—' }}</p>
+                    <p>Created {{ $booking->created_at?->format('d M Y, H:i') ?? '—' }}</p>
                 </div>
             </div>
             <div class="info-grid">
@@ -52,20 +52,6 @@
                     <span>Booking status</span>
                     <strong>{{ ucfirst($booking->status) }}</strong>
                 </div>
-                <div class="info-item">
-                    <span>Total guests</span>
-                    <strong>{{ number_format($totals['guests']) }}</strong>
-                </div>
-                <div class="info-item">
-                    <span>Payment status</span>
-                    <strong>
-                        {{ match ($totals['payment_state']) {
-                            'paid' => 'Paid',
-                            'not_required' => 'Not required',
-                            default => $booking->status === 'pending' ? 'Awaiting owner decision' : 'Awaiting payment',
-                        } }}
-                    </strong>
-                </div>
             </div>
         </section>
 
@@ -80,12 +66,10 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Space / venue</th>
                             <th>Layout</th>
                             <th>Event type</th>
                             <th>Package</th>
                             <th>Time</th>
-                            <th>Guests</th>
                             <th>Total</th>
                             <th>Commission rate</th>
                             <th>Commission</th>
@@ -93,61 +77,38 @@
                     </thead>
                     <tbody>
                         @forelse ($booking->details->sortBy('start_at') as $detail)
-                            @php
-                                $detailStart = $detail->start_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE);
-                                $detailEnd = $detail->end_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE);
-                            @endphp
                             <tr>
-                                <td>
-                                    <span class="cell-primary">{{ $detail->space?->name ?? '—' }}</span>
-                                    <span class="cell-secondary">{{ $detail->space?->venue?->name ?? $booking->venue?->name ?? '—' }}</span>
-                                </td>
-                                <td>
-                                    <span class="cell-primary">{{ $detail->spaceLayout?->name ?? '—' }}</span>
-                                    @if ($detail->spaceLayout)
-                                        <span class="cell-secondary">Capacity {{ number_format((int) $detail->spaceLayout->capacity) }}</span>
-                                    @endif
-                                </td>
+                                <td>{{ $detail->spaceLayout?->name ?? '—' }}</td>
                                 <td>{{ $detail->eventType?->name ?? '—' }}</td>
                                 <td>{{ $detail->package?->name ?? 'Hourly' }}</td>
                                 <td>
-                                    <span class="cell-primary">{{ $detailStart?->format('d M Y') ?? '—' }}</span>
-                                    <span class="cell-secondary">{{ $detailStart?->format('H:i') ?? '—' }}–{{ $detailEnd?->format('H:i') ?? '—' }}</span>
+                                    <span class="cell-primary">{{ $detail->start_at?->format('d M Y') ?? '—' }}</span>
+                                    <span class="cell-secondary">{{ $detail->start_at?->format('H:i') ?? '—' }}–{{ $detail->end_at?->format('H:i') ?? '—' }}</span>
                                 </td>
-                                <td>{{ number_format($detail->guests) }}</td>
                                 <td class="amount">{{ number_format((float) $detail->total_price, 2) }}</td>
                                 <td>{{ number_format((float) $detail->commission_rate, 2) }}%</td>
                                 <td class="amount">{{ number_format((float) $detail->commission_amount, 2) }}</td>
                             </tr>
                         @empty
-                            <tr><td colspan="9"><div class="empty-inline">No booking details are recorded.</div></td></tr>
+                            <tr><td colspan="7"><div class="empty-inline">No booking details are recorded.</div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            <div class="totals-strip">
-                <div><span>Booking total</span><strong>{{ number_format((float) $totals['amount'], 2) }}</strong></div>
-                <div><span>Total commission</span><strong>{{ number_format((float) $totals['commission'], 2) }}</strong></div>
-            </div>
         </section>
 
         <section class="panel">
-            <div class="panel-heading panel-heading--row">
+            <div class="panel-heading">
                 <div>
                     <h2>Payments</h2>
-                    <p>
-                        All payment attempts are listed. Only the successful payment is counted.
-                        @if ($totals['failed_attempts'] > 0)
-                            Failed attempts: {{ $totals['failed_attempts'] }}.
-                        @endif
-                    </p>
+                    <p>Payments are recorded against the booking.</p>
                 </div>
-                <span class="result-count">Paid {{ number_format($totals['paid'], 2) }} of {{ number_format($totals['amount'], 2) }}</span>
+                <span class="result-count">Total recorded: {{ number_format((float) $totals['payments'], 2) }}</span>
             </div>
             <div class="table-scroll dashboard-table-wrap" tabindex="0" role="region" aria-label="Payments">
                 <table class="data-table">
                     <thead>
-                        <tr><th>Amount (JOD)</th><th>Method</th><th>Status</th><th>Charged (USD)</th><th>Reference</th><th>Paid at</th></tr>
+                        <tr><th>Amount</th><th>Method</th><th>Status</th><th>Reference</th><th>Paid at</th></tr>
                     </thead>
                     <tbody>
                         @forelse ($booking->payments as $payment)
@@ -155,12 +116,11 @@
                                 <td class="amount">{{ number_format((float) $payment->amount, 2) }}</td>
                                 <td>{{ ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</td>
                                 <td><span class="status-badge status-badge--{{ $payment->status }}">{{ ucfirst($payment->status) }}</span></td>
-                                <td>{{ $payment->stripe_usd_cents !== null ? number_format($payment->stripe_usd_cents / 100, 2) : '—' }}</td>
                                 <td>{{ $payment->transaction_reference ?: '—' }}</td>
-                                <td>{{ $payment->paid_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE)->format('d M Y, H:i') ?? '—' }}</td>
+                                <td>{{ $payment->paid_at?->format('d M Y, H:i') ?? '—' }}</td>
                             </tr>
                         @empty
-                            <tr><td colspan="6"><div class="empty-inline">No payment records yet.</div></td></tr>
+                            <tr><td colspan="5"><div class="empty-inline">No payment records yet.</div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
