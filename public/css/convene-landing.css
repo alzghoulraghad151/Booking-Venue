@@ -81,9 +81,9 @@
 .home-arrivals__viewport { overflow: hidden; }
 .home-arrivals__track { display: flex; width: max-content; }
 .home-arrivals__group { display: flex; flex: 0 0 auto; gap: 24px; padding-right: 24px; }
-.home-arrivals__track.is-moving { animation: home-arrivals-right 72s linear infinite; }
+.home-arrivals__track.is-moving { animation: home-arrivals-right var(--home-arrivals-duration, 72s) linear infinite; }
 .home-arrivals:hover .home-arrivals__track, .home-arrivals:focus-within .home-arrivals__track { animation-play-state: paused; }
-@keyframes home-arrivals-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes home-arrivals-right { from { transform: translateX(var(--home-arrivals-shift, -50%)); } to { transform: translateX(0); } }
 .home-space-card { display: flex; min-width: 0; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 1px solid var(--home-line); background: var(--home-surface); transition: border-color .18s ease, box-shadow .18s ease; }
 .home-space-card:hover { border-color: var(--home-accent); box-shadow: 0 10px 28px rgb(30 27 25 / 8%); }
 .home-space-card__image { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--home-surface-low); }

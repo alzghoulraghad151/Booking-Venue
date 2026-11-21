@@ -98,14 +98,22 @@
                 <div class="home-carousel__viewport" data-carousel-viewport tabindex="0">
                     <div class="home-carousel__track" data-carousel-track>
                         @forelse ($featuredVenues as $venue)
-                            <a class="home-location-card home-carousel__item" href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}">
-                                <div class="home-location-card__image"><img src="{{ $venue->images->first()?->image_url }}" alt="" loading="lazy"></div>
-                                <div class="home-location-card__caption home-location-card__caption--venue">
-                                    <h3>{{ $venue->name }}</h3>
-                                    <p>{{ $venue->address }}</p>
-                                    <span>{{ $venue->active_spaces_count }} {{ \Illuminate\Support\Str::plural('space', $venue->active_spaces_count) }}</span>
+                            <article class="home-space-card home-carousel__item">
+                                <a class="home-space-card__image" href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}" aria-label="Browse spaces at {{ $venue->name }}">
+                                    <img src="{{ $venue->images->first()?->image_url }}" alt="{{ $venue->name }}" loading="lazy">
+                                </a>
+                                <div class="home-space-card__body">
+                                    <p class="home-space-card__venue">{{ $venue->address }}</p>
+                                    <h3><a href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}">{{ $venue->name }}</a></h3>
+                                    @if ($venue->description)
+                                        <p class="home-space-card__description">{{ \Illuminate\Support\Str::limit($venue->description, 120) }}</p>
+                                    @endif
+                                    <div class="home-space-card__footer">
+                                        <span>{{ $venue->active_spaces_count }} {{ \Illuminate\Support\Str::plural('active space', $venue->active_spaces_count) }}</span>
+                                        <strong><a href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}">Explore spaces →</a></strong>
+                                    </div>
                                 </div>
-                            </a>
+                            </article>
                         @empty
                             <p class="home-empty">No approved venues are available yet.</p>
                         @endforelse

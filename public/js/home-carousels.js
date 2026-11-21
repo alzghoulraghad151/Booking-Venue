@@ -29,25 +29,51 @@ const arrivals = document.querySelector('[data-home-arrivals]');
 const arrivalsTrack = arrivals?.querySelector('[data-arrivals-track]');
 const arrivalsGroup = arrivals?.querySelector('[data-arrivals-group]');
 if (arrivalsTrack && arrivalsGroup) {
-    const cards = [...arrivalsGroup.querySelectorAll('.home-space-card')];
-    const duplicate = arrivalsGroup.cloneNode(true);
-    duplicate.removeAttribute('data-arrivals-group');
-    duplicate.setAttribute('aria-hidden', 'true');
-    duplicate.inert = true;
-    duplicate.querySelectorAll('a').forEach((link) => link.setAttribute('tabindex', '-1'));
-    arrivalsTrack.append(duplicate);
+    const sourceCards = [...arrivalsGroup.querySelectorAll('.home-space-card')];
+    let duplicate = null;
 
     const sizeCards = () => {
+        if (!sourceCards.length) return;
+
+        duplicate?.remove();
+        duplicate = null;
+        arrivalsGroup.replaceChildren(...sourceCards);
+
         const visible = innerWidth <= 640 ? 1 : innerWidth <= 900 ? 2 : 3;
         const gap = Number.parseFloat(getComputedStyle(arrivalsGroup).gap) || 24;
-        const sectionWidth = arrivals.clientWidth;
+        const sectionWidth = arrivals.querySelector('.home-arrivals__viewport')?.clientWidth || arrivals.clientWidth;
         const width = (sectionWidth - gap * (visible - 1)) / visible;
-        cards.forEach((card) => { card.style.flexBasis = `${width}px`; });
-        duplicate.querySelectorAll('.home-space-card').forEach((card) => { card.style.flexBasis = `${width}px`; });
+        if (!Number.isFinite(width) || width <= 0) return;
+
+        sourceCards.forEach((card) => { card.style.flexBasis = `${width}px`; });
+
+        if (sourceCards.length > 1) {
+            let index = 0;
+            while (arrivalsGroup.scrollWidth < sectionWidth) {
+                const repeatedCard = sourceCards[index % sourceCards.length].cloneNode(true);
+                repeatedCard.setAttribute('aria-hidden', 'true');
+                repeatedCard.inert = true;
+                repeatedCard.querySelectorAll('a').forEach((link) => link.setAttribute('tabindex', '-1'));
+                repeatedCard.style.flexBasis = `${width}px`;
+                arrivalsGroup.append(repeatedCard);
+                index += 1;
+            }
+
+            duplicate = arrivalsGroup.cloneNode(true);
+            duplicate.removeAttribute('data-arrivals-group');
+            duplicate.setAttribute('aria-hidden', 'true');
+            duplicate.inert = true;
+            duplicate.querySelectorAll('a').forEach((link) => link.setAttribute('tabindex', '-1'));
+            arrivalsTrack.append(duplicate);
+
+            const cycleWidth = arrivalsGroup.getBoundingClientRect().width;
+            arrivalsTrack.style.setProperty('--home-arrivals-shift', `${-cycleWidth}px`);
+            arrivalsTrack.style.setProperty('--home-arrivals-duration', `${cycleWidth / 18}s`);
+        }
+
+        arrivalsTrack.classList.toggle('is-moving', sourceCards.length > 1);
     };
 
-    if (cards.length > 1) arrivalsTrack.classList.add('is-moving');
-    else arrivalsTrack.classList.remove('is-moving');
     addEventListener('resize', sizeCards);
     sizeCards();
 }
