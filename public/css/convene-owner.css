@@ -34,8 +34,7 @@
     gap: 8px 16px;
 }
 
-.owner-filter-actions,
-.convene-admin-ui #admin-content .bookings-page .panel-heading > .filter-actions {
+.owner-filter-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -104,3 +103,9 @@
 
 .owner-filter-form--compact > div:first-child { flex: 2 1 220px; min-width: 0; }
 .owner-filter-form--compact > div:nth-child(2) { flex: 1 1 150px; min-width: 0; }
+
+.owner-filter-form:not(.owner-filter-form--compact) > .owner-filter-actions {
+    grid-column: -2 / -1;
+    align-self: end;
+    justify-content: flex-end;
+}

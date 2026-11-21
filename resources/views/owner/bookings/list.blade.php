@@ -24,14 +24,10 @@
         @endif
 
         <section class="panel">
-            <div class="panel-heading panel-heading--row">
+            <div class="panel-heading">
                 <div>
                     <h2>Search and filters</h2>
                     <p>Find bookings for your venues by organizer, status, space, or event date.</p>
-                </div>
-                <div class="filter-actions">
-                    <button class="button admin-filter-submit" type="submit" form="owner-booking-filters">Apply filters</button>
-                    <a class="admin-filter-reset" href="{{ route('owner.bookings.index') }}">Reset</a>
                 </div>
             </div>
             <form id="owner-booking-filters" class="filter-grid" action="{{ route('owner.bookings.index') }}" method="GET">
@@ -78,6 +74,10 @@
                             <option value="{{ $value }}" @selected(($filters['sort'] ?? 'newest') === $value)>{{ $label }}</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="filter-actions">
+                    <button class="button admin-filter-submit" type="submit">Apply filters</button>
+                    <a class="admin-filter-reset" href="{{ route('owner.bookings.index') }}">Reset</a>
                 </div>
             </form>
         </section>
