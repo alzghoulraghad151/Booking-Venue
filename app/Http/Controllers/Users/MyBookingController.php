@@ -13,6 +13,7 @@ class MyBookingController extends Controller
     {
         $bookings = Booking::query()
             ->where('customer_id', $request->user()->getKey())
+            ->withExists(['payments as has_paid_payment' => fn ($payments) => $payments->where('status', 'paid')])
             ->with([
                 'venue',
                 'review',

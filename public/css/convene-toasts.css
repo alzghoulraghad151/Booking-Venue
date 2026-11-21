@@ -1,0 +1,34 @@
+.convene-toasts {
+    position: fixed;
+    inset-block-end: 1rem;
+    inset-inline-end: 1rem;
+    z-index: 1100;
+    display: grid;
+    gap: .5rem;
+    width: min(24rem, calc(100vw - 2rem));
+}
+
+.convene-toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .8rem 1rem;
+    border-inline-start: 4px solid #526c68;
+    border-radius: .65rem;
+    background: #172b3a;
+    color: #fff;
+    box-shadow: 0 6px 22px #172b3a35;
+    font: 500 .9rem/1.45 system-ui, sans-serif;
+}
+
+.convene-toast--warning { border-inline-start-color: #e5a66a; }
+.convene-toast--error { border-inline-start-color: #ef8b8b; }
+
+.convene-toast button {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1.25rem;
+}

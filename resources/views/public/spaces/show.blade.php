@@ -1,15 +1,14 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $space->name }} | Convene</title>
+@extends('layouts.users')
 
-    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+@section('title', $space->name)
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/space-details.css') }}">
-</head>
-<body class="space-details-page">
-    <main class="space-details">
+@endpush
+
+@section('content')
+    <div class="space-details-page">
+<div class="space-details">
         <section class="space-gallery" aria-label="Space photos">
             @forelse ($images as $image)
                 <div class="space-gallery__photo">
@@ -68,6 +67,29 @@
         <form id="space-booking-form" class="space-booking-options"
               method="GET"
               action="{{ route('bookings.create', ['space' => $space]) }}">
+            @if (is_string(request()->query('guest_count')))
+                <section aria-labelledby="invite-guests-heading">
+                    <h2 id="invite-guests-heading">Guests</h2>
+                    <label for="invite-guest-count">Guests in the room</label>
+                    <input id="invite-guest-count"
+                           name="guest_count"
+                           type="number"
+                           min="1"
+                           max="{{ $space->capacity }}"
+                           value="{{ old('guest_count', request()->query('guest_count')) }}"
+                           required>
+                </section>
+
+                @foreach (['date', 'start_time', 'end_time'] as $field)
+                    @if (is_string(request()->query($field)))
+                        <input type="hidden" name="{{ $field }}" value="{{ request()->query($field) }}">
+                    @endif
+                @endforeach
+            @endif
+
+            @error('guest_count')
+                <p role="alert">{{ $message }}</p>
+            @enderror
             <section aria-labelledby="event-type-heading">
                 <h2 id="event-type-heading">Event Type</h2>
 
@@ -246,8 +268,12 @@
                 </dialog>
             @endif
         </section>
-    </main>
+    </div>
 
+
+    </div>
+@endsection
+
+@push('scripts')
     <script src="{{ asset('js/space-booking-options.js') }}" defer></script>
-</body>
-</html>
+@endpush

@@ -37,6 +37,7 @@
         <link rel="stylesheet" href="{{ asset('css/convene-admin-actions.css') }}">
         <script src="{{ asset('js/convene-admin-actions.js') }}" defer></script>
     @endif
+    <link rel="stylesheet" href="{{ asset('css/convene-toasts.css') }}">
 </head>
 <body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.profile.*', 'admin.bookings.*', 'owner.*') ? ' admin-warm-actions' : '' }}">
     <a class="admin-skip" href="#admin-content">Skip to content</a>
@@ -72,5 +73,6 @@
         @endif
         @include('admin.partials.management-dialogs')
     </main>
+    @include('partials.site.toasts')
 </body>
 </html>

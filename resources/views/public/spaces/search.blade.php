@@ -1,13 +1,14 @@
-<!doctype html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Find places | Convene</title>
+@extends('layouts.users')
+
+@section('title', "Find places")
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-place-results.css') }}">
-</head>
-<body class="places-page">
-    <main class="places-shell">
+@endpush
+
+@section('content')
+    <div class="places-page">
+<div class="places-shell">
 
         <form class="places-filters" action="{{ route('spaces.search') }}" method="GET">
             <div class="places-filters__grid">
@@ -78,7 +79,6 @@
                     <audio id="voice-summary-audio" src="{{ $voiceSummaryAudioUrl }}" preload="none"></audio>
                     <button type="button" id="voice-summary-play">Play summary</button>
                     <p id="voice-summary-status" role="status"></p>
-                    <script type="module" src="{{ asset('js/space-search-summary-audio.js') }}"></script>
                 @endif
             </section>
         @endif
@@ -93,7 +93,7 @@
                 @php($image = $space->images->first())
                 @php($eventLabels = $space->spaceLayouts->flatMap(fn ($layout) => $layout->eventTypes)->unique('id')->take(4))
                 <article class="place-card">
-                    <a class="place-card__photo-link" href="{{ route('public.venues.show', $space->venue) }}" aria-label="View {{ $space->name }} at {{ $space->venue->name }}">
+                    <a class="place-card__photo-link" href="{{ route('spaces.show', $space) }}" aria-label="View {{ $space->name }} at {{ $space->venue->name }}">
                         @if ($image)
                             <img class="place-card__image" src="{{ $image->image_url }}" alt="{{ $space->name }}" loading="lazy">
                         @else
@@ -107,7 +107,7 @@
                     <div class="place-card__body">
                         <div class="place-card__title-row">
                             <div>
-                                <h3><a href="{{ route('public.venues.show', $space->venue) }}">{{ $space->name }}</a></h3>
+                                <h3><a href="{{ route('spaces.show', $space) }}">{{ $space->name }}</a></h3>
                                 <p class="place-card__venue">{{ $space->venue->name }}</p>
                             </div>
                             <span class="place-card__capacity"><span aria-hidden="true">♙</span> {{ $space->capacity }}</span>
@@ -135,7 +135,7 @@
                             </div>
                         @endif
 
-                        <a class="place-card__action" href="{{ route('public.venues.show', $space->venue) }}">View venue</a>
+                        <a class="place-card__action" href="{{ route('spaces.show', $space) }}">View space</a>
                     </div>
                 </article>
             @empty
@@ -174,7 +174,11 @@
         <button type="button" id="voice-search" class="places-voice-search" data-url="{{ route('spaces.search.voice') }}" data-csrf="{{ csrf_token() }}">ابحث بصوتك</button>
         <p id="voice-status" role="status" aria-live="polite"></p>
         <p id="voice-transcript" dir="auto"></p>
-        <script src="{{ asset('js/space-voice-search.js') }}" defer></script>
-    </main>
-</body>
-</html>
+    </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script type="module" src="{{ asset('js/space-search-summary-audio.js') }}"></script>
+    <script src="{{ asset('js/space-voice-search.js') }}" defer></script>
+@endpush

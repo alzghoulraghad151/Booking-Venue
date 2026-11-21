@@ -1,15 +1,14 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Booking details | Convene</title>
-    {{-- Shared theme (--color-navy, --color-cream, --color-warm, --color-white, --color-sage):
-         load the shared theme file here if the project serves it as a separate stylesheet. --}}
+@extends('layouts.users')
+
+@section('title', "Booking details")
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-booking-confirm.css') }}">
-</head>
-<body class="bc-standalone">
-<main class="bc-page">
+@endpush
+
+@section('content')
+    <div class="bc-standalone">
+<div class="bc-page">
     <header>
         <p class="bc-eyebrow">Step 2 of 2</p>
         <h1 class="bc-title">Booking details</h1>
@@ -52,7 +51,7 @@
             </div>
             <div class="bc-info-item">
                 <dt>Guests</dt>
-                <dd>{{ number_format($guestCount) }}</dd>
+                <dd>{{ $guestCount === null ? 'Not specified' : number_format($guestCount) }}</dd>
             </div>
             <div class="bc-info-item">
                 <dt>Package</dt>
@@ -81,7 +80,9 @@
         @if ($package)
             <input type="hidden" name="package_id" value="{{ $package->id }}">
         @endif
-        <input type="hidden" name="guest_count" value="{{ $guestCount }}">
+        @if ($guestCount !== null)
+            <input type="hidden" name="guest_count" value="{{ $guestCount }}">
+        @endif
 
         <section class="bc-panel" aria-labelledby="bc-when-heading">
             <h2 id="bc-when-heading">Date and time</h2>
@@ -90,19 +91,19 @@
             <div class="bc-fields">
                 <div class="bc-field">
                     <label for="date">Date</label>
-                    <input id="date" name="date" type="date" min="{{ $minDate }}" value="{{ old('date') }}" required>
+                    <input id="date" name="date" type="date" min="{{ $minDate }}" value="{{ old('date', request()->query('date')) }}" required>
                     @error('date') <p class="bc-field-error" role="alert">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="bc-field">
                     <label for="start_time">Start time</label>
-                    <input id="start_time" name="start_time" type="time" step="60" value="{{ old('start_time') }}" required>
+                    <input id="start_time" name="start_time" type="time" step="60" value="{{ old('start_time', request()->query('start_time')) }}" required>
                     @error('start_time') <p class="bc-field-error" role="alert">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="bc-field">
                     <label for="end_time">End time</label>
-                    <input id="end_time" name="end_time" type="time" step="60" value="{{ old('end_time') }}" required>
+                    <input id="end_time" name="end_time" type="time" step="60" value="{{ old('end_time', request()->query('end_time')) }}" required>
                     @error('end_time') <p class="bc-field-error" role="alert">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -141,11 +142,26 @@
 
         <div class="bc-actions">
             <button class="bc-button bc-button--primary" type="submit">Confirm booking</button>
-            <a class="bc-button bc-button--quiet" href="{{ Route::has('spaces.show') ? route('spaces.show', $space) : url()->previous() }}">Back to space</a>
+            @php
+                $returnPrefill = array_filter([
+                    'date' => old('date', request()->query('date')),
+                    'start_time' => old('start_time', request()->query('start_time')),
+                    'end_time' => old('end_time', request()->query('end_time')),
+                    'guest_count' => $guestCount,
+                ], static fn ($value) => (is_string($value) && $value !== '') || is_int($value));
+            @endphp
+            <a class="bc-button bc-button--quiet"
+               href="{{ Route::has('spaces.show') ? route('spaces.show', ['space' => $space] + $returnPrefill) : url()->previous() }}">
+                Back to space
+            </a>
         </div>
     </form>
-</main>
+</div>
 
-<script src="{{ asset('js/booking-confirm.js') }}"></script>
-</body>
-</html>
+
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="{{ asset('js/booking-confirm.js') }}"></script>
+@endpush
