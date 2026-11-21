@@ -1,22 +1,40 @@
 @extends('layouts.account')
 
 @section('title', 'Personal Details')
+@section('content-class', 'account-profile')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/personal-details.css') }}">
+@endpush
+
+@push('scripts')
+    <script src="{{ asset('js/personal-details.js') }}" defer></script>
+@endpush
 
 @section('account-content')
-    <h1>Personal Details</h1>
+    <header class="profile-heading">
+        <p class="profile-heading__label">Organizer Account</p>
+        <h1>Personal Details</h1>
+    </header>
 
     @if (session('status'))
         <p role="status">{{ session('status') }}</p>
     @endif
 
-    <section class="account-photo">
-        <h2>Profile Photo</h2>
+    <section class="account-photo" aria-labelledby="profile-photo-heading">
+        <h2 id="profile-photo-heading">Profile Photo</h2>
 
         @if ($user->profile_photo_url)
-            <img src="{{ $user->profile_photo_url }}" alt="Profile photo" width="112">
+            <img src="{{ $user->profile_photo_url }}"
+                 alt="Profile photo" width="96" height="96">
+        @else
+            <span class="profile-avatar-placeholder" aria-hidden="true">
+                {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($user->name, 0, 1)) }}
+            </span>
         @endif
 
-        <form method="POST" action="{{ route('account.profile-photo.update') }}"
+        <form method="POST"
+              action="{{ route('account.profile-photo.update') }}"
               enctype="multipart/form-data">
             @csrf
 
@@ -42,7 +60,8 @@
         @endif
     </section>
 
-    <form method="POST" action="{{ route('account.personal-details.update') }}">
+    <form class="profile-fields" method="POST"
+          action="{{ route('account.personal-details.update') }}">
         @csrf
         @method('PATCH')
 
@@ -81,7 +100,9 @@
             @enderror
         </div>
 
-        <button type="submit">Save changes</button>
+        <div class="profile-save-row">
+            <button type="submit">Save changes</button>
+        </div>
     </form>
 
     <dialog id="email-dialog" aria-labelledby="email-dialog-title"
@@ -115,41 +136,10 @@
                 @enderror
             </div>
 
-            <button type="button" id="cancel-email">Cancel</button>
-            <button type="submit">Save email</button>
+            <div class="profile-dialog-actions">
+                <button type="button" id="cancel-email">Cancel</button>
+                <button type="submit">Save email</button>
+            </div>
         </form>
     </dialog>
-
-    <script>
-        const photoInput = document.getElementById('photo');
-
-        document.getElementById('choose-profile-photo').addEventListener('click', () => {
-            photoInput.click();
-        });
-
-        photoInput.addEventListener('change', () => {
-            if (photoInput.files.length > 0) {
-                photoInput.form.requestSubmit();
-            }
-        });
-
-        const emailDialog = document.getElementById('email-dialog');
-        const passwordInput = document.getElementById('current_password');
-
-        document.getElementById('edit-email').addEventListener('click', () => {
-            emailDialog.showModal();
-        });
-
-        document.getElementById('cancel-email').addEventListener('click', () => {
-            emailDialog.close();
-        });
-
-        emailDialog.addEventListener('close', () => {
-            passwordInput.value = '';
-        });
-
-        if (emailDialog.hasAttribute('data-show-errors')) {
-            emailDialog.showModal();
-        }
-    </script>
 @endsection
