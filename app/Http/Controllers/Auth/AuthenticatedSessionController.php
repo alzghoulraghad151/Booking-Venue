@@ -43,7 +43,7 @@ class AuthenticatedSessionController extends Controller
     return redirect()->route(match ($request->user()->role) {
         'venue_owner' => 'owner.venues.index',
         'admin' => 'admin.dashboard',
-        default => 'account.signed-in',
+        default => 'home',
     });
 }
 }

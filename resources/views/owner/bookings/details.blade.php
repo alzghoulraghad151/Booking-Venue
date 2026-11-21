@@ -1,6 +1,6 @@
 @extends('layouts.owner')
 
-@section('title', 'Booking review')
+@section('title', 'Booking #'.$booking->id)
 @section('subtitle', 'Confirm or reject this booking for your venue.')
 
 @push('styles')
