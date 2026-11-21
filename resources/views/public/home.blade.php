@@ -16,29 +16,29 @@
                 <p class="landing-eyebrow">A space for every gathering</p>
                 <h1 id="landing-title">Find the right space for your next event</h1>
                 <p class="landing-hero__intro">From meaningful dinners to memorable celebrations, discover a venue that brings people together.</p>
-                <section class="landing-voice" aria-labelledby="landing-voice-title" lang="ar" dir="rtl">
-                    <div class="landing-voice__action">
-                        <button type="button" id="voice-search" form="landing-search" class="landing-voice__button"
-                            data-url="{{ route('spaces.search.voice') }}" data-csrf="{{ csrf_token() }}">
-                            <span class="landing-voice__icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-                                    <rect x="9" y="2" width="6" height="13" rx="3"/>
-                                    <path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/>
-                                </svg>
-                            </span>
-                            <span data-voice-label>ابدأ التسجيل</span>
-                        </button>
-                        <div>
-                            <h2 id="landing-voice-title">ابحث بصوتك</h2>
-                            <p>جرّب تقول «بدي قاعة بعمان لـ ٨٠ شخص»</p>
-                        </div>
-                    </div>
-                    <p class="landing-voice__feedback" id="voice-status" role="status" dir="auto"></p>
-                    <p class="landing-voice__feedback" id="voice-transcript" dir="auto"></p>
-                    <a class="landing-voice__fallback" href="#landing-address">البحث بالكتابة</a>
-                </section>
                 <a class="landing-button landing-button--warm" href="#explore-locations">Explore spaces <span aria-hidden="true">→</span></a>
             </div>
+            <section class="landing-voice" aria-labelledby="landing-voice-title" lang="ar" dir="rtl">
+                <div class="landing-voice__action">
+                    <button type="button" id="voice-search" form="landing-search" class="landing-voice__button"
+                        data-url="{{ route('spaces.search.voice') }}" data-csrf="{{ csrf_token() }}">
+                        <span class="landing-voice__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                                <rect x="9" y="2" width="6" height="13" rx="3"/>
+                                <path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/>
+                            </svg>
+                        </span>
+                        <span data-voice-label>ابدأ التسجيل</span>
+                    </button>
+                    <div>
+                        <h2 id="landing-voice-title">ابحث بصوتك</h2>
+                        <p>جرّب تقول «بدي قاعة بعمان لـ ٨٠ شخص»</p>
+                    </div>
+                </div>
+                <p class="landing-voice__feedback" id="voice-status" role="status" dir="auto"></p>
+                <p class="landing-voice__feedback" id="voice-transcript" dir="auto"></p>
+                <a class="landing-voice__fallback" href="#landing-address">البحث بالكتابة</a>
+            </section>
         </section>
 
         <form id="landing-search" class="landing-search" action="{{ route('spaces.search') }}" method="GET" aria-label="Search event spaces">
