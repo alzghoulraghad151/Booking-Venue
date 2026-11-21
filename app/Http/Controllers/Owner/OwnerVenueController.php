@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Owner;
 use Illuminate\Support\Facades\DB;
-use App\Actions\Owner\CreateVenue;
+use App\Actions\Owner\SaveVenue;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Client\HttpClientException;
 use RuntimeException;
@@ -17,18 +17,28 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Owner\UpdateVenueRequest;
 use App\Models\Venue;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 
 class OwnerVenueController extends Controller
 {
     public function index(Request $request): View
     {
-        $venues = $request->user()
-            ->venues()
-            ->latest()
-            ->paginate(15);
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', Rule::in(['pending', 'approved', 'rejected', 'inactive'])],
+            'sort' => ['nullable', Rule::in(['newest', 'oldest'])],
+        ]);
+        $direction = ($filters['sort'] ?? 'newest') === 'oldest' ? 'asc' : 'desc';
 
-        return view('owner.venues.index', ['venues' => $venues]);
+        $venues = $request->user()->venues()
+            ->when(filled($filters['search'] ?? null), fn ($query) => $query->where('name', 'like', '%'.$filters['search'].'%'))
+            ->when(filled($filters['status'] ?? null), fn ($query) => $query->where('status', $filters['status']))
+            ->orderBy('created_at', $direction)->orderBy('id', $direction)
+            ->paginate(9)->withQueryString();
+
+        return view('owner.venues.index', compact('venues', 'filters'));
     }
 
 
@@ -44,51 +54,53 @@ public function show(Venue $venue): View
 
 
     public function create(): View
-{
-    return view('owner.venues.create');
-}
-
-
-public function store(StoreVenueRequest $request, CreateVenue $createVenue): RedirectResponse
-{
-    try {
-        $createVenue->handle($request->user(), $request->safe()->except('image'), $request->file('image'));
-    } catch (HttpClientException|RuntimeException $exception) {
-        report($exception);
-
-        return back()->withInput($request->safe()->except('image'))->withErrors([
-            'image' => 'The venue and image could not be saved. Please select the image and try again.',
-        ]);
+    {
+        return view('owner.venues.create', ['addresses' => Venue::addressOptions()]);
     }
 
-    return redirect()
-        ->route('owner.venues.index')
-        ->with('success', 'Venue added and submitted for review.');
-}
+    public function store(StoreVenueRequest $request, SaveVenue $saveVenue): RedirectResponse
+    {
+        return $this->save($request, $saveVenue, null);
+    }
 
+    public function edit(Venue $venue): View
+    {
+        Gate::authorize('update', $venue);
+        $venue->load(['images' => fn ($query) => $query->orderByDesc('is_primary')->orderBy('id')]);
 
+        return view('owner.venues.edit', ['venue' => $venue, 'addresses' => Venue::addressOptions()]);
+    }
 
+    public function update(UpdateVenueRequest $request, Venue $venue, SaveVenue $saveVenue): RedirectResponse
+    {
+        return $this->save($request, $saveVenue, $venue);
+    }
 
-public function edit(Venue $venue): View
-{
-    Gate::authorize('update', $venue);
+    private function save(StoreVenueRequest|UpdateVenueRequest $request, SaveVenue $saveVenue, ?Venue $venue): RedirectResponse
+    {
+        try {
+            $saveVenue->handle(
+                $request->user(),
+                $venue,
+                $request->safe()->only(['name', 'address', 'description']),
+                $request->file('images', []),
+                array_map('intval', $request->validated('removed_images', [])),
+                $request->validated('primary_image'),
+            );
+        } catch (ValidationException $exception) {
+            throw $exception;
+        } catch (HttpClientException|RuntimeException $exception) {
+            report($exception);
 
-    $venue->load('images');
+            return back()->withInput($request->safe()->only(['name', 'address', 'description']))->withErrors([
+                'images' => 'The venue changes could not be saved. Select the new images and try again.',
+            ]);
+        }
 
-    return view('owner.venues.edit', ['venue' => $venue]);
-}
-
-
-
-public function update(UpdateVenueRequest $request, Venue $venue): RedirectResponse
-{
-    $venue->update($request->validated());
-
-    return redirect()
-        ->route('owner.venues.index')
-        ->with('success', 'Venue updated successfully.');
-}
-
+        return to_route('owner.venues.index')->with('success', $venue
+            ? 'Venue updated successfully.'
+            : 'Venue added and submitted for review.');
+    }
 
 public function updateAvailability(Request $request, Venue $venue): RedirectResponse
 {

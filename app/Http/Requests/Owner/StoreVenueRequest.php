@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Owner;
 
+use App\Models\Venue;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreVenueRequest extends FormRequest
 {
@@ -15,9 +17,11 @@ class StoreVenueRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255', Rule::in(Venue::addressOptions())],
             'description' => ['nullable', 'string', 'max:5000'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'images' => ['required', 'array', 'list', 'min:1', 'max:'.Venue::IMAGE_LIMIT],
+            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'primary_image' => ['nullable', 'string', 'max:30'],
         ];
     }
 }

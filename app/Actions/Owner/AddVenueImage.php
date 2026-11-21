@@ -23,9 +23,9 @@ class AddVenueImage
 public function handle(Venue $venue, array $images): void
 {
 
-if ($venue->images()->count() + count($images) > 5) {
+if ($venue->images()->count() + count($images) > Venue::IMAGE_LIMIT) {
     throw ValidationException::withMessages([
-        'images' => 'A venue can have at most 5 images in total.',
+        'images' => 'A venue can have at most 3 images in total.',
     ]);
 }
 
@@ -39,8 +39,6 @@ if ($venue->images()->count() + count($images) > 5) {
 
         DB::transaction(function () use ($venue, $uploaded): void {
 
-        $needsPrimary = $existingCount === 0;
-
             $currentVenue = Venue::query()
                 ->lockForUpdate()
                 ->findOrFail($venue->getKey());
@@ -49,9 +47,9 @@ if ($venue->images()->count() + count($images) > 5) {
 
 $existingCount = $currentVenue->images()->count();
 
-if ($existingCount + count($uploaded) > 5) {
+if ($existingCount + count($uploaded) > Venue::IMAGE_LIMIT) {
     throw ValidationException::withMessages([
-        'images' => 'A venue can have at most 5 images in total.',
+        'images' => 'A venue can have at most 3 images in total.',
     ]);
 }
 
