@@ -19,16 +19,15 @@ class PublicBookingController extends Controller
     public function create(PublicBookingDetailsRequest $request, Space $space): View
     {
         $selection = $request->resolved();
-        $space = $selection['space']->loadMissing(['venue', 'images']); 
+        $space = $selection['space']->loadMissing(['venue.images', 'images']);
 
-        $image = $space->images->sortByDesc('is_primary')->first();
-        $imageUrl = null;
-
-        if ($image) {
-            $imageUrl = str_starts_with($image->image_url, 'http')
-                ? $image->image_url
-                : Storage::disk('public')->url($image->image_url);
-        }
+        // Same order as the space details page (primary first), then the venue's photos as a fallback.
+        // The first image that resolves to a usable URL wins; null shows a neutral placeholder.
+        $imageUrl = $space->images
+            ->sortBy([['is_primary', 'desc'], ['id', 'asc']])
+            ->concat($space->venue?->images->sortBy([['is_primary', 'desc'], ['id', 'asc']]) ?? [])
+            ->map(fn ($image) => $this->resolveImageUrl($image->image_url))
+            ->first(fn ($url) => $url !== null);
 
         return view('public.bookings.create', [
             'space' => $space,
@@ -98,5 +97,31 @@ class PublicBookingController extends Controller
         }
 
         return $redirect;
+    }
+
+    /**
+     * Absolute URLs (Cloudinary) are used as stored. Relative paths are checked on disk first,
+     * and built with asset() so the host and port follow the current request, not APP_URL.
+     */
+    private function resolveImageUrl(?string $value): ?string
+    {
+        $path = trim((string) $value);
+
+        if ($path === '') {
+            return null;
+        }
+
+        if (preg_match('#^(https?:)?//#i', $path)) {
+            return $path;
+        }
+
+        $path = ltrim($path, '/');
+        $relative = str_starts_with($path, 'storage/') ? substr($path, 8) : $path;
+
+        if (Storage::disk('public')->exists($relative)) {
+            return asset('storage/'.$relative);
+        }
+
+        return is_file(public_path($path)) ? asset($path) : null;
     }
 }
