@@ -16,6 +16,7 @@
             @if (\Illuminate\Support\Facades\Route::has('admin.event-types.index'))
                 <x-admin.nav-item label="Event Types" route-name="admin.event-types.index" active-pattern="admin.event-types.*" />
             @endif
+            <x-admin.nav-item label="My profile" route-name="admin.profile.edit" active-pattern="admin.profile.*" />
             <x-admin.nav-item label="Reviews" route-name="admin.reviews.index" active-pattern="admin.reviews.*" />
         </div>
     </nav>

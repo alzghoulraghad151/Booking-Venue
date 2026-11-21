@@ -1,4 +1,4 @@
-@php($adminActions = request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'owner.*'))
+@php($adminActions = request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.profile.*', 'owner.*'))
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,7 +18,7 @@
         <script src="{{ asset('js/convene-admin-actions.js') }}" defer></script>
     @endif
 </head>
-<body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.bookings.*', 'owner.*') ? ' admin-warm-actions' : '' }}">
+<body class="convene-admin convene-admin-ui{{ request()->routeIs('admin.dashboard', 'admin.users.*', 'admin.venues.*', 'admin.event-types.*', 'admin.reviews.*', 'admin.profile.*', 'admin.bookings.*', 'owner.*') ? ' admin-warm-actions' : '' }}">
     <a class="admin-skip" href="#admin-content">Skip to content</a>
 
     @section('sidebar')

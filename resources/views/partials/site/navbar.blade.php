@@ -13,15 +13,6 @@
                     <a class="site-link" href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif>Home</a>
                 @endif
                 <a class="site-link site-link--navy" href="{{ route('spaces.search') }}" @if (request()->routeIs('spaces.search')) aria-current="page" @endif>Browse spaces</a>
-                @auth
-                    @if (auth()->user()->role === 'organizer')
-                        @foreach (['my-bookings.index' => 'My bookings', 'favorites.index' => 'Favorites'] as $name => $label)
-                            @if (Route::has($name))
-                                <a class="site-link" href="{{ route($name) }}" @if (request()->routeIs($name)) aria-current="page" @endif>{{ $label }}</a>
-                            @endif
-                        @endforeach
-                    @endif
-                @endauth
             </div>
 
             <div class="site-nav-account">
@@ -33,6 +24,13 @@
                         <a class="site-button" href="{{ route('register') }}">Create account</a>
                     @endif
                 @else
+                    @if (auth()->user()->role === 'organizer')
+                        @foreach (['my-bookings.index' => 'My bookings', 'favorites.index' => 'Favorites'] as $name => $label)
+                            @if (Route::has($name))
+                                <a class="site-link site-account-link" href="{{ route($name) }}" @if (request()->routeIs($name)) aria-current="page" @endif>{{ $label }}</a>
+                            @endif
+                        @endforeach
+                    @endif
                     @if (auth()->user()->role === 'venue_owner' && Route::has('owner.venues.index'))
                         <a class="site-button" href="{{ route('owner.venues.index') }}">Manage venues</a>
                     @elseif (auth()->user()->role === 'admin' && Route::has('admin.dashboard'))
