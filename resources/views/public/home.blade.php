@@ -119,7 +119,7 @@
             </div>
         </section>
 
-        <section class="landing-occasion" aria-labelledby="occasion-title">
+        <section class="landing-occasion" id="event-types" aria-labelledby="occasion-title">
             <div class="landing-occasion__intro">
                 <p class="landing-eyebrow landing-eyebrow--warm">Make room for a good moment</p>
                 <h2 id="occasion-title">Spaces for every kind of gathering</h2>
