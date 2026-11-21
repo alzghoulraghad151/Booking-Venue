@@ -1,14 +1,8 @@
-@extends('layouts.users')
+@extends('layouts.auth')
 
 @section('title', "Forgot password")
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
-@endpush
-
-@section('content')
-    <div class="auth-page">
-<div class="auth-card">
+@section('auth-form')
         <h1>Forgot password</h1>
         <p>Enter your email to request a password reset link.</p>
 
@@ -36,8 +30,6 @@
         </form>
 
         <a href="{{ route('login') }}">Back to sign in</a>
-    </div>
-    </div>
 @endsection
 
 @push('scripts')
