@@ -17,7 +17,13 @@
             <x-admin.nav-item label="Bookings" route-name="owner.bookings.index" active-pattern="owner.bookings.*" />
             <x-admin.nav-item label="Calendar" route-name="owner.calendar.index" active-pattern="owner.calendar.*" />
         </div>
+
+        <div class="admin-nav-group">
+            <h2>Account</h2>
+            <x-admin.nav-item label="Profile" route-name="owner.profile.edit" active-pattern="owner.profile.*" />
+        </div>
     </nav>
+
     <form class="admin-sidebar-logout" method="POST" action="{{ route('admin.logout') }}">
         @csrf
         <button class="admin-nav-item" type="submit">Logout</button>

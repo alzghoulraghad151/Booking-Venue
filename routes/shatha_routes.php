@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Owner\OwnerBookingController;
+use App\Http\Controllers\Owner\OwnerProfileController;
 use App\Http\Controllers\PublicBookingController;
 
 
@@ -17,7 +18,7 @@ Route::prefix('admin')
         Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])
             ->name('bookings.show');
 
-        // Only admins can delete reviews (owners have no such route).
+       
         Route::delete('/bookings/{booking}/review', [AdminBookingController::class, 'destroyReview'])
             ->name('bookings.review.destroy');
     });
@@ -38,6 +39,12 @@ Route::prefix('owner')
 
         Route::patch('/bookings/{booking}/reject', [OwnerBookingController::class, 'reject'])
             ->name('bookings.reject');
+
+        Route::get('/profile', [OwnerProfileController::class, 'edit'])
+            ->name('profile.edit');
+
+        Route::patch('/profile', [OwnerProfileController::class, 'update'])
+            ->name('profile.update');
     });
 
 Route::middleware(['auth', 'organizer'])->group(function () {
