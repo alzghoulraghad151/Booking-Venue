@@ -271,7 +271,8 @@
     color: var(--convene-navy);
 }
 
-.admin-warm-actions .admin-navigation :is(a.admin-nav-item:hover, a.admin-nav-item[aria-current="page"]) {
+.admin-warm-actions .admin-navigation :is(a.admin-nav-item:hover, a.admin-nav-item[aria-current="page"]),
+.admin-warm-actions .admin-sidebar-account a.admin-nav-item[data-edit-dialog]:hover {
     background: var(--convene-warm);
     color: var(--convene-navy);
     border: 0;
@@ -350,6 +351,11 @@
 
 .convene-admin-ui .admin-bookings-page .filter-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.convene-admin-ui .admin-bookings-page .filter-grid > .filter-actions {
+    grid-column: -2 / -1;
+    justify-content: flex-end;
 }
 
 .convene-admin-ui .admin-bookings-page .field {
