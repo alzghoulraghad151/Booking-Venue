@@ -11,93 +11,8 @@
 
 @php($backUrl = Route::has('spaces.show') ? route('spaces.show', $space) : url()->previous())
 @php($homeUrl = Route::has('home') ? route('home') : route('spaces.search'))
-@php($logoutRoute = Route::has('logout') ? Route::getRoutes()->getByName('logout') : Route::getRoutes()->getByName('admin.logout'))
-@php($accountLinks = ['my-bookings.index' => 'My bookings', 'account.favourites.index' => 'Favorites', 'account.personal-details.edit' => 'My profile'])
 
-{{-- Shared Dar & Brass shell (same header/footer as the Home and Spaces pages). --}}
-@section('navbar')
-    <header class="bc-topbar">
-        <div class="bc-topbar__inner">
-            <nav class="bc-topbar__nav" aria-label="Primary navigation">
-                <a href="{{ $homeUrl }}">Home</a>
-                <a class="is-active" href="{{ route('spaces.search') }}">Explore Spaces</a>
-                @if (Route::has('bookings.from-invite'))
-                    <a href="{{ route('bookings.from-invite') }}">AI Booking Assistant</a>
-                @endif
-            </nav>
-
-            <a class="bc-topbar__brand" href="{{ $homeUrl }}" aria-label="Convene">Convene</a>
-
-            <div class="bc-topbar__account">
-                @auth
-                    @foreach ($accountLinks as $name => $label)
-                        @if (Route::has($name))
-                            <a class="bc-topbar__link {{ $name === 'my-bookings.index' ? 'bc-topbar__link--pill' : '' }}" href="{{ route($name) }}">{{ $label }}</a>
-                        @endif
-                    @endforeach
-                    @if ($logoutRoute && in_array('POST', $logoutRoute->methods(), true))
-                        <form method="POST" action="{{ route($logoutRoute->getName()) }}">
-                            @csrf
-                            <button class="bc-topbar__link" type="submit">Sign out</button>
-                        </form>
-                    @endif
-                @endauth
-                <button class="bc-topbar__menu" type="button" aria-label="Toggle menu" aria-controls="bc-mobile-nav" aria-expanded="false" data-bc-menu>
-                    <span aria-hidden="true">&#9776;</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="bc-mobile-nav" id="bc-mobile-nav" hidden>
-            <a href="{{ $homeUrl }}">Home</a>
-            <a class="is-active" href="{{ route('spaces.search') }}">Explore Spaces</a>
-            @if (Route::has('bookings.from-invite'))
-                <a href="{{ route('bookings.from-invite') }}">AI Booking Assistant</a>
-            @endif
-            @auth
-                @foreach ($accountLinks as $name => $label)
-                    @if (Route::has($name))
-                        <a href="{{ route($name) }}">{{ $label }}</a>
-                    @endif
-                @endforeach
-                @if ($logoutRoute && in_array('POST', $logoutRoute->methods(), true))
-                    <form method="POST" action="{{ route($logoutRoute->getName()) }}">
-                        @csrf
-                        <button type="submit">Sign out</button>
-                    </form>
-                @endif
-            @endauth
-        </div>
-    </header>
-@endsection
-
-@section('footer')
-    <footer class="bc-footer">
-        <div class="bc-footer__inner">
-            <div class="bc-footer__about">
-                <a class="bc-footer__brand" href="{{ $homeUrl }}">Convene</a>
-                <p>The B2B hospitality platform for discovering and booking individual event spaces inside Jordan's leading venues.</p>
-            </div>
-            <div class="bc-footer__col">
-                <span class="bc-footer__title">Platform</span>
-                <a href="{{ route('spaces.search') }}">Explore Spaces</a>
-                <a href="{{ $homeUrl }}">Home</a>
-                @if (Route::has('bookings.from-invite'))
-                    <a href="{{ route('bookings.from-invite') }}">AI Booking Assistant</a>
-                @endif
-            </div>
-            <div class="bc-footer__col">
-                <span class="bc-footer__title">Account</span>
-                @foreach ($accountLinks as $name => $label)
-                    @if (Route::has($name))
-                        <a href="{{ route($name) }}">{{ $label }}</a>
-                    @endif
-                @endforeach
-            </div>
-        </div>
-    </footer>
-@endsection
-
+{{-- Header and footer come from the shared layout (layouts.users -> partials/site). --}}
 @section('content')
 <div class="bc-wrap">
 <div class="bc-page">
@@ -186,8 +101,10 @@
         <div class="bc-col bc-col--side">
             <section class="bc-panel bc-selection" aria-labelledby="bc-selection-heading">
                 @if ($imageUrl)
-                    <img class="bc-venue__image" src="{{ $imageUrl }}" alt="{{ $space->name }}">
+                    <img class="bc-venue__image" src="{{ $imageUrl }}" alt="{{ $space->name }}" referrerpolicy="no-referrer"
+                         onerror="this.hidden=true;this.nextElementSibling.hidden=false;">
                 @endif
+                <div class="bc-venue__image bc-venue__image--empty" @if ($imageUrl) hidden @endif>No photo available</div>
 
                 <div class="bc-selection__body">
                     <div class="bc-venue">
