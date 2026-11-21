@@ -22,19 +22,12 @@
 @endphp
 
 <div class="invite-assistant">
+    <header class="invite-intro">
+        <h1>AI Booking Assistant</h1>
+        <p>Paste a meeting invitation in Arabic or English to start a booking draft.</p>
+    </header>
+
     <div class="invite-workspace">
-        <section class="invite-intro" aria-labelledby="assistant-heading">
-            <p class="invite-label">AI Booking Assistant</p>
-            <h1 id="assistant-heading">Turn a meeting email into a booking draft.</h1>
-            <p>Paste an invitation in Arabic or English. We’ll pull out the timing, guest count, and equipment requests so you can find a space without retyping the details.</p>
-
-            <ol class="invite-steps">
-                <li><strong>Paste your email</strong><span>A meeting invitation or a short message works.</span></li>
-                <li><strong>Review the details</strong><span>Correct anything the assistant missed.</span></li>
-                <li><strong>Find a space</strong><span>See options based on the time and in-person guest count.</span></li>
-            </ol>
-        </section>
-
         <section class="invite-card" aria-labelledby="invite-form-heading">
             <h2 id="invite-form-heading">Your meeting invitation</h2>
             <form method="POST" action="{{ route('bookings.from-invite.analyze') }}">
@@ -43,7 +36,7 @@
                     <label for="invitation">Email or message</label>
                     <button class="invite-link" type="button" data-invite-example>Try an example</button>
                 </div>
-                <textarea id="invitation" name="invitation" rows="9" maxlength="6000" dir="auto"
+                <textarea id="invitation" name="invitation" rows="7" maxlength="6000" dir="auto"
                           placeholder="Paste the email subject and message here…" required>{{ old('invitation', $invitation ?? '') }}</textarea>
                 @error('invitation')
                     <p class="invite-error" role="alert">{{ $message }}</p>
@@ -54,6 +47,15 @@
                 <button class="invite-primary" type="submit">Analyze invitation</button>
             </form>
         </section>
+
+        <aside class="invite-card invite-guide" aria-labelledby="invite-guide-heading">
+            <h2 id="invite-guide-heading">How it works</h2>
+            <ol class="invite-steps">
+                <li><strong>Paste your invitation</strong><span>A meeting email or a short message works.</span></li>
+                <li><strong>Review the details</strong><span>Check the time, guest count, and equipment requests.</span></li>
+                <li><strong>Find a space</strong><span>See options based on the time and in-person guest count.</span></li>
+            </ol>
+        </aside>
     </div>
 
     @if ($hasDraft)

@@ -106,7 +106,6 @@
 .places-filters__grid { grid-template-columns: minmax(175px, 1.4fr) repeat(3, minmax(125px, 1fr)) minmax(95px, .7fr) minmax(145px, 1.1fr) minmax(140px, 1fr) auto; gap: 11px; }
 .places-filter-field label { color: #4e595f; font-size: 10px; letter-spacing: .075em; text-transform: uppercase; }
 .places-filter-field input, .places-filter-field select { min-height: 40px; border-color: #d8d2c8; border-radius: 5px; background: #fff; font-size: 13px; transition: border-color .16s ease, box-shadow .16s ease; }
-.places-filter-field input:focus, .places-filter-field select:focus { border-color: var(--places-sage); box-shadow: 0 0 0 3px rgb(82 108 104 / 12%); outline: 0; }
 .places-filters__actions { min-height: 40px; gap: 9px; }
 .places-button { min-height: 40px; border-radius: 5px; background:#1e1b19; }
 .places-button:hover { background: var(--places-sage); }
