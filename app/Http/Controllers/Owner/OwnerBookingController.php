@@ -71,13 +71,6 @@ class OwnerBookingController extends Controller
             $query->where('status', $filters['status']);
         }
 
-        // Filter by space.
-        if (!empty($filters['space_id'])) {
-            $query->whereHas('details', fn (Builder $details) =>
-                $details->where('space_id', $filters['space_id'])
-            );
-        }
-
         // Filter by event date. Dates are stored in UTC but the owner picks a
         // day in Amman time, so compare against that day's UTC range.
         if (!empty($filters['date'])) {
@@ -85,11 +78,18 @@ class OwnerBookingController extends Controller
                 '!Y-m-d',
                 $filters['date'],
                 PublicBookingDetailsRequest::TIMEZONE
-            )->utc();
+            );
 
             $query->whereHas('details', fn (Builder $details) =>
-                $details->where('start_at', '>=', $dayStart)
-                    ->where('start_at', '<', $dayStart->addDay())
+                $details->where('start_at', '<', $dayStart->addDay()->utc())
+                    ->where('end_at', '>', $dayStart->utc())
+                    ->when(!empty($filters['space_id']), fn (Builder $detail) =>
+                        $detail->where('space_id', $filters['space_id'])
+                    )
+            );
+        } elseif (!empty($filters['space_id'])) {
+            $query->whereHas('details', fn (Builder $details) =>
+                $details->where('space_id', $filters['space_id'])
             );
         }
 

@@ -138,7 +138,10 @@
 .convene-admin-ui #admin-content .owner-record > .admin-button { margin-top: 16px; }
 .convene-admin-ui #admin-content .admin-dashboard-stats > article { grid-template-rows: auto 1fr; }
 .convene-admin-ui #admin-content .dashboard-quick-actions a { min-height: 60px; }
-.convene-admin-ui #admin-content .calendar-controls button { border-radius: 10px; }
+.convene-admin-ui #admin-content .calendar-controls button {
+    margin-inline-start: auto;
+    border-radius: 10px;
+}
 
 .convene-admin-ui #admin-content .owner-filter-form--compact {
     display: flex;

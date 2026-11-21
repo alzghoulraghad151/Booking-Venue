@@ -132,6 +132,40 @@
 .admin-management-list .dashboard-badge { padding: 5px 9px; font-size: 12px; line-height: 1.4; }
 .admin-management-list #reviews .dashboard-pagination { margin-top: 16px; }
 
+.admin-management-list .admin-reviews-table {
+    table-layout: fixed;
+    min-width: 760px;
+}
+
+.admin-review-comment-column { width: 21%; }
+
+.convene-admin-ui #admin-content .admin-reviews-table .admin-table-actions {
+    width: 96px;
+}
+
+.convene-admin-ui #admin-content .admin-reviews-table .admin-review-comment-preview {
+    display: inline-block;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.admin-review-comment-preview:hover { color: var(--dar-brass, var(--convene-sage)); }
+
+#admin-review-comment-dialog .admin-review-comment {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+#admin-review-comment-dialog [data-dialog-close] { width: 36px; }
+
 @media (max-width: 1100px) {
     .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) table :is(th, td) { min-width: 88px; }
 }

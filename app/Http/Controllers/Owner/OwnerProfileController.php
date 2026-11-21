@@ -22,7 +22,6 @@ class OwnerProfileController extends Controller
 
     public function update(UpdateOwnerProfileRequest $request): RedirectResponse
     {
-        // current_password is only used for validation, never saved.
         $request->user()->update($request->safe()->only(['name', 'email', 'phone']));
 
         return redirect()

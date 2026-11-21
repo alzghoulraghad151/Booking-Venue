@@ -32,6 +32,7 @@ class OwnerSpaceController extends Controller
             'per_page' => '10',
         ], array_filter(
             $request->validate([
+                'space' => ['nullable', 'integer', 'min:1'],
                 'search' => ['nullable', 'string', 'max:100'],
                 'status' => ['nullable', Rule::in(['active', 'inactive', 'maintenance'])],
                 'sort' => ['nullable', Rule::in($allowedSorts)],
@@ -44,6 +45,10 @@ class OwnerSpaceController extends Controller
         $query = Space::query()
             ->with(['venue', 'images'])
             ->whereHas('venue', fn ($venueQuery) => $venueQuery->where('owner_id', $request->user()->getKey()));
+
+        if (isset($filters['space'])) {
+            $query->whereKey($filters['space']);
+        }
 
         if ($filters['search'] !== '') {
             $search = $filters['search'];
