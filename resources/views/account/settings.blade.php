@@ -3,7 +3,7 @@
 @section('title', 'Account Settings')
 @section('content-class', 'account-settings')
 
-@section('content')
+@section('account-content')
     <h1>Account Settings</h1>
 
     @if (session('status'))

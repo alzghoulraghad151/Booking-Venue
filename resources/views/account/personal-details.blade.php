@@ -2,7 +2,7 @@
 
 @section('title', 'Personal Details')
 
-@section('content')
+@section('account-content')
     <h1>Personal Details</h1>
 
     @if (session('status'))
