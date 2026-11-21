@@ -21,12 +21,12 @@
     <form action="{{ route('admin.reviews.index') }}" method="GET" class="admin-review-filters">
         <label for="review-search">Search reviews</label>
         <input id="review-search" type="search" name="search" value="{{ $search }}"
-               placeholder="Booking #, organizer, venue, or comment" maxlength="100">
+               placeholder="Booking ID, organizer, venue, or comment" maxlength="100">
         <label for="review-rating">Rating</label>
         <select id="review-rating" name="rating">
             <option value="">All ratings</option>
             @foreach (range(5, 1) as $value)
-                <option value="{{ $value }}" @selected($rating === (string) $value)>{{ $value }} / 5</option>
+                <option value="{{ $value }}" @selected($rating === (string) $value)>{{ $value }}</option>
             @endforeach
         </select>
         <label for="review-sort">Sort by</label>
@@ -44,17 +44,17 @@
     <section id="reviews" class="dashboard-panel" aria-labelledby="reviews-title">
         <header class="dashboard-panel-header">
             <h2 id="reviews-title">Venue Reviews</h2>
-            <p class="dashboard-badge">Overall average: {{ $averageRating === null ? 'No ratings yet' : number_format($averageRating, 1) . ' / 5' }}</p>
+            <p class="dashboard-badge">Overall average: {{ $averageRating === null ? 'No ratings yet' : number_format($averageRating, 1) }}</p>
         </header>
         <div class="dashboard-table-wrap" tabindex="0" role="region" aria-labelledby="reviews-title">
-            <table class="dashboard-table">
+            <table class="dashboard-table admin-reviews-table">
                 <thead>
                     <tr>
-                        <th scope="col">Booking #</th>
+                        <th scope="col">Booking</th>
                         <th scope="col">Organizer</th>
                         <th scope="col">Venue</th>
                         <th scope="col">Rating</th>
-                        <th scope="col">Comment</th>
+                        <th scope="col" class="admin-review-comment-column">Comment</th>
                         <th scope="col">Reviewed on</th>
                         <th scope="col" class="admin-table-actions">Actions</th>
                     </tr>
@@ -62,11 +62,20 @@
                 <tbody>
                     @forelse ($reviews as $review)
                         <tr>
-                            <td>#{{ $review->booking_id }}</td>
+                            <td>{{ $review->booking_id }}</td>
                             <td>{{ $review->booking?->customer?->name ?? '—' }}</td>
                             <td>{{ $review->booking?->venue?->name ?? '—' }}</td>
-                            <td><span class="dashboard-badge">{{ $review->rating }} / 5</span></td>
-                            <td>{{ filled($review->comment) ? Str::limit($review->comment, 110) : '—' }}</td>
+                            <td><span class="dashboard-badge">{{ $review->rating }}</span></td>
+                            <td>
+                                @if (filled($review->comment))
+                                    <a class="admin-review-comment-preview"
+                                       href="{{ route('admin.reviews.show', $review) }}#review-comment"
+                                       data-review-comment="{{ $review->comment }}"
+                                       aria-label="Read full comment for booking {{ $review->booking_id }}">{{ $review->comment }}</a>
+                                @else
+                                    —
+                                @endif
+                            </td>
                             <td>{{ $review->created_at?->format('d M Y') ?? '—' }}</td>
                             <td class="admin-table-actions">
                                 <a class="admin-table-icon" href="{{ route('admin.reviews.show', $review) }}" aria-label="View review for booking {{ $review->booking_id }}" title="View">
@@ -87,4 +96,16 @@
 
         {{ $reviews->onEachSide(1)->links('components.admin.pagination') }}
     </section>
+
+    <dialog id="admin-review-comment-dialog" class="management-dialog" aria-labelledby="admin-review-comment-title">
+        <header class="management-dialog-header">
+            <h2 id="admin-review-comment-title">Organizer comment</h2>
+            <form method="dialog">
+                <button type="submit" data-dialog-close aria-label="Close comment" autofocus>×</button>
+            </form>
+        </header>
+        <div class="management-dialog-body">
+            <p class="admin-review-comment" data-review-comment-body></p>
+        </div>
+    </dialog>
 @endsection

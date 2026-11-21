@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers\Owner;
-
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PublicBookingDetailsRequest;
 use App\Models\Booking;
+use App\Models\BookingDetail;
 use App\Models\Venue;
 use App\Services\AvailabilityService;
+use App\Services\BookingPriceCalculator;
 use App\Models\Space;
+use Carbon\CarbonImmutable;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +18,8 @@ use Illuminate\View\View;
 
 class OwnerBookingController extends Controller
 {
-    private const PLATFORM_COMMISSION_RATE = 10;
+    /** The only booking statuses in the system. */
+    public const STATUSES = ['pending', 'confirmed', 'completed', 'rejected'];
 
     private const RELATIONS = [
         'customer',
@@ -24,7 +28,6 @@ class OwnerBookingController extends Controller
         'details.spaceLayout',
         'details.eventType',
         'details.package',
-        'payments',
     ];
 
     public function index(Request $request): View
@@ -36,11 +39,10 @@ class OwnerBookingController extends Controller
             ->pluck('id');
 
         $filters = $request->validate([
-            'status' => ['nullable', 'in:pending,confirmed,completed,cancelled,rejected'],
-            'date' => ['nullable', 'date'],
+            'status' => ['nullable', Rule::in(self::STATUSES)],
+            'date' => ['nullable', 'date_format:Y-m-d'],
             'organizer' => ['nullable', 'string', 'max:100'],
 
-           
             'space_id' => [
                 'nullable',
                 'integer',
@@ -51,16 +53,16 @@ class OwnerBookingController extends Controller
 
             'sort' => [
                 'nullable',
-                'in:newest,oldest,event_date_asc,event_date_desc,total_desc,total_asc,guests_desc',
+                'in:newest,oldest,event_date_asc,event_date_desc,total_desc,total_asc',
             ],
         ]);
 
         $query = Booking::query()
+            ->select('bookings.*')
             ->with(self::RELATIONS)
             ->withCount('details')
             ->withMin('details', 'start_at')
             ->withSum('details', 'total_price')
-            ->withSum('details', 'guest_count')
             ->whereHas('venue', fn (Builder $venue) =>
                 $venue->where('owner_id', $owner->getKey())
             );
@@ -69,17 +71,25 @@ class OwnerBookingController extends Controller
             $query->where('status', $filters['status']);
         }
 
-        // Filter by space.
-        if (!empty($filters['space_id'])) {
+        // Filter by event date. Dates are stored in UTC but the owner picks a
+        // day in Amman time, so compare against that day's UTC range.
+        if (!empty($filters['date'])) {
+            $dayStart = CarbonImmutable::createFromFormat(
+                '!Y-m-d',
+                $filters['date'],
+                PublicBookingDetailsRequest::TIMEZONE
+            );
+
+            $query->whereHas('details', fn (Builder $details) =>
+                $details->where('start_at', '<', $dayStart->addDay()->utc())
+                    ->where('end_at', '>', $dayStart->utc())
+                    ->when(!empty($filters['space_id']), fn (Builder $detail) =>
+                        $detail->where('space_id', $filters['space_id'])
+                    )
+            );
+        } elseif (!empty($filters['space_id'])) {
             $query->whereHas('details', fn (Builder $details) =>
                 $details->where('space_id', $filters['space_id'])
-            );
-        }
-
-        // Filter by event date.
-        if (!empty($filters['date'])) {
-            $query->whereHas('details', fn (Builder $details) =>
-                $details->whereDate('start_at', $filters['date'])
             );
         }
 
@@ -115,10 +125,6 @@ class OwnerBookingController extends Controller
                 ->orderBy('details_sum_total_price')
                 ->orderByDesc('id'),
 
-            'guests_desc' => $query
-                ->orderByDesc('details_sum_guest_count')
-                ->orderByDesc('id'),
-
             default => $query
                 ->orderByDesc('created_at')
                 ->orderByDesc('id'),
@@ -133,9 +139,11 @@ class OwnerBookingController extends Controller
             ->orderBy('name')
             ->get();
 
+        $statuses = self::STATUSES;
+
         return view(
             'owner.bookings.list',
-            compact('bookings', 'filters', 'spaces')
+            compact('bookings', 'filters', 'spaces', 'statuses')
         );
     }
 
@@ -144,46 +152,85 @@ class OwnerBookingController extends Controller
         $owner = $request->user();
 
         $booking = Booking::query()
-            ->with([...self::RELATIONS, 'review'])
+            ->with([
+                ...self::RELATIONS,
+                'review',
+                // Only the successful payment counts. Failed or abandoned attempts are
+                // ignored: the organizer simply tries again.
+                'payments' => fn ($payments) => $payments->where('status', 'paid')->orderBy('id'),
+            ])
             ->whereKey($booking->getKey())
             ->whereHas('venue', fn (Builder $venue) =>
                 $venue->where('owner_id', $owner->getKey())
             )
             ->firstOrFail();
 
-        // Calculate the total booking amount.
-        $bookingAmount = (float) $booking->details->sum('total_price');
-
-        // Platform commission rate.
-        $commissionRate = self::PLATFORM_COMMISSION_RATE;
-
-        // Cancelled and rejected bookings have no commission.
-        $commission = in_array($booking->status, ['cancelled', 'rejected'])
-            ? 0
-            : round($bookingAmount * ($commissionRate / 100), 2);
-
-        // Calculate booking totals.
-        $totals = [
-            'amount' => $bookingAmount,
-
-            'paid' => $booking->payments
-                ->where('status', 'paid')
-                ->sum('amount'),
-
-            'commission_rate' => $commissionRate,
-
-            'commission' => $commission,
-
-            'owner_earnings' => round(
-                $bookingAmount - $commission,
-                2
-            ),
-        ];
+        $totals = $this->totals($booking);
 
         return view(
             'owner.bookings.details',
             compact('booking', 'owner', 'totals')
         );
+    }
+
+    /**
+     * Money figures of one booking, all in JOD.
+     *
+     * Payment works as one successful payment for the whole booking amount
+     * (a failed attempt can be retried), so only the "paid" payment is read.
+     *
+     * - amount / commission come from the booking details (frozen when the booking is created).
+     * - paid is the amount of the successful payment.
+     * - payout tells whether the owner's share has already been transferred.
+     */
+    private function totals(Booking $booking): array
+    {
+        $amount = round((float) $booking->details->sum('total_price'), 2);
+        $rejected = $booking->status === 'rejected';
+
+        // Rejected bookings are never charged, so no commission applies.
+        $commission = $rejected
+            ? 0.0
+            : round((float) $booking->details->sum('commission_amount'), 2);
+
+        // Older rows may have been saved without a commission: use the default rate.
+        if (! $rejected && $commission <= 0 && $amount > 0) {
+            $commission = round($amount * BookingPriceCalculator::COMMISSION_RATE / 100, 2);
+        }
+
+        $commissionRate = $amount > 0
+            ? round($commission / $amount * 100, 2)
+            : (float) BookingPriceCalculator::COMMISSION_RATE;
+
+        // The relation only holds paid payments (see show()).
+        $payment = $booking->payments->first();
+        $isPaid = $payment !== null;
+
+        $paymentState = match (true) {
+            $rejected => 'not_required',
+            $isPaid => 'paid',
+            default => 'unpaid',
+        };
+
+        $payout = match (true) {
+            $rejected || ! $isPaid => 'none',
+            filled($payment->stripe_transfer_id) => 'released',
+            default => 'held',
+        };
+
+        return [
+            'amount' => $amount,
+            'commission_rate' => $commissionRate,
+            'commission' => $commission,
+            'owner_earnings' => round($amount - $commission, 2),
+
+            'paid' => $isPaid ? round((float) $payment->amount, 2) : 0.0,
+
+            'guests' => (int) $booking->details->sum(fn (BookingDetail $detail) => $detail->guests),
+
+            'payment_state' => $paymentState,
+            'payout' => $payout,
+        ];
     }
 
     public function confirm(

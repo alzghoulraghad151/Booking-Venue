@@ -1,0 +1,23 @@
+.places-pagination { font: 400 15px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin: 36px auto 0; }
+.places-pagination a,
+.places-pagination span { display: inline-flex; min-width: 40px; min-height: 40px; align-items: center; justify-content: center; padding: 0 12px; border: 1px solid #d0c4be; border-radius: 7px; background: #fff; color: #1e1b19; font-size: 14px; text-decoration: none; }
+.places-pagination a:hover { border-color: #77592e; background: #fdf8f7; }
+.places-pagination .is-current { border-color: #77592e; background: #77592e; color: #fff; }
+.places-pagination__disabled { color: #9aa2a6 !important; }
+
+.places-pagination { justify-content: space-between; gap: 16px; margin-top: 34px; padding-top: 24px; border-top: 1px solid #d0c4be; }
+.places-pagination__summary { color: #4d4540; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+.places-pagination__pages { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.places-pagination a, .places-pagination span { min-width: 36px; min-height: 36px; padding: 0 10px; border-color: #d0c4be; border-radius: 999px; color: #1c1b1b; font-size: 11px; }
+.places-pagination a:hover { border-color: #77592e; background: transparent; }
+.places-pagination .is-current { border-color: #1e1b19; background: #1e1b19; color: #fff; }
+.places-pagination .places-pagination__previous,
+.places-pagination .places-pagination__next { width: auto; border: 0; border-radius: 0; color: #77592e; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+.places-pagination .places-pagination__previous:hover,
+.places-pagination .places-pagination__next:hover { background: transparent; color: #1e1b19; }
+.places-pagination .places-pagination__disabled { color: #9aa2a6; }
+
+@media (max-width: 680px) {
+    .places-pagination { align-items: flex-start; flex-direction: column; }
+    .places-pagination__pages { justify-content: flex-start; }
+}

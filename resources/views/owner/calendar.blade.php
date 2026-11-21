@@ -59,12 +59,12 @@
             </nav>
         </header>
 
-        <ul class="calendar-legend" aria-label="Booking statuses">
-            @foreach (['pending', 'confirmed', 'completed', 'cancelled', 'rejected'] as $status)
+               <ul class="calendar-legend" aria-label="Booking statuses">
+            @foreach (['pending', 'confirmed', 'completed', 'rejected'] as $status)
                 <li class="calendar-status calendar-status--{{ $status }}">{{ ucfirst($status) }}</li>
             @endforeach
         </ul>
-        <p class="dashboard-note">Confirmed and completed bookings occupy time. Pending requests can overlap. Cancelled and rejected bookings release their time.</p>
+        <p class="dashboard-note">Confirmed and completed bookings occupy time. Pending requests can overlap. Rejected bookings release their time.</p>
 
         @if ($spaces->isEmpty())
             <p>No spaces yet. Add a venue and a space to see bookings on your calendar.</p>
@@ -77,13 +77,31 @@
                 @endif
 
                 @foreach ($days as $day)
+                    @php
+                        $bookingCount = collect($day['events'])->pluck('detail.booking_id')->unique()->count();
+                        $bookingsUrl = $bookingCount > 1
+                            ? route('owner.bookings.index', array_filter([
+                                'date' => $day['date']->toDateString(),
+                                'space_id' => $spaceId,
+                            ]))
+                            : null;
+                    @endphp
                     <section class="calendar-day" aria-labelledby="calendar-day-{{ $loop->index }}">
-                        <h3 id="calendar-day-{{ $loop->index }}">{{ $day['date']->format('D, j M') }}</h3>
-                        @forelse ($day['events'] as $event)
+                        <h3 id="calendar-day-{{ $loop->index }}">
+                            @if ($bookingsUrl)
+                                <a href="{{ $bookingsUrl }}">{{ $day['date']->format('D, j M') }}</a>
+                            @else
+                                {{ $day['date']->format('D, j M') }}
+                            @endif
+                        </h3>
+                        @forelse ($bookingsUrl ? array_slice($day['events'], 0, 2) : $day['events'] as $event)
                             @include('owner.partials.calendar-event', ['event' => $event])
                         @empty
                             <p class="dashboard-note">No bookings.</p>
                         @endforelse
+                        @if ($bookingsUrl)
+                            <p><a href="{{ $bookingsUrl }}">View all {{ $bookingCount }} bookings</a></p>
+                        @endif
                     </section>
                 @endforeach
             </div>

@@ -42,14 +42,14 @@ class OwnerCalendarTest extends TestCase
 
         $this->signIn(1);
         $this->calendar(['date' => '2026-11-19'])
-            ->assertOk()->assertSee('Booking #1')->assertSee('Conference')
-            ->assertDontSee('Second Hall')->assertDontSee('Booking #2')->assertDontSee('Booking #3');
+            ->assertOk()->assertSee(route('owner.bookings.show', 1))->assertDontSee('Conference')
+            ->assertDontSee('Second Hall')->assertDontSee(route('owner.bookings.show', 2))->assertDontSee(route('owner.bookings.show', 3));
         $this->calendar(['space_id' => 2])->assertNotFound();
 
         $this->signIn(2);
         $this->calendar(['date' => '2026-11-19'])
-            ->assertOk()->assertSee('Booking #2')->assertDontSee('First Hall')
-            ->assertDontSee('Booking #1')->assertDontSee('Booking #3');
+            ->assertOk()->assertSee(route('owner.bookings.show', 2))->assertDontSee('First Hall')
+            ->assertDontSee(route('owner.bookings.show', 1))->assertDontSee(route('owner.bookings.show', 3));
     }
 
     public function test_day_view_converts_utc_and_marks_only_overlapping_active_intervals(): void
@@ -63,7 +63,9 @@ class OwnerCalendarTest extends TestCase
         $this->booking(5, 1, 1, 'rejected', '2026-11-19 21:00:00', '2026-11-19 22:00:00');
 
         $response = $this->calendar(['date' => '2026-11-19', 'view' => 'day', 'space_id' => 1]);
-        $response->assertOk()->assertSee('00:30')->assertDontSee('Booking #5');
+        $response->assertOk()->assertSee('00:30')->assertSee('View all 4 bookings')
+            ->assertSee(route('owner.bookings.index', ['date' => '2026-11-19', 'space_id' => 1]))
+            ->assertDontSee(route('owner.bookings.show', 5));
         $events = $response->viewData('days')['2026-11-19']['events'];
         $this->assertSame([true, true, false, false], array_column($events, 'overlap'));
         $this->assertSame('00:00', $events[0]['start']->format('H:i'));
@@ -74,8 +76,8 @@ class OwnerCalendarTest extends TestCase
         $this->catalog();
         $this->signIn(1);
         $this->booking(1, 1, 1, 'confirmed', '2026-11-28 10:00:00', '2026-11-28 11:00:00');
-        $this->calendar(['date' => '2026-11-19', 'view' => 'week'])->assertOk()->assertDontSee('Booking #1');
-        $this->calendar(['date' => '2026-11-19', 'view' => 'month'])->assertOk()->assertSee('Booking #1');
+        $this->calendar(['date' => '2026-11-19', 'view' => 'week'])->assertOk()->assertDontSee(route('owner.bookings.show', 1));
+        $this->calendar(['date' => '2026-11-19', 'view' => 'month'])->assertOk()->assertSee(route('owner.bookings.show', 1));
         $this->calendar(['date' => '2026-02-30', 'view' => 'year', 'space_id' => -1])
             ->assertRedirectToRoute('owner.calendar.index')
             ->assertSessionHasErrors(['date', 'view', 'space_id']);

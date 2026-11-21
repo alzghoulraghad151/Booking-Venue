@@ -11,6 +11,14 @@ class Venue extends Model
 {
     use SoftDeletes;
 
+    public const IMAGE_LIMIT = 3;
+
+    public static function addressOptions(): array
+    {
+        return static::withTrashed()->where('address', '<>', '')
+            ->distinct()->orderBy('address')->pluck('address')->all();
+    }
+
     protected $fillable = ['name', 'description', 'address'];
 
     public function owner(): BelongsTo

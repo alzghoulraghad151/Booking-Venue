@@ -8,10 +8,22 @@
 @endpush
 
 @section('content')
-<div class="venue-page">
+<div class="venue-page venue-detail-page">
         <a class="admin-button admin-button--navy" href="{{ route('owner.venues.index') }}">Back to My Venues</a>
 
-        <h1>{{ $venue->name }}</h1>
+        <header class="venue-detail-heading">
+            <h1>{{ $venue->name }}</h1>
+            <div class="venue-detail-actions">
+        <a data-edit-dialog class="admin-button admin-button--primary admin-button--page" href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
+<form data-delete-message="Archive this venue?" data-delete-action="Archive" method="POST" action="{{ route('owner.venues.destroy', $venue) }}"
+      onsubmit="return confirm('Archive this venue?')">
+    @csrf
+    @method('DELETE')
+
+    <button class="admin-button admin-button--danger" type="submit">Archive Venue</button>
+</form>
+            </div>
+        </header>
 
         <section class="venue-card">
             <h2>Venue images</h2>
@@ -42,7 +54,7 @@
             <p>Your venue is awaiting approval. Customers cannot see it yet.</p>
         @endif
 
-        <a data-edit-dialog class="admin-button admin-button--primary admin-button--page" href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
+
 
 
         @if (session('success'))
@@ -73,18 +85,15 @@
     <p role="alert">{{ $message }}</p>
 @enderror
 
-<form data-delete-message="Archive this venue?" data-delete-action="Archive" method="POST" action="{{ route('owner.venues.destroy', $venue) }}"
-      onsubmit="return confirm('Archive this venue?')">
-    @csrf
-    @method('DELETE')
 
-    <button class="admin-button admin-button--danger" type="submit">Archive Venue</button>
-</form>
         <h2>Spaces</h2>
 
         <ul>
             @forelse ($venue->spaces as $space)
-                <li>{{ $space->name }} (capacity: {{ $space->capacity }})</li>
+                <li>
+                    <a href="{{ route('owner.spaces.index', ['space' => $space->id]) }}#space-{{ $space->id }}">{{ $space->name }}</a>
+                    <span> · Capacity {{ $space->capacity }}</span>
+                </li>
             @empty
                 <li>No spaces have been added to this venue.</li>
             @endforelse

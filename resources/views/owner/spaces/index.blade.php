@@ -83,7 +83,7 @@
             <tbody>
                 @forelse ($spaces as $space)
                     @php($image = $space->images->firstWhere('is_primary', true) ?? $space->images->first())
-                    <tr>
+                    <tr id="space-{{ $space->id }}">
                         <td>
                             @if ($image)
                                 <img src="{{ $image->image_url }}" alt="{{ $space->name }}" width="100">

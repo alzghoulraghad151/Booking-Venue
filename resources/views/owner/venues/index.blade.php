@@ -11,6 +11,28 @@
     <x-admin.list-heading title="My Venues" description="Manage your venue listings and their availability."
         :action-url="route('owner.venues.create')" action-label="Add venue" />
 <div class="venue-page">
+    <x-owner.filter-panel form-id="owner-venues-filters" :action="route('owner.venues.index')">
+        <div>
+            <label for="venue-search">Venue name</label>
+            <input id="venue-search" name="search" value="{{ $filters['search'] ?? '' }}" maxlength="255">
+        </div>
+        <div>
+            <label for="venue-status">Status</label>
+            <select id="venue-status" name="status">
+                <option value="">All statuses</option>
+                @foreach (['pending', 'approved', 'rejected', 'inactive'] as $status)
+                    <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ ucfirst($status) }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label for="venue-sort">Date added</label>
+            <select id="venue-sort" name="sort">
+                <option value="newest" @selected(($filters['sort'] ?? 'newest') === 'newest')>Newest first</option>
+                <option value="oldest" @selected(($filters['sort'] ?? '') === 'oldest')>Oldest first</option>
+            </select>
+        </div>
+    </x-owner.filter-panel>
 
         @if (session('success'))
     <p role="status">{{ session('success') }}</p>
@@ -42,7 +64,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="4">You haven't added any venues yet.</td>
+                <td colspan="4">No venues match these filters.</td>
             </tr>
         @endforelse
     </tbody>

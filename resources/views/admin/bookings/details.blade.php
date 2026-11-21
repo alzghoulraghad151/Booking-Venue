@@ -66,12 +66,10 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Space / venue</th>
                             <th>Layout</th>
                             <th>Event type</th>
                             <th>Package</th>
                             <th>Time</th>
-                            <th>Guests</th>
                             <th>Total</th>
                             <th>Commission rate</th>
                             <th>Commission</th>
@@ -80,10 +78,6 @@
                     <tbody>
                         @forelse ($booking->details->sortBy('start_at') as $detail)
                             <tr>
-                                <td>
-                                    <span class="cell-primary">{{ $detail->space?->name ?? '—' }}</span>
-                                    <span class="cell-secondary">{{ $detail->space?->venue?->name ?? $booking->venue?->name ?? '—' }}</span>
-                                </td>
                                 <td>{{ $detail->spaceLayout?->name ?? '—' }}</td>
                                 <td>{{ $detail->eventType?->name ?? '—' }}</td>
                                 <td>{{ $detail->package?->name ?? 'Hourly' }}</td>
@@ -91,20 +85,15 @@
                                     <span class="cell-primary">{{ $detail->start_at?->format('d M Y') ?? '—' }}</span>
                                     <span class="cell-secondary">{{ $detail->start_at?->format('H:i') ?? '—' }}–{{ $detail->end_at?->format('H:i') ?? '—' }}</span>
                                 </td>
-                                <td>{{ number_format((int) $detail->guest_count) }}</td>
                                 <td class="amount">{{ number_format((float) $detail->total_price, 2) }}</td>
                                 <td>{{ number_format((float) $detail->commission_rate, 2) }}%</td>
                                 <td class="amount">{{ number_format((float) $detail->commission_amount, 2) }}</td>
                             </tr>
                         @empty
-                            <tr><td colspan="9"><div class="empty-inline">No booking details are recorded.</div></td></tr>
+                            <tr><td colspan="7"><div class="empty-inline">No booking details are recorded.</div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
-            </div>
-            <div class="totals-strip">
-                <div><span>Booking total</span><strong>{{ number_format((float) $totals['amount'], 2) }}</strong></div>
-                <div><span>Total commission</span><strong>{{ number_format((float) $totals['commission'], 2) }}</strong></div>
             </div>
         </section>
 
