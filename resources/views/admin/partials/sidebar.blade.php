@@ -1,8 +1,8 @@
-<aside class="admin-sidebar admin-sidebar--management">
+<aside class="admin-sidebar admin-sidebar--management admin-sidebar--admin">
     <div class="admin-brand">
         <a href="{{ route(Route::has('admin.dashboard') ? 'admin.dashboard' : 'admin.users.index') }}">
-            <span class="admin-mark" aria-hidden="true">C</span>
-            Convene
+            <span class="dar-sidebar-wordmark">CONVENE</span>
+            <span class="dar-sidebar-role">Administration</span>
         </a>
     </div>
 
@@ -26,7 +26,10 @@
         </nav>
         <form class="admin-sidebar-logout" method="POST" action="{{ route('admin.logout') }}">
             @csrf
-            <button class="admin-nav-item" type="submit">Logout</button>
+            <button class="admin-nav-item" type="submit">
+            <x-admin.management-nav-icon name="logout" />
+            Logout
+        </button>
         </form>
     </div>
 </aside>

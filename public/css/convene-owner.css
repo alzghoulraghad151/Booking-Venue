@@ -105,7 +105,7 @@
 .owner-filter-form--compact > div:nth-child(2) { flex: 1 1 150px; min-width: 0; }
 
 .owner-filter-form:not(.owner-filter-form--compact) > .owner-filter-actions {
-    grid-column: -2 / -1;
+    grid-column: 1 / -1;
     align-self: end;
     justify-content: flex-end;
 }
