@@ -5,6 +5,27 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-bookings.css') }}">
+    <style>
+        .convene-admin-ui #admin-content .admin-table-actions .admin-table-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0 14px;
+            border: 1px solid var(--admin-ui-border);
+            border-radius: 10px;
+            background: var(--convene-cream);
+            color: var(--convene-navy);
+            font-weight: 700;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .convene-admin-ui #admin-content .admin-table-actions .admin-table-link:hover {
+            border-color: var(--convene-sage);
+            background: var(--convene-white);
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -39,7 +60,7 @@
                     <label for="status">Booking status</label>
                     <select id="status" name="status">
                         <option value="">All statuses</option>
-                        @foreach (['pending', 'confirmed', 'completed', 'cancelled', 'rejected'] as $status)
+                        @foreach ($statuses as $status)
                             <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ ucfirst($status) }}</option>
                         @endforeach
                     </select>
@@ -69,7 +90,6 @@
                             'event_date_desc' => 'Event date (latest)',
                             'total_desc' => 'Total (highest)',
                             'total_asc' => 'Total (lowest)',
-                            'guests_desc' => 'Guests (most)',
                         ] as $value => $label)
                             <option value="{{ $value }}" @selected(($filters['sort'] ?? 'newest') === $value)>{{ $label }}</option>
                         @endforeach
@@ -100,7 +120,6 @@
                             <th>Venue</th>
                             <th>Event date</th>
                             <th>Spaces</th>
-                            <th>Guests</th>
                             <th>Total</th>
                             <th>Status</th>
                             <th scope="col" class="admin-table-actions">Actions</th>
@@ -110,6 +129,7 @@
                         @forelse ($bookings as $booking)
                             @php
                                 $firstDetail = $booking->details->sortBy('start_at')->first();
+                                $eventStart = $firstDetail?->start_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE);
                             @endphp
                             <tr>
                                 <td><a class="booking-id" href="{{ route('owner.bookings.show', $booking) }}">#{{ $booking->id }}</a></td>
@@ -118,16 +138,15 @@
                                     <span class="cell-secondary">{{ $booking->customer?->email ?? 'No email' }}</span>
                                 </td>
                                 <td>{{ $booking->venue?->name ?? '—' }}</td>
-                                <td>{{ $firstDetail?->start_at?->format('d M Y') ?? '—' }}</td>
+                                <td>{{ $eventStart?->format('d M Y') ?? '—' }}</td>
                                 <td>{{ number_format($booking->details_count) }}</td>
-                                <td>{{ number_format((int) $booking->details_sum_guest_count) }}</td>
                                 <td class="amount">{{ number_format((float) $booking->details_sum_total_price, 2) }}</td>
                                 <td><span class="status-badge status-badge--{{ $booking->status }}">{{ ucfirst($booking->status) }}</span></td>
-                                <td class="admin-table-actions"><a class="admin-table-icon" href="{{ route('owner.bookings.show', $booking) }}" aria-label="Review booking {{ $booking->id }}" title="Review booking"><x-admin.table-action-icon name="view" /></a></td>
+                                <td class="admin-table-actions"><a class="admin-table-link" href="{{ route('owner.bookings.show', $booking) }}" aria-label="View details for booking {{ $booking->id }}">View details</a></td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9">
+                                <td colspan="8">
                                     <div class="empty-state">
                                         <span class="empty-mark" aria-hidden="true">E</span>
                                         <strong>No bookings found</strong>

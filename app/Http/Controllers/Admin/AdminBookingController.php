@@ -16,7 +16,7 @@ class AdminBookingController extends Controller
             'venue_id' => ['nullable', 'integer', 'exists:venues,id'],
             'date' => ['nullable', 'date'],
             'organizer' => ['nullable', 'string', 'max:100'],
-            'sort' => ['nullable', 'in:newest,oldest,event_date_asc,event_date_desc,total_desc,total_asc,guests_desc'],
+            'sort' => ['nullable', 'in:newest,oldest,event_date_asc,event_date_desc,total_desc,total_asc'],
         ]);
 
         $query = Booking::query()->with([
@@ -28,8 +28,7 @@ class AdminBookingController extends Controller
             'details.package',
         ])->withCount('details')
             ->withMin('details', 'start_at')
-            ->withSum('details', 'total_price')
-            ->withSum('details', 'guest_count');
+            ->withSum('details', 'total_price');
 
         if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
@@ -59,7 +58,6 @@ class AdminBookingController extends Controller
             'event_date_desc' => $query->orderByDesc('details_min_start_at')->orderByDesc('id'),
             'total_desc' => $query->orderByDesc('details_sum_total_price')->orderByDesc('id'),
             'total_asc' => $query->orderBy('details_sum_total_price')->orderByDesc('id'),
-            'guests_desc' => $query->orderByDesc('details_sum_guest_count')->orderByDesc('id'),
             default => $query->orderByDesc('created_at')->orderByDesc('id'),
         };
 
