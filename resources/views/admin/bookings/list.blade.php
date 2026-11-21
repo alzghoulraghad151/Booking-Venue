@@ -1,3 +1,4 @@
+
 @extends('layouts.admin')
 
 @section('title', 'Bookings Management')
@@ -39,7 +40,7 @@
                     <label for="status">Booking status</label>
                     <select id="status" name="status">
                         <option value="">All statuses</option>
-                        @foreach (['pending', 'confirmed', 'completed', 'cancelled', 'rejected'] as $status)
+                        @foreach ($statuses as $status)
                             <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ ucfirst($status) }}</option>
                         @endforeach
                     </select>
@@ -111,7 +112,7 @@
                             @php
                                 $firstDetail = $booking->details->sortBy('start_at')->first();
                                 $total = $booking->details->sum('total_price');
-                                $guests = $booking->details->sum('guest_count');
+                                $eventStart = $firstDetail?->start_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE);
                             @endphp
                             <tr>
                                 <td><a class="booking-id" href="{{ route('admin.bookings.show', $booking) }}">#{{ $booking->id }}</a></td>
@@ -121,15 +122,15 @@
                                 </td>
                                 <td>{{ $booking->venue?->name ?? '—' }}</td>
                                 <td>{{ $firstDetail?->eventType?->name ?? '—' }}</td>
-                                <td>{{ $firstDetail?->start_at?->format('d M Y') ?? '—' }}</td>
-                                <td>{{ number_format($guests) }}</td>
+                                <td>{{ $eventStart?->format('d M Y') ?? '—' }}</td>
+                                <td>{{ number_format((int) $booking->guests_total) }}</td>
                                 <td class="amount">{{ number_format((float) $total, 2) }}</td>
                                 <td><span class="status-badge status-badge--{{ $booking->status }}">{{ ucfirst($booking->status) }}</span></td>
                                 <td class="admin-table-actions">
-                                <a class="admin-table-icon" href="{{ route('admin.bookings.show', $booking) }}" aria-label="View booking {{ $booking->id }}" title="View">
-                                    <x-admin.table-action-icon name="view" />
-                                </a>
-                            </td>
+                                    <a class="admin-table-icon" href="{{ route('admin.bookings.show', $booking) }}" aria-label="View booking {{ $booking->id }}" title="View">
+                                        <x-admin.table-action-icon name="view" />
+                                    </a>
+                                </td>
                             </tr>
                         @empty
                             <tr>

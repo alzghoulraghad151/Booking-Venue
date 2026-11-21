@@ -59,12 +59,12 @@
             </nav>
         </header>
 
-        <ul class="calendar-legend" aria-label="Booking statuses">
-            @foreach (['pending', 'confirmed', 'completed', 'cancelled', 'rejected'] as $status)
+               <ul class="calendar-legend" aria-label="Booking statuses">
+            @foreach (['pending', 'confirmed', 'completed', 'rejected'] as $status)
                 <li class="calendar-status calendar-status--{{ $status }}">{{ ucfirst($status) }}</li>
             @endforeach
         </ul>
-        <p class="dashboard-note">Confirmed and completed bookings occupy time. Pending requests can overlap. Cancelled and rejected bookings release their time.</p>
+        <p class="dashboard-note">Confirmed and completed bookings occupy time. Pending requests can overlap. Rejected bookings release their time.</p>
 
         @if ($spaces->isEmpty())
             <p>No spaces yet. Add a venue and a space to see bookings on your calendar.</p>
