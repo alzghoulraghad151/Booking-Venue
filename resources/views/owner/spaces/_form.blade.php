@@ -29,7 +29,7 @@
     <input id="capacity" type="number" name="capacity" value="{{ old('capacity', $space?->capacity ?? 1) }}" min="1" max="100000" required>
 
     <label for="hourly_rate">Hourly rate</label>
-    <input id="hourly_rate" type="number" name="hourly_rate" value="{{ old('hourly_rate', $space?->hourly_rate ?? '') }}" min="0" max="10000000" step="0.01" required>
+    <input id="hourly_rate" type="number" name="hourly_rate" value="{{ old('hourly_rate', $space?->hourly_rate ?? '') }}" min="0" max="10000000" step="1" required>
 
     <label for="status">Status</label>
     <select id="status" name="status" required>
@@ -39,16 +39,26 @@
     </select>
 
     @if ($editing && $space->images->isNotEmpty())
-        <fieldset>
+        <fieldset class="owner-space-images">
             <legend>Current images</legend>
             @foreach ($space->images as $image)
-                <label>
-                    <img src="{{ $image->image_url }}" alt="{{ $space->name }}" width="120">
-                    <input type="checkbox" name="remove_images[]" value="{{ $image->id }}">
-                    Remove image
-                    @if ($image->is_primary)(Primary)@endif
-                </label>
+                <figure class="owner-space-image">
+                    <img src="{{ $image->image_url }}" alt="{{ $space->name }}" loading="lazy">
+                    @if ($space->images->count() > 1)
+                        <button class="owner-space-image__delete" type="submit" name="remove_images[]" value="{{ $image->id }}" aria-label="Delete image" title="Delete image" onclick="return confirm('Delete this image?')">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3" /></svg>
+                        </button>
+                    @else
+                        <button class="owner-space-image__delete owner-space-image__delete--disabled" type="button" disabled aria-label="The last image cannot be deleted" title="At least one image must remain">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3" /></svg>
+                        </button>
+                    @endif
+                    @if ($image->is_primary)
+                        <figcaption>Primary</figcaption>
+                    @endif
+                </figure>
             @endforeach
+            <p class="owner-space-images__hint">At least one image must remain.</p>
         </fieldset>
     @endif
 
