@@ -98,8 +98,8 @@
                         <td>{{ ucfirst($space->status) }}</td>
                         <td class="admin-table-actions">
                         <div class="admin-table-action-group">
-                            <a class="admin-table-icon" href="{{ route('owner.spaces.edit', $space) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
-                            <form action="{{ route('owner.spaces.destroy', $space) }}" method="POST" onsubmit="return confirm('Delete this space?');">
+                            <a data-edit-dialog class="admin-table-icon" href="{{ route('owner.spaces.edit', $space) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
+                            <form data-delete-message="Delete this space?" data-delete-action="Delete" action="{{ route('owner.spaces.destroy', $space) }}" method="POST" onsubmit="return confirm('Delete this space?');">
                                 @csrf
                                 @method('DELETE')
                                 <button class="admin-button admin-table-icon admin-table-icon--danger" type="submit" aria-label="Delete" title="Delete"><x-admin.table-action-icon name="delete" /></button>

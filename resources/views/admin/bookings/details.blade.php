@@ -154,7 +154,7 @@
                     <div>
                         <strong class="review-title">Booking rating</strong>
                         <p class="review-comment">{{ $booking->review->comment ?: 'No written comment.' }}</p>
-                        <form action="{{ route('admin.bookings.review.destroy', $booking) }}" method="POST"
+                        <form data-delete-message="Delete this review? This cannot be undone." data-delete-action="Delete" action="{{ route('admin.bookings.review.destroy', $booking) }}" method="POST"
                               onsubmit="return confirm('Delete this review? This cannot be undone.');">
                             @csrf
                             @method('DELETE')

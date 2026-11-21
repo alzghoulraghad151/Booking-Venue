@@ -53,7 +53,7 @@
                 @enderror
             </div>
 
-            <button class="admin-button admin-button--primary admin-button--page" type="submit">Save Changes</button>
+            <x-admin.edit-actions :back-url="route('owner.venues.index')" back-label="Back to My Venues" save-label="Save changes" />
         </form>
 
 
@@ -92,7 +92,7 @@
 
 
 @if ($venue->images->count() > 1)
-    <form method="POST"
+    <form data-delete-message="Delete this image?" data-delete-action="Delete" method="POST"
           action="{{ route('owner.venues.images.destroy', [$venue, $image->id]) }}"
           onsubmit="return confirm('Delete this image?')">
         @csrf
@@ -129,7 +129,7 @@
 
 <div id="venue-image-previews" class="venue-gallery"
      role="group" aria-label="Selected image previews"></div>
-       <script src="{{ asset('js/venue-image-preview.js') }}" defer></script>
+       <script data-venue-preview src="{{ asset('js/venue-image-preview.js') }}" defer></script>
 
 @error('images')
     <p role="alert">{{ $message }}</p>
@@ -140,6 +140,5 @@
 @enderror
               <button class="admin-button admin-button--primary admin-button--page" type="submit" @disabled($remainingImages === 0)>Upload images</button>
             </form>
-        <a class="admin-button admin-button--navy" href="{{ route('owner.venues.index') }}">Back to My Venues</a>
     </div>
 @endsection

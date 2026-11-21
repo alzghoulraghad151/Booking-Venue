@@ -9,6 +9,6 @@
 <form class="admin-edit-form owner-editor" action="{{ route('owner.space-layouts.store') }}" method="POST">
     @csrf
     @include('owner.space-layouts.fields')
-    <button class="admin-button admin-button--primary admin-button--page" type="submit">Save Layout</button>
+    <x-admin.edit-actions :back-url="route('owner.space-layouts.index')" save-label="Add space layout" />
 </form>
 @endsection

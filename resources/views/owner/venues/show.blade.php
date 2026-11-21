@@ -42,7 +42,7 @@
             <p>Your venue is awaiting approval. Customers cannot see it yet.</p>
         @endif
 
-        <a class="admin-button admin-button--primary admin-button--page" href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
+        <a data-edit-dialog class="admin-button admin-button--primary admin-button--page" href="{{ route('owner.venues.edit', $venue) }}">Edit Venue</a>
 
 
         @if (session('success'))
@@ -73,7 +73,7 @@
     <p role="alert">{{ $message }}</p>
 @enderror
 
-<form method="POST" action="{{ route('owner.venues.destroy', $venue) }}"
+<form data-delete-message="Archive this venue?" data-delete-action="Archive" method="POST" action="{{ route('owner.venues.destroy', $venue) }}"
       onsubmit="return confirm('Archive this venue?')">
     @csrf
     @method('DELETE')

@@ -53,7 +53,7 @@
                     <td class="admin-table-actions">
                         <div class="admin-table-action-group">
                             <a class="admin-table-icon" href="{{ route('owner.packages.show', ['id' => $package->id]) }}" aria-label="View" title="View"><x-admin.table-action-icon name="view" /></a>
-                        <a class="admin-table-icon" href="{{ route('owner.packages.edit', ['id' => $package->id]) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
+                        <a data-edit-dialog class="admin-table-icon" href="{{ route('owner.packages.edit', ['id' => $package->id]) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
 
                         <form method="POST"
                               action="{{ route('owner.packages.status.update', ['id' => $package->id]) }}">
@@ -63,7 +63,7 @@
                             <button class="admin-button admin-table-icon" type="submit" name="is_active" value="{{ $package->is_active ? 0 : 1 }}" aria-label="{{ $package->is_active ? 'Deactivate' : 'Activate' }}" title="{{ $package->is_active ? 'Deactivate' : 'Activate' }}"><x-admin.table-action-icon :name="$package->is_active ? 'suspend' : 'activate'" /></button>
                         </form>
 
-                        <form method="POST"
+                        <form data-delete-message="Delete this package?" data-delete-action="Delete" method="POST"
                               action="{{ route('owner.packages.destroy', ['id' => $package->id]) }}"
                               onsubmit="return confirm('Delete this package?')">
                             @csrf

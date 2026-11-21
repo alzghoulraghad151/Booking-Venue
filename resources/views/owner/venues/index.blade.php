@@ -36,7 +36,7 @@
                 <td class="admin-table-actions">
                         <div class="admin-table-action-group">
                             <a class="admin-table-icon" href="{{ route('owner.venues.show', $venue) }}" aria-label="View" title="View"><x-admin.table-action-icon name="view" /></a>
-                    <a class="admin-table-icon" href="{{ route('owner.venues.edit', $venue) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
+                    <a data-edit-dialog class="admin-table-icon" href="{{ route('owner.venues.edit', $venue) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
                         </div>
                     </td>
             </tr>

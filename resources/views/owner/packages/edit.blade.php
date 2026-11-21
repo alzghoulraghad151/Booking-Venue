@@ -109,6 +109,6 @@
             </div>
         </fieldset>
 
-        <button class="admin-button admin-button--primary admin-button--page" type="submit">Save</button>
+        <x-admin.edit-actions :back-url="route('owner.packages.index')" back-label="Cancel" save-label="Save package" />
     </form>
 @endsection

@@ -9,7 +9,7 @@
 
 
 
-        <form class="admin-edit-form owner-editor" method="POST" action="{{ route('owner.venues.store') }}" enctype="multipart/form-data">
+        <form class="admin-edit-form owner-editor management-create-grid" method="POST" action="{{ route('owner.venues.store') }}" enctype="multipart/form-data">
     @csrf
 
     <div>
@@ -30,7 +30,7 @@
         @enderror
     </div>
 
-    <div>
+    <div class="management-form-wide">
         <label for="description">Description</label>
         <textarea id="description" name="description"
                   maxlength="5000">{{ old('description') }}</textarea>
@@ -48,10 +48,9 @@
         @enderror
     </div>
 
-    <button class="admin-button admin-button--primary admin-button--page" type="submit">Save Venue</button>
+    <x-admin.edit-actions :back-url="route('owner.venues.index')" save-label="Add venue" />
 </form>
 
        
-        <a class="admin-button admin-button--navy" href="{{ route('owner.venues.index') }}">Back to My Venues</a>
     </div>
 @endsection

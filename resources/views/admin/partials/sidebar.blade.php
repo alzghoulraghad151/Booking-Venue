@@ -16,13 +16,17 @@
             @if (\Illuminate\Support\Facades\Route::has('admin.event-types.index'))
                 <x-admin.nav-item label="Event Types" route-name="admin.event-types.index" active-pattern="admin.event-types.*" />
             @endif
-            <x-admin.nav-item label="My profile" route-name="admin.profile.edit" active-pattern="admin.profile.*" />
             <x-admin.nav-item label="Reviews" route-name="admin.reviews.index" active-pattern="admin.reviews.*" />
         </div>
     </nav>
 
-    <form class="admin-sidebar-logout" method="POST" action="{{ route('admin.logout') }}">
-        @csrf
-        <button class="admin-nav-item" type="submit">Logout</button>
-    </form>
+    <div class="admin-sidebar-account">
+        <nav aria-label="Account">
+            <x-admin.nav-item data-edit-dialog label="My profile" route-name="admin.profile.edit" active-pattern="admin.profile.*" />
+        </nav>
+        <form class="admin-sidebar-logout" method="POST" action="{{ route('admin.logout') }}">
+            @csrf
+            <button class="admin-nav-item" type="submit">Logout</button>
+        </form>
+    </div>
 </aside>

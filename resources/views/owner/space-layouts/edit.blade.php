@@ -10,7 +10,6 @@
 
         @include('owner.space-layouts.fields')
 
-        <button class="admin-button admin-button--primary admin-button--page" type="submit">Save Layout</button>
-        <a href="{{ route('owner.space-layouts.index') }}">Cancel</a>
+        <x-admin.edit-actions :back-url="route('owner.space-layouts.index')" back-label="Cancel" save-label="Save layout" />
     </form>
 @endsection

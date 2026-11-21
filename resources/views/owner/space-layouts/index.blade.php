@@ -56,9 +56,9 @@
                     <td class="admin-table-actions">
                         <div class="admin-table-action-group">
                             <a class="admin-table-icon" href="{{ route('owner.space-layouts.show', ['id' => $layout->id]) }}" aria-label="View" title="View"><x-admin.table-action-icon name="view" /></a>
-                        <a class="admin-table-icon" href="{{ route('owner.space-layouts.edit', ['id' => $layout->id]) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
+                        <a data-edit-dialog class="admin-table-icon" href="{{ route('owner.space-layouts.edit', ['id' => $layout->id]) }}" aria-label="Edit" title="Edit"><x-admin.table-action-icon name="edit" /></a>
 
-                        <form method="POST"
+                        <form data-delete-message="Delete this space layout?" data-delete-action="Delete" onsubmit="return confirm('Delete this space layout?')" method="POST"
                               action="{{ route('owner.space-layouts.destroy', ['id' => $layout->id]) }}">
                             @csrf
                             @method('DELETE')

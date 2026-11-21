@@ -56,5 +56,9 @@
     <input id="images" type="file" name="images[]" accept="image/jpeg,image/png,image/webp" multiple>
     <p>Upload up to 10 JPEG, PNG, or WebP images, up to 5 MB each.</p>
 
-    <button class="admin-button admin-button--primary admin-button--page" type="submit">{{ $editing ? 'Save space' : 'Create space' }}</button>
+    @if ($editing)
+        <x-admin.edit-actions :back-url="route('owner.spaces.index')" back-label="Back to My Spaces" save-label="Save space" />
+    @else
+        <x-admin.edit-actions :back-url="route('owner.spaces.index')" save-label="Add space" />
+    @endif
 </form>

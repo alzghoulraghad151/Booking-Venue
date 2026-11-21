@@ -6,7 +6,6 @@
 @section('content')
     <div class="admin-record">
         <h1>My profile</h1>
-        <p class="admin-description">Update the contact details for your administrator account.</p>
 
         @if (session('success'))
             <p role="status">{{ session('success') }}</p>
@@ -44,7 +43,7 @@
                 <p id="profile-password-error" role="alert">{{ $message }}</p>
             @enderror
 
-            <button class="admin-button admin-button--primary admin-button--page" type="submit">Save changes</button>
+            <x-admin.edit-actions :back-url="route('admin.dashboard')" back-label="Cancel" save-label="Save changes" />
         </form>
     </div>
 @endsection
