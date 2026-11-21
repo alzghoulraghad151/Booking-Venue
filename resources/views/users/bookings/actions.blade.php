@@ -1,4 +1,15 @@
 <div class="site-booking-actions">
+    @if ($booking->has_paid_payment)
+        <p>Paid</p>
+    @elseif ($booking->status === 'confirmed' && $booking->details->isNotEmpty()
+        && str_starts_with((string) config('services.stripe.secret'), 'sk_test_')
+        && filled(config('services.stripe.webhook_secret')))
+        <form method="POST" action="{{ route('my-bookings.checkout', $booking) }}">
+            @csrf
+            <button class="site-button" type="submit">Pay in USD · Sandbox</button>
+            <small>Demo rate: 1 JOD = {{ \App\Services\StripeBookingCheckout::DEMO_USD_PER_JOD }} USD.</small>
+        </form>
+    @endif
     @if ($booking->details->isNotEmpty())
         <details>
             <summary>Booking details</summary>

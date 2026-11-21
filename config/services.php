@@ -53,4 +53,11 @@ return [
     
 ],
 
+
+'stripe' => [
+    'secret' => env('STRIPE_SECRET'),
+    'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    'sandbox_owner_account' => env('STRIPE_SANDBOX_OWNER_ACCOUNT'),
+    'sandbox_owner_email' => env('STRIPE_SANDBOX_OWNER_EMAIL'),
+],
 ];

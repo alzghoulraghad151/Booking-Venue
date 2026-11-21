@@ -26,7 +26,7 @@ class StoreSpaceRequest extends FormRequest
             'capacity' => ['required', 'integer', 'min:1', 'max:100000'],
             'hourly_rate' => ['required', 'numeric', 'min:0', 'max:10000000'],
             'status' => ['required', 'in:active,inactive,maintenance'],
-            'images' => ['nullable', 'array', 'max:10'],
+            'images' => ['required', 'array', 'min:1', 'max:3'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }

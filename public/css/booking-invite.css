@@ -1,0 +1,86 @@
+.invite-assistant {
+    color: var(--color-navy);
+    background: var(--color-cream);
+    padding: clamp(1.25rem, 5vw, 4rem) max(1rem, calc((100% - 72rem) / 2));
+}
+
+.invite-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    gap: clamp(1rem, 4vw, 3rem);
+    align-items: start;
+}
+
+.invite-intro {
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+    border-radius: 1.25rem;
+    background: var(--color-navy);
+    color: var(--color-white);
+}
+
+.invite-label { color: var(--color-warm); font-weight: 700; }
+.invite-intro h1 { margin: .5rem 0 1rem; font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.07; }
+.invite-intro p { line-height: 1.6; }
+.invite-steps { display: grid; gap: .9rem; margin: 1.5rem 0 0; padding-inline-start: 1.35rem; }
+.invite-steps li::marker { color: var(--color-warm); font-weight: 700; }
+.invite-steps span { display: block; font-size: .9rem; }
+
+.invite-card, .invite-dialog {
+    padding: clamp(1.15rem, 4vw, 2rem);
+    border: 1px solid #d9dfda;
+    border-radius: 1.25rem;
+    background: var(--color-white);
+    color: var(--color-navy);
+}
+
+.invite-card h2, .invite-card h3, .invite-dialog h2 { margin: 0 0 .65rem; }
+.invite-card form, .invite-dialog form { display: grid; gap: .8rem; }
+.invite-field-heading, .invite-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: .75rem;
+}
+.invite-assistant label { font-weight: 650; }
+.invite-assistant textarea, .invite-assistant input:not([type=hidden]) {
+    box-sizing: border-box;
+    width: 100%;
+    padding: .75rem;
+    border: 1px solid #a5b4ad;
+    border-radius: .6rem;
+    background: var(--color-white);
+    color: var(--color-navy);
+    font: inherit;
+}
+.invite-assistant textarea { resize: vertical; }
+.invite-assistant :is(button, input, textarea, a):focus-visible {
+    outline: 3px solid var(--color-sage);
+    outline-offset: 3px;
+}
+.invite-primary, .invite-link {
+    justify-self: start;
+    padding: .65rem .95rem;
+    border: 0;
+    border-radius: .6rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+.invite-primary { background: var(--color-warm); color: var(--color-navy); }
+.invite-link { background: var(--color-cream); color: var(--color-navy); }
+.invite-primary:hover, .invite-link:hover { outline: 1px solid var(--color-sage); }
+.invite-error { color: #9c2929; margin: .15rem 0; }
+.invite-dialog { width: min(40rem, calc(100% - 2rem)); max-height: 85vh; overflow: auto; }
+.invite-dialog::backdrop { background: #172b3aa0; }
+.invite-dialog-header p { margin: 0 0 1rem; }
+.invite-dialog .invite-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.invite-field-grid label { display: block; margin-bottom: .35rem; }
+.invite-requirements { margin: .25rem 0 0; }
+.invite-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+.invite-tags li { background: var(--color-cream); padding: .3rem .55rem; border-radius: 1rem; }
+.invite-results { margin-block-start: 1.5rem; }
+.invite-results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .75rem; }
+.invite-results-grid a { color: var(--color-sage); font-weight: 700; }
+[data-invite-review-open] { margin-block-start: 1rem; }
+@media (max-width: 48rem) { .invite-workspace { grid-template-columns: 1fr; } }
+@media (max-width: 30rem) { .invite-dialog .invite-field-grid { grid-template-columns: 1fr; } }

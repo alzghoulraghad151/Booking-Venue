@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/convene-site.css') }}">
     @stack('styles')
     <script src="{{ asset('js/convene-site-navigation.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/convene-toasts.css') }}">
 </head>
 <body class="convene-site">
     @php($brandRoute = Route::has('home') ? 'home' : 'spaces.search')
@@ -27,5 +28,6 @@
     @show
 
     @stack('scripts')
+    @include('partials.site.toasts')
 </body>
 </html>

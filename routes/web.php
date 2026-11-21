@@ -16,6 +16,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\SpaceVoiceSearchController;
+use App\Http\Controllers\BookingInvitationController;
+
+use App\Http\Controllers\PublicSpaceDetailsController;
 
 
 
@@ -83,7 +86,9 @@ Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
     ->name('spaces.search.summary-audio');
 
 
- 
+ Route::get('/spaces/{space}', [PublicSpaceDetailsController::class, 'show'])
+    ->whereNumber('space')
+    ->name('spaces.show');
 
 
 Route::prefix('owner')
@@ -120,6 +125,31 @@ Route::prefix('owner')
                 ->name('images.destroy');
         });
     });
+
+
+
+
+Route::middleware('auth')->group(function (): void {
+    Route::view('/booking-assistant', 'public.bookings.from-invite')
+        ->name('bookings.from-invite');
+
+    Route::post('/booking-assistant', [BookingInvitationController::class, 'analyze'])
+        ->middleware('throttle:5,1')
+        ->name('bookings.from-invite.analyze');
+    Route::post('/booking-assistant/suggestions', [BookingInvitationController::class, 'suggest'])
+        ->middleware('throttle:15,1')
+        ->name('bookings.from-invite.suggest');
+});
+
+
+
+Route::post('/my-bookings/{booking}/checkout', \App\Http\Controllers\Users\StripeCheckoutController::class)
+    ->middleware(['auth', 'organizer', 'throttle:10,1'])
+    ->whereNumber('booking')
+    ->name('my-bookings.checkout');
+
+Route::post('/stripe/booking-webhook', \App\Http\Controllers\StripeBookingWebhookController::class)
+    ->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
 
 require __DIR__ . '/zaid.php';
 require __DIR__ . '/omar.php';

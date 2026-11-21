@@ -53,8 +53,8 @@
     @endif
 
     <label for="images">{{ $editing ? 'Add images' : 'Images' }}</label>
-    <input id="images" type="file" name="images[]" accept="image/jpeg,image/png,image/webp" multiple>
-    <p>Upload up to 10 JPEG, PNG, or WebP images, up to 5 MB each.</p>
+    <input id="images" type="file" name="images[]" accept="image/jpeg,image/png,image/webp" multiple @required(! $editing)>
+    <p>Keep 1 to 3 images per space. JPEG, PNG, or WebP, up to 5 MB each.</p>
 
     @if ($editing)
         <x-admin.edit-actions :back-url="route('owner.spaces.index')" back-label="Back to My Spaces" save-label="Save space" />
