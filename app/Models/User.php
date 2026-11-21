@@ -4,12 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -56,14 +55,13 @@ public function bookings(): HasMany
 {
     return $this->hasMany(Booking::class, 'customer_id');
 }
+    public function favoriteSpaces(): BelongsToMany
+    {
+        return $this->belongsToMany(Space::class, 'favorites')->withTimestamps();
+    }
+
     public function venues(): HasMany
     {
         return $this->hasMany(Venue::class, 'owner_id');
     }
-
-public function favoriteSpaces(): BelongsToMany
-{
-    return $this->belongsToMany(Space::class, 'favourites')
-        ->withTimestamps();
-}
 }

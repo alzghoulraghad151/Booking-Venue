@@ -26,6 +26,7 @@ class PublicSpaceDetailsController extends Controller
     ->get(['id', 'image_url']);
 
         $layouts = $space->spaceLayouts()
+    ->with('eventTypes:id')
     ->orderBy('name')
     ->orderBy('id')
     ->get();

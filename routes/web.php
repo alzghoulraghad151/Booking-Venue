@@ -17,7 +17,6 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\SpaceVoiceSearchController;
 use App\Http\Controllers\BookingInvitationController;
-use App\Http\Controllers\PublicVenueController;
 
 use App\Http\Controllers\PublicSpaceDetailsController;
 
@@ -56,7 +55,7 @@ Route::get('/account/signed-in', fn () => response('Signed in successfully.'))
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-
+  
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
     Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
@@ -90,10 +89,6 @@ Route::get('/spaces/search', [PublicSpaceSearchController::class, 'index'])
  Route::get('/spaces/{space}', [PublicSpaceDetailsController::class, 'show'])
     ->whereNumber('space')
     ->name('spaces.show');
-
-Route::get('/venues/{venue}', [PublicVenueController::class, 'show'])
-    ->whereNumber('venue')
-    ->name('public.venues.show');
 
 
 Route::prefix('owner')
