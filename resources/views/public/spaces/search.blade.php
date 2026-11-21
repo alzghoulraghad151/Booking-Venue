@@ -205,11 +205,6 @@
                 </div>
             </nav>
         @endif
-
-        <button type="button" id="voice-search" class="places-voice-search" data-url="{{ route('spaces.search.voice') }}" data-csrf="{{ csrf_token() }}">ابحث بصوتك</button>
-        <p id="voice-status" role="status" aria-live="polite"></p>
-        <p id="voice-transcript" dir="auto"></p>
-
     </div>
     </div>
 @endsection
