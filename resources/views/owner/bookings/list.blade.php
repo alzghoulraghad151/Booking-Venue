@@ -39,7 +39,7 @@
                     <label for="status">Booking status</label>
                     <select id="status" name="status">
                         <option value="">All statuses</option>
-                        @foreach (['pending', 'confirmed', 'completed', 'cancelled', 'rejected'] as $status)
+                        @foreach ($statuses as $status)
                             <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ ucfirst($status) }}</option>
                         @endforeach
                     </select>
@@ -110,6 +110,7 @@
                         @forelse ($bookings as $booking)
                             @php
                                 $firstDetail = $booking->details->sortBy('start_at')->first();
+                                $eventStart = $firstDetail?->start_at?->copy()->timezone(\App\Http\Requests\PublicBookingDetailsRequest::TIMEZONE);
                             @endphp
                             <tr>
                                 <td><a class="booking-id" href="{{ route('owner.bookings.show', $booking) }}">#{{ $booking->id }}</a></td>
@@ -118,9 +119,9 @@
                                     <span class="cell-secondary">{{ $booking->customer?->email ?? 'No email' }}</span>
                                 </td>
                                 <td>{{ $booking->venue?->name ?? '—' }}</td>
-                                <td>{{ $firstDetail?->start_at?->format('d M Y') ?? '—' }}</td>
+                                <td>{{ $eventStart?->format('d M Y') ?? '—' }}</td>
                                 <td>{{ number_format($booking->details_count) }}</td>
-                                <td>{{ number_format((int) $booking->details_sum_guest_count) }}</td>
+                                <td>{{ number_format((int) $booking->guests_total) }}</td>
                                 <td class="amount">{{ number_format((float) $booking->details_sum_total_price, 2) }}</td>
                                 <td><span class="status-badge status-badge--{{ $booking->status }}">{{ ucfirst($booking->status) }}</span></td>
                                 <td class="admin-table-actions"><a class="admin-table-icon" href="{{ route('owner.bookings.show', $booking) }}" aria-label="Review booking {{ $booking->id }}" title="Review booking"><x-admin.table-action-icon name="view" /></a></td>
