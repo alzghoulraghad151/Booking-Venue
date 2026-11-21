@@ -1,17 +1,18 @@
-<footer class="site-footer">
+<footer class="site-footer site-footer--dar">
     <div class="site-container">
         <div class="site-footer-grid">
-            <div class="site-footer-brand">
+            <div class="site-footer-brand" id="about">
                 @include('partials.site.brand')
-                <p>Find spaces in Jordan for meetings, conferences, and company events.</p>
+                <p>Discover and book individual event spaces for business gatherings across Jordan.</p>
             </div>
 
             <nav class="site-footer-group" aria-labelledby="site-footer-explore">
-                <h2 id="site-footer-explore">Explore</h2>
+                <h2 id="site-footer-explore">Platform</h2>
                 <ul>
-                    <li><a href="{{ route('spaces.search') }}">Spaces</a></li>
+                    <li><a href="{{ route('spaces.search') }}">Explore Spaces</a></li>
                     @if (Route::has('home'))
-                        <li><a href="{{ route('home') }}">Home</a></li>
+                        <li><a href="{{ route('home') }}#event-types">Event Categories</a></li>
+                        <li><a href="{{ route('home') }}#about">About Convene</a></li>
                     @endif
                 </ul>
             </nav>
@@ -21,7 +22,7 @@
                     <nav class="site-footer-group" aria-labelledby="site-footer-account">
                         <h2 id="site-footer-account">Account</h2>
                         <ul>
-                            @foreach (['login' => 'Sign in', 'register' => 'Create account', 'password.request' => 'Reset password'] as $name => $label)
+                            @foreach (['login' => 'Organizer Login', 'register' => 'Sign Up', 'password.request' => 'Reset password'] as $name => $label)
                                 @if (Route::has($name))
                                     <li><a href="{{ route($name) }}">{{ $label }}</a></li>
                                 @endif

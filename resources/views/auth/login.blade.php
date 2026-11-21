@@ -1,14 +1,8 @@
-@extends('layouts.users')
+@extends('layouts.auth')
 
 @section('title', "Sign in")
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
-@endpush
-
-@section('content')
-    <div class="auth-page">
-<div class="auth-card">
+@section('auth-form')
         <h1>Sign in</h1>
 
         @if (session('status'))
@@ -59,8 +53,6 @@
         </form>
 <p><a href="{{ route('password.request') }}">Forgot password?</a></p>
         <a href="{{ route('register') }}">Create an account</a>
-    </div>
-    </div>
 @endsection
 
 @push('scripts')
