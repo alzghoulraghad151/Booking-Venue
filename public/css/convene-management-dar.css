@@ -138,12 +138,32 @@
 
 .dar-owner-dashboard-grid {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr);
     gap: 20px;
-    align-items: start;
     margin-top: 20px;
 }
-.convene-dar-management .dar-owner-dashboard-grid > .dashboard-panel { margin-top: 0; }
+.convene-dar-management .dar-owner-dashboard-grid > .dashboard-panel {
+    min-width: 0;
+    margin-top: 0;
+}
+
+.convene-dar-management .admin-content:has(> .dar-owner-dashboard-grid) {
+    padding-block-end: 24px;
+}
+
+.dar-owner-dashboard-grid .dashboard-review-list > li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding-block: 8px;
+}
+
+.dar-owner-dashboard-grid .dashboard-review-list > li:last-child { border-bottom: 0; }
+.dar-owner-dashboard-grid .dashboard-review-list strong { overflow-wrap: anywhere; }
+.dar-owner-dashboard-grid .dashboard-review-list .dashboard-note {
+    display: block;
+    overflow-wrap: anywhere;
+}
 
 .convene-dar-management #admin-content :is(.dashboard-table-wrap, .table-wrap, .venue-card, .venue-table, .calendar-day) {
     border-color: var(--admin-ui-border);
@@ -164,7 +184,7 @@
 
 .convene-dar-management #admin-content :is(input, select, textarea)[aria-invalid="true"] { border-color: #ba1a1a; }
 
-.convene-dar-management:has(> .admin-sidebar--admin) #admin-content
+.convene-dar-management:has(> :is(.admin-sidebar--admin, .admin-sidebar--owner)) #admin-content
     :is(input:not([type="checkbox"], [type="radio"], [type="hidden"], [type="button"], [type="submit"], [type="reset"]), select, textarea):focus-visible {
     outline: 2px solid var(--dar-brass);
     outline-offset: 2px;
@@ -324,12 +344,12 @@
 }
 
 @media (min-width: 992px) {
-    .convene-dar-management:has(> .admin-sidebar--admin) > .admin-content {
+    .convene-dar-management:has(> :is(.admin-sidebar--admin, .admin-sidebar--owner)) > .admin-content {
         padding-block-start: 22px;
     }
 
     .convene-dar-management .admin-content:has(> .dar-admin-profile) { padding-block: 40px; }
-    .convene-dar-management:has(> .admin-sidebar--admin) > .admin-content:has(> .dar-admin-profile) {
+    .convene-dar-management:has(> :is(.admin-sidebar--admin, .admin-sidebar--owner)) > .admin-content:has(> .dar-admin-profile) {
         padding-block-start: 30px;
     }
 }

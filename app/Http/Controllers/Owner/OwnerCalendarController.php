@@ -43,7 +43,7 @@ class OwnerCalendarController extends Controller
             ->whereHas('booking', fn ($query) => $query->whereIn('venue_id', clone $venues))
             ->where('start_at', '<', $end->utc())
             ->where('end_at', '>', $start->utc())
-            ->with(['booking.customer', 'space.venue', 'eventType'])
+            ->with(['booking', 'space'])
             ->orderBy('start_at')
             ->orderBy('id')
             ->get();

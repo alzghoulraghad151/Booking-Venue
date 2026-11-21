@@ -77,13 +77,31 @@
                 @endif
 
                 @foreach ($days as $day)
+                    @php
+                        $bookingCount = collect($day['events'])->pluck('detail.booking_id')->unique()->count();
+                        $bookingsUrl = $bookingCount > 1
+                            ? route('owner.bookings.index', array_filter([
+                                'date' => $day['date']->toDateString(),
+                                'space_id' => $spaceId,
+                            ]))
+                            : null;
+                    @endphp
                     <section class="calendar-day" aria-labelledby="calendar-day-{{ $loop->index }}">
-                        <h3 id="calendar-day-{{ $loop->index }}">{{ $day['date']->format('D, j M') }}</h3>
-                        @forelse ($day['events'] as $event)
+                        <h3 id="calendar-day-{{ $loop->index }}">
+                            @if ($bookingsUrl)
+                                <a href="{{ $bookingsUrl }}">{{ $day['date']->format('D, j M') }}</a>
+                            @else
+                                {{ $day['date']->format('D, j M') }}
+                            @endif
+                        </h3>
+                        @forelse ($bookingsUrl ? array_slice($day['events'], 0, 2) : $day['events'] as $event)
                             @include('owner.partials.calendar-event', ['event' => $event])
                         @empty
                             <p class="dashboard-note">No bookings.</p>
                         @endforelse
+                        @if ($bookingsUrl)
+                            <p><a href="{{ $bookingsUrl }}">View all {{ $bookingCount }} bookings</a></p>
+                        @endif
                     </section>
                 @endforeach
             </div>
