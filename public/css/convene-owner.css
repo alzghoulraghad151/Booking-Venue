@@ -86,6 +86,51 @@
 .convene-admin-ui #admin-content .owner-editor fieldset label:has(input[type="checkbox"]) { margin: 0; }
 .convene-admin-ui #admin-content .owner-editor button[type="submit"] { justify-self: start; }
 .convene-admin-ui #admin-content .owner-editor [role="alert"] { margin: 4px 0 0; }
+.convene-admin-ui #admin-content .owner-editor .owner-space-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+.convene-admin-ui #admin-content .owner-editor .owner-space-images legend { grid-column: 1 / -1; }
+.convene-admin-ui #admin-content .owner-space-image {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 9px;
+    background: var(--convene-cream);
+}
+.convene-admin-ui #admin-content .owner-space-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+.convene-admin-ui #admin-content .owner-editor .owner-space-image__delete {
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    right: 2px;
+    display: grid;
+    width: 34px;
+    min-height: 34px;
+    place-items: center;
+    padding: 6px;
+    border: 0;
+    border-radius: 50%;
+    background: #dc2626;
+    color: #fff;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 28%);
+    cursor: pointer;
+}
+.convene-admin-ui #admin-content .owner-editor .owner-space-image__delete:hover { background: #b91c1c; }
+.convene-admin-ui #admin-content .owner-editor .owner-space-image__delete:disabled {
+    background: #737b80;
+    cursor: not-allowed;
+}
+.owner-space-image__delete svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.convene-admin-ui #admin-content .owner-space-image figcaption { padding: 5px 8px; color: var(--convene-sage); font-size: 12px; font-weight: 700; }
+.convene-admin-ui #admin-content .owner-space-images__hint { grid-column: 1 / -1; margin: 0; color: #657078; font-size: 12px; }
 .convene-admin-ui #admin-content .owner-record .dashboard-panel h2 { margin-bottom: 8px; }
 .convene-admin-ui #admin-content .owner-record .dashboard-panel ul { margin: 0; padding-inline-start: 20px; }
 .convene-admin-ui #admin-content .owner-record .dashboard-panel > p { margin: 0 0 8px; }

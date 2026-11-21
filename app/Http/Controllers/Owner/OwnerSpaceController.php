@@ -146,6 +146,7 @@ class OwnerSpaceController extends Controller
                 $space = Space::query()->lockForUpdate()->findOrFail($space->getKey());
                 $removeIds = $data['remove_images'] ?? [];
                 $imagesToRemove = $space->images()->whereKey($removeIds)->get();
+                $currentImageCount = $space->images()->count();
 
                 if ($imagesToRemove->count() !== count($removeIds)) {
                     throw ValidationException::withMessages([
@@ -153,7 +154,13 @@ class OwnerSpaceController extends Controller
                     ]);
                 }
 
-                $finalCount = $space->images()->count() - $imagesToRemove->count() + count($uploadedImages);
+                if ($imagesToRemove->isNotEmpty() && $imagesToRemove->count() >= $currentImageCount) {
+                    throw ValidationException::withMessages([
+                        'images' => 'At least one image must remain for this place.',
+                    ]);
+                }
+
+                $finalCount = $currentImageCount - $imagesToRemove->count() + count($uploadedImages);
 
                 if ($finalCount < 1 || $finalCount > 3) {
                     throw ValidationException::withMessages([

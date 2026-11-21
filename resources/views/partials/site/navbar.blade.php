@@ -32,7 +32,7 @@
                     @endif
                 @else
                     @if (auth()->user()->role === 'organizer')
-                        @foreach (['my-bookings.index' => 'My bookings', 'favorites.index' => 'Favorites'] as $name => $label)
+                        @foreach (['my-bookings.index' => 'My bookings', 'account.favourites.index' => 'Favorites'] as $name => $label)
                             @if (Route::has($name))
                                 <a class="site-link site-account-link" href="{{ route($name) }}" @if (request()->routeIs($name)) aria-current="page" @endif>{{ $label }}</a>
                             @endif
@@ -42,8 +42,8 @@
                         <a class="site-button" href="{{ route('owner.venues.index') }}">Manage venues</a>
                     @elseif (auth()->user()->role === 'admin' && Route::has('admin.dashboard'))
                         <a class="site-button" href="{{ route('admin.dashboard') }}">Admin dashboard</a>
-                    @elseif (Route::has('profile.edit'))
-                        <a class="site-link" href="{{ route('profile.edit') }}">My profile</a>
+                    @elseif (Route::has('account.personal-details.edit'))
+                        <a class="site-link" href="{{ route('account.personal-details.edit') }}">My profile</a>
                     @endif
 
                     @php($logoutRoute = Route::has('logout') ? Route::getRoutes()->getByName('logout') : Route::getRoutes()->getByName('admin.logout'))

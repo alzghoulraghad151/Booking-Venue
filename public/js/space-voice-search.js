@@ -1,8 +1,10 @@
 const button = document.getElementById('voice-search');
 const status = document.getElementById('voice-status');
 const transcript = document.getElementById('voice-transcript');
-const address = document.getElementById('address');
-const capacity = document.getElementById('capacity');
+const label = button.querySelector('[data-voice-label]') ?? button;
+const idleLabel = label.textContent;
+const address = button.form?.elements.namedItem('address') ?? document.getElementById('address');
+const capacity = button.form?.elements.namedItem('capacity') ?? document.getElementById('capacity');
 
 let recorder;
 
@@ -32,9 +34,10 @@ button.addEventListener('click', async () => {
 
         recorder.addEventListener('stop', async () => {
             clearTimeout(timer);
+            button.removeAttribute('data-recording');
             stream.getTracks().forEach((track) => track.stop());
             button.disabled = true;
-            button.textContent = 'ابحث بصوتك';
+            label.textContent = 'ابحث بصوتك';
             status.textContent = 'جاري تحويل التسجيل إلى نص واستخراج الفلاتر…';
 
             try {
@@ -114,11 +117,13 @@ status.textContent = 'كمّلي الحقول الفارغة، وبعدها اض
             } catch (error) {
                 status.textContent = error.message;
             } finally {
+                label.textContent = idleLabel;
                 button.disabled = false;
             }
         }, { once: true });
 
         recorder.start();
+        button.setAttribute('data-recording', '');
 
         const timer = setTimeout(() => {
             if (recorder.state === 'recording') {
@@ -126,7 +131,7 @@ status.textContent = 'كمّلي الحقول الفارغة، وبعدها اض
             }
         }, 10000);
 
-        button.textContent = 'إيقاف وإرسال التسجيل';
+        label.textContent = 'إيقاف وإرسال التسجيل';
         button.disabled = false;
             status.textContent = 'جاري التسجيل. احكي الموقع وعدد الأشخاص.';
     } catch {

@@ -37,7 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
     return match ($request->user()?->role) {
         'venue_owner' => route('owner.venues.index'),
         'admin' => route('admin.dashboard'),
-        default => route('account.signed-in'),
+        default => route('home'),
     };
 });
     })

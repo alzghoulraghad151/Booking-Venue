@@ -14,6 +14,7 @@ class PublicSpaceSearchController extends Controller
     public function index(Request $request): View
     {
         $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
             'venue_id' => ['nullable', 'integer', 'exists:venues,id'],
             'capacity' => ['nullable', 'integer', 'min:1'],
@@ -24,6 +25,7 @@ class PublicSpaceSearchController extends Controller
             'lang' => ['nullable', 'in:ar,en'],
         ]);
 
+        $search = trim($filters['search'] ?? '');
         $address = trim($filters['address'] ?? '');
         $venueId = $filters['venue_id'] ?? null;
         $capacity = $filters['capacity'] ?? null;
@@ -32,7 +34,7 @@ class PublicSpaceSearchController extends Controller
         $maxRate = $filters['max_rate'] ?? null;
         $sort = $filters['sort'] ?? 'newest';
         $isEnglish = ($filters['lang'] ?? 'en') === 'en';
-        $searched = $address !== '' || $venueId !== null || $capacity !== null
+        $searched = $search !== '' || $address !== '' || $venueId !== null || $capacity !== null
             || $eventTypeId !== null || $minRate !== null || $maxRate !== null;
 
         $averageRating = Review::query()
@@ -61,8 +63,28 @@ class PublicSpaceSearchController extends Controller
                 $query->where('status', 'approved')
                     ->where('is_active_by_owner', true)
                     ->when($address !== '', fn ($venueQuery) => $venueQuery
-                        ->where('address', 'like', '%'.$address.'%'));
+                        ->where('address', $address));
             })
+            ->when($search !== '', fn ($query) => $query->where(function ($matches) use ($search): void {
+                $matches->where('spaces.name', 'like', '%'.$search.'%')
+                    ->orWhere('spaces.description', 'like', '%'.$search.'%')
+                    ->orWhereHas('venue', fn ($venueQuery) => $venueQuery
+                        ->where('name', 'like', '%'.$search.'%'))
+                    ->orWhereHas('spaceLayouts', fn ($layoutQuery) => $layoutQuery
+                        ->where('name', 'like', '%'.$search.'%')
+                        ->orWhereHas('eventTypes', fn ($eventTypeQuery) => $eventTypeQuery
+                            ->where('name', 'like', '%'.$search.'%')));
+            }))
+            ->when($search !== '', fn ($query) => $query->where(function ($matches) use ($search): void {
+                $matches->where('spaces.name', 'like', '%'.$search.'%')
+                    ->orWhere('spaces.description', 'like', '%'.$search.'%')
+                    ->orWhereHas('venue', fn ($venueQuery) => $venueQuery
+                        ->where('name', 'like', '%'.$search.'%'))
+                    ->orWhereHas('spaceLayouts', fn ($layoutQuery) => $layoutQuery
+                        ->where('name', 'like', '%'.$search.'%')
+                        ->orWhereHas('eventTypes', fn ($eventTypeQuery) => $eventTypeQuery
+                            ->where('name', 'like', '%'.$search.'%')));
+            }))
             ->when($venueId !== null, fn ($query) => $query->where('venue_id', $venueId))
             ->when($capacity !== null, fn ($query) => $query->where('capacity', '>=', $capacity))
             ->when($eventTypeId !== null, fn ($query) => $query->whereHas(
@@ -84,6 +106,11 @@ class PublicSpaceSearchController extends Controller
         $spaces = $spacesQuery
             ->paginate(9)
             ->withQueryString();
+
+        $favoriteSpaceIds = $request->user()?->favoriteSpaces()
+            ->whereIn('spaces.id', $spaces->getCollection()->pluck('id'))
+            ->pluck('spaces.id')
+            ->all() ?? [];
 
         $venues = Venue::query()
             ->where('status', 'approved')
@@ -140,6 +167,7 @@ class PublicSpaceSearchController extends Controller
             );
 
         return view('public.spaces.search', compact(
+            'search',
             'address',
             'capacity',
             'venueId',
@@ -149,6 +177,7 @@ class PublicSpaceSearchController extends Controller
             'sort',
             'searched',
             'spaces',
+            'favoriteSpaceIds',
             'venues',
             'eventTypes',
             'selectedVenue',
