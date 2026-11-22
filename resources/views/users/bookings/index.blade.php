@@ -42,7 +42,8 @@
                     @endif
                     <span @class(['site-booking-status', 'site-booking-status--' . $booking->status])>{{ ucfirst($booking->status) }}</span>
                 </div>
-                @if ($booking->details->isNotEmpty() || ($booking->status === 'completed' && ! $booking->review))
+                @php($canReview = $booking->status === 'completed' && $booking->has_paid_payment)
+                @if ($booking->details->isNotEmpty() || $canReview)
                     @include('users.bookings.actions', ['booking' => $booking, 'page' => $bookings->currentPage()])
                 @endif
             </li>

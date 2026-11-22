@@ -170,6 +170,9 @@ class PublicBookingDetailsRequest extends FormRequest
 
                 if ($end->lessThanOrEqualTo($start)) {
                     $errors->add('end_time', 'The end time must be after the start time.');
+                } elseif ($end->getTimestamp() - $start->getTimestamp() < 3600) {
+                    // Minimum booking is 1 hour (a package already includes 1 hour of the space).
+                    $errors->add('end_time', 'The minimum booking duration is 1 hour.');
                 }
             }
         }

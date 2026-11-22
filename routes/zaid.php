@@ -72,6 +72,11 @@ Route::post('/my-bookings/{booking}/review', [BookingReviewController::class, 's
     ->whereNumber('booking')
     ->name('my-bookings.reviews.store');
 
+Route::patch('/my-bookings/{booking}/review', [BookingReviewController::class, 'update'])
+    ->middleware('auth')
+    ->whereNumber('booking')
+    ->name('my-bookings.reviews.update');
+
 Route::get('/admin/profile', [AdminProfileController::class, 'edit'])
     ->middleware(['auth', 'admin'])
     ->name('admin.profile.edit');

@@ -8,11 +8,23 @@
     font-family: var(--dar-brass-body);
 }
 
+.invite-assistant :is(h1, h2, h3, p, ol, ul) { margin: 0; }
+.invite-assistant [hidden] { display: none !important; }
+.invite-assistant :focus-visible { outline: 2px solid var(--ia-accent); outline-offset: 3px; }
+/* Headings are only focused by script (after "Edit" / after results load), so no ring on them. */
+.invite-assistant :is(h2)[tabindex="-1"]:focus { outline: 0; }
+
+/* Arabic must not get letter-spacing or uppercase: it breaks the cursive joining. */
+.invite-assistant :lang(ar), .invite-assistant :lang(ar) * { letter-spacing: 0 !important; text-transform: none !important; }
+
+/* Intro + form */
 .invite-workspace {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     gap: 16px;
     align-items: start;
+    padding-block-end: 40px;
+    border-block-end: 1px solid var(--ia-line);
 }
 
 .invite-intro {
@@ -40,6 +52,8 @@
     background: var(--color-white);
     color: var(--dar-brass-ink);
 }
+.invite-steps strong { display: block; font-size: 18px; font-weight: 600; line-height: 26px; }
+.invite-steps span { display: block; font-size: 14px; line-height: 22px; color: var(--ia-muted); }
 
 .invite-card h2, .invite-card h3, .invite-dialog h2, .invite-results h2 { font-family: var(--dar-brass-heading); font-weight: 600; margin: 0 0 .65rem; }
 .invite-card form, .invite-dialog form { display: grid; gap: 10px; }
@@ -50,9 +64,14 @@
     align-items: center;
     gap: .75rem;
 }
-.invite-assistant label { font-weight: 650; }
+
+.invite-card h2, .invite-review h2, .invite-results h2 { font: 600 24px/30px var(--ia-display); }
+.invite-form { display: grid; gap: 16px; }
+
+.invite-field-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.invite-assistant label { font-size: 11px; font-weight: 600; line-height: 16px; letter-spacing: .08em; text-transform: uppercase; color: var(--ia-muted); }
+
 .invite-assistant textarea, .invite-assistant input:not([type=hidden]) {
-    box-sizing: border-box;
     width: 100%;
     padding: .75rem;
     border: 1px solid var(--dar-brass-border);
@@ -75,6 +94,7 @@
     font: inherit;
     font-weight: 700;
     cursor: pointer;
+    transition: color 120ms ease-out;
 }
 .invite-primary { background: var(--dar-brass-ink); color: var(--color-white); }
 .invite-primary:hover { background: var(--dar-brass-muted); }

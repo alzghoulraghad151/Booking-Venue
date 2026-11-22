@@ -13,7 +13,7 @@
 .convene-landing a { color: inherit; }
 .convene-landing :focus-visible { outline: 3px solid var(--home-brass); outline-offset: 3px; }
 .home-container, .home-section { width: min(1320px, calc(100% - 48px)); margin-inline: auto; }
-.home-hero { position: relative; display: flex; min-height: 630px; align-items: stretch; background: #27211b url('/images/convene-hero.jpg') center 48% / cover no-repeat; color: #fff; }
+.home-hero { position: relative; display: flex; min-height: 630px; align-items: stretch; background: #27211b url('/images/convene-home-hero.png') center 48% / cover no-repeat; color: #fff; }
 .home-hero::before { position: absolute; inset: 0; background: linear-gradient(0deg, rgb(30 27 25 / 95%), rgb(30 27 25 / 62%) 55%, rgb(30 27 25 / 28%)); content: ''; }
 .home-hero__inner { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 34px; padding-block: 40px 54px; }
 .home-hero__copy { max-width: 730px; }
@@ -80,13 +80,14 @@
 .home-arrivals__track.is-moving { animation: home-arrivals-right var(--home-arrivals-duration, 72s) linear infinite; }
 .home-arrivals:hover .home-arrivals__track, .home-arrivals:focus-within .home-arrivals__track { animation-play-state: paused; }
 @keyframes home-arrivals-right { from { transform: translateX(var(--home-arrivals-shift, -50%)); } to { transform: translateX(0); } }
-.home-space-card { display: flex; min-width: 0; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 1px solid var(--home-line); background: var(--home-surface); transition: border-color .18s ease, box-shadow .18s ease; }
+.home-space-card { position: relative; display: flex; min-width: 0; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 1px solid var(--home-line); background: var(--home-surface); transition: border-color .18s ease, box-shadow .18s ease; }
 .home-space-card:hover { border-color: var(--home-accent); box-shadow: 0 10px 28px rgb(30 27 25 / 8%); }
 .home-space-card__image { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--home-surface-low); }
 .home-space-card__body { display: flex; flex: 1; flex-direction: column; padding: 19px 20px; }
 .home-space-card__venue { margin: 0 0 5px; color: var(--home-accent); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .home-space-card h3 { margin: 0; font: 600 22px/1.25 'Playfair Display', Georgia, serif; }
 .home-space-card h3 a { text-decoration: none; }
+.home-space-card h3 a::after { position: absolute; inset: 0; z-index: 1; content: ''; cursor: pointer; }
 .home-space-card__description { margin: 9px 0 18px; color: var(--home-ink-soft); font-size: 13px; }
 .home-space-card__footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px 14px; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--home-line); color: var(--home-ink-soft); font-size: 12px; }
 .home-space-card__footer strong { color: var(--home-ink); }
@@ -298,4 +299,63 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+}
+
+
+.convene-landing .home-venue-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-cream);
+    border-radius: 1rem;
+    background: var(--color-white);
+    color: var(--color-navy);
+}
+
+.home-venue-card .home-space-card__image {
+    display: block;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    border-radius: 0;
+}
+
+.home-venue-card .home-space-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-venue-card .home-space-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.home-venue-card .home-space-card__body h3 {
+    order: -1;
+    margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+}
+
+.home-venue-card .home-space-card__venue {
+    color: var(--color-sage);
+}
+
+.home-venue-card .home-space-card__footer {
+    flex-wrap: wrap;
+    gap: .65rem;
+    margin-top: auto;
+    padding-top: .9rem;
+    border-top: 1px solid var(--color-cream);
+}
+
+.home-venue-card .home-space-card__footer a {
+    display: inline-flex;
+    padding: .45rem .85rem;
+    border-radius: 999px;
+    background: var(--color-navy);
+    color: var(--color-white);
 }

@@ -51,9 +51,6 @@ if (arrivalsTrack && arrivalsGroup) {
             let index = 0;
             while (arrivalsGroup.scrollWidth < sectionWidth) {
                 const repeatedCard = sourceCards[index % sourceCards.length].cloneNode(true);
-                repeatedCard.setAttribute('aria-hidden', 'true');
-                repeatedCard.inert = true;
-                repeatedCard.querySelectorAll('a').forEach((link) => link.setAttribute('tabindex', '-1'));
                 repeatedCard.style.flexBasis = `${width}px`;
                 arrivalsGroup.append(repeatedCard);
                 index += 1;
