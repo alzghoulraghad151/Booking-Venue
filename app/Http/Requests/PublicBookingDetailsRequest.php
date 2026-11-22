@@ -130,11 +130,11 @@ class PublicBookingDetailsRequest extends FormRequest
 
             if (! $package
                 || ! $package->is_active
+                || ! $package->items()->where('space_id', $space->getKey())->exists()
                 || (int) $package->owner_id !== (int) $space->venue->owner_id) {
-                $errors->add('package_id', 'The selected package is not available for this venue.');
+                $errors->add('package_id', 'The selected package is not available for this space.');
                 $package = null;
-            } elseif ($package->eventTypes()->exists()
-                && ! $package->eventTypes()->whereKey($eventTypeId)->exists()) {
+            } elseif (! $package->eventTypes()->whereKey($eventTypeId)->exists()) {
                 $errors->add('package_id', "The package '{$package->name}' does not support this event type.");
             } elseif ($layout && ($guests < $package->min_guests || $guests > $package->max_guests)) {
                 $errors->add('package_id', "The package '{$package->name}' accepts {$package->min_guests} to {$package->max_guests} guests, but the selected layout holds {$guests}.");

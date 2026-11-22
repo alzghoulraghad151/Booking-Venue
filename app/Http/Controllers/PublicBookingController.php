@@ -36,6 +36,7 @@ class PublicBookingController extends Controller
             'layout' => $selection['layout'],
             'package' => $selection['package'],
             'imageUrl' => $imageUrl,
+            'bookingPrefill' => $request->safe()->only(['date', 'start_time', 'end_time']),
             'minDate' => CarbonImmutable::now(PublicBookingDetailsRequest::TIMEZONE)->toDateString(),
         ]);
     }

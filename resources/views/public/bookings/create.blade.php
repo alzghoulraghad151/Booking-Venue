@@ -74,19 +74,19 @@
                 <div class="bc-fields">
                     <div class="bc-field bc-field--date">
                         <label for="date">Date</label>
-                        <input id="date" name="date" type="date" min="{{ $minDate }}" value="{{ old('date') }}" required>
+                        <input id="date" name="date" type="date" min="{{ $minDate }}" value="{{ old('date', $bookingPrefill['date'] ?? '') }}" required>
                         @error('date') <p class="bc-field-error" role="alert">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="bc-field">
                         <label for="start_time">Start time</label>
-                        <input id="start_time" name="start_time" type="time" step="60" value="{{ old('start_time') }}" required>
+                        <input id="start_time" name="start_time" type="time" step="60" value="{{ old('start_time', $bookingPrefill['start_time'] ?? '') }}" required>
                         @error('start_time') <p class="bc-field-error" role="alert">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="bc-field">
                         <label for="end_time">End time</label>
-                        <input id="end_time" name="end_time" type="time" step="60" value="{{ old('end_time') }}" required>
+                        <input id="end_time" name="end_time" type="time" step="60" value="{{ old('end_time', $bookingPrefill['end_time'] ?? '') }}" required>
                         @error('end_time') <p class="bc-field-error" role="alert">{{ $message }}</p> @enderror
                     </div>
                 </div>

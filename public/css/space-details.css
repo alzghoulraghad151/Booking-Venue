@@ -513,9 +513,13 @@
     grid-template-rows: 1fr auto;
 }
 
+.package-options__grid > .package-option[hidden] {
+    display: none;
+}
+
 .package-option__preview {
     display: grid;
-    grid-template-rows: 2.8em 2.8em 2.8em 4.2em auto;
+    grid-template-rows: 2.8em 2.8em 2.8em 4.2em;
     gap: .375rem;
     min-width: 0;
     padding: 0;

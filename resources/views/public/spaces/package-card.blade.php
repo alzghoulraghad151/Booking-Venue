@@ -1,5 +1,5 @@
 <article class="package-option" data-event-type-ids="{{ implode(' ', $package->eventTypes->modelKeys()) }}" hidden>
-    <button type="button" class="package-option__preview" data-package-open aria-haspopup="dialog">
+    <label class="package-option__preview" for="package-choice-{{ $package->id }}">
         <span class="package-option__title">{{ $package->name }}</span>
         <span class="package-option__description">{{ $package->description }}</span>
         <span class="package-option__facts">
@@ -14,14 +14,15 @@
                 <span aria-label="More included services">&hellip;</span>
             @endif
         </span>
-        <span class="package-option__details">View details</span>
-    </button>
+    </label>
     <label class="package-option__choice">
-        <input type="radio" name="package_choice" value="{{ $package->id }}"
+        <input id="package-choice-{{ $package->id }}" type="radio" name="package_choice" value="{{ $package->id }}"
                @checked((string) old('package_id') === (string) $package->id) disabled>
         Select package
         <span class="package-option__sr-only">{{ $package->name }}</span>
     </label>
+
+    <button type="button" class="package-option__details" data-package-open aria-haspopup="dialog">View details</button>
 
     <dialog class="package-details-dialog" aria-labelledby="package-title-{{ $package->id }}">
         <button type="button" class="space-details__more" data-package-close autofocus>Close</button>
