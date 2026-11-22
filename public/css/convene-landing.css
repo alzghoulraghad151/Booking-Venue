@@ -80,13 +80,14 @@
 .home-arrivals__track.is-moving { animation: home-arrivals-right var(--home-arrivals-duration, 72s) linear infinite; }
 .home-arrivals:hover .home-arrivals__track, .home-arrivals:focus-within .home-arrivals__track { animation-play-state: paused; }
 @keyframes home-arrivals-right { from { transform: translateX(var(--home-arrivals-shift, -50%)); } to { transform: translateX(0); } }
-.home-space-card { display: flex; min-width: 0; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 1px solid var(--home-line); background: var(--home-surface); transition: border-color .18s ease, box-shadow .18s ease; }
+.home-space-card { position: relative; display: flex; min-width: 0; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 1px solid var(--home-line); background: var(--home-surface); transition: border-color .18s ease, box-shadow .18s ease; }
 .home-space-card:hover { border-color: var(--home-accent); box-shadow: 0 10px 28px rgb(30 27 25 / 8%); }
 .home-space-card__image { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--home-surface-low); }
 .home-space-card__body { display: flex; flex: 1; flex-direction: column; padding: 19px 20px; }
 .home-space-card__venue { margin: 0 0 5px; color: var(--home-accent); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .home-space-card h3 { margin: 0; font: 600 22px/1.25 'Playfair Display', Georgia, serif; }
 .home-space-card h3 a { text-decoration: none; }
+.home-space-card h3 a::after { position: absolute; inset: 0; z-index: 1; content: ''; cursor: pointer; }
 .home-space-card__description { margin: 9px 0 18px; color: var(--home-ink-soft); font-size: 13px; }
 .home-space-card__footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px 14px; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--home-line); color: var(--home-ink-soft); font-size: 12px; }
 .home-space-card__footer strong { color: var(--home-ink); }
