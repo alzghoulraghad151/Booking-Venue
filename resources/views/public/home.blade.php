@@ -97,7 +97,7 @@
                 <div class="home-carousel__viewport" data-carousel-viewport tabindex="0">
                     <div class="home-carousel__track" data-carousel-track>
                         @forelse ($featuredVenues as $venue)
-                            <article class="home-space-card home-carousel__item">
+                            <article class="home-space-card home-carousel__item home-venue-card">
                                 <a class="home-space-card__image" href="{{ route('spaces.search', ['venue_id' => $venue->id]) }}" aria-label="Browse spaces at {{ $venue->name }}">
                                     <img src="{{ $venue->images->first()?->image_url }}" alt="{{ $venue->name }}" loading="lazy">
                                 </a>

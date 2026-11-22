@@ -8,80 +8,86 @@
             <small>Demo rate: 1 JOD = {{ \App\Services\StripeBookingCheckout::DEMO_USD_PER_JOD }} USD.</small>
         </form>
     @endif
-    @if ($booking->details->isNotEmpty())
-        <details>
-            <summary>Booking details</summary>
-            @foreach ($booking->details as $detail)
-                <dl class="site-booking-facts">
-                    <div>
-                        <dt>Space</dt>
-                        <dd>{{ $detail->space?->name ?? 'Unavailable' }}</dd>
-                    </div>
-                    <div>
-                        <dt>Starts</dt>
-                        <dd>{{ $detail->start_at?->format('d M Y, H:i') ?? '—' }}</dd>
-                    </div>
-                    <div>
-                        <dt>Ends</dt>
-                        <dd>{{ $detail->end_at?->format('d M Y, H:i') ?? '—' }}</dd>
-                    </div>
-                    <div>
-                        <dt>Layout</dt>
-                        <dd>{{ $detail->spaceLayout?->name ?? '—' }}</dd>
-                    </div>
-                    @if ($detail->package)
+    <div class="site-booking-disclosures">
+        @if ($booking->details->isNotEmpty())
+            <details class="site-booking-details">
+                <summary>Booking details</summary>
+                @foreach ($booking->details as $detail)
+                    <dl class="site-booking-facts">
                         <div>
-                            <dt>Package</dt>
-                            <dd>{{ $detail->package->name }}</dd>
+                            <dt>Space</dt>
+                            <dd>{{ $detail->space?->name ?? 'Unavailable' }}</dd>
                         </div>
+                        <div>
+                            <dt>Starts</dt>
+                            <dd>{{ $detail->start_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        </div>
+                        <div>
+                            <dt>Ends</dt>
+                            <dd>{{ $detail->end_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        </div>
+                        <div>
+                            <dt>Layout</dt>
+                            <dd>{{ $detail->spaceLayout?->name ?? '—' }}</dd>
+                        </div>
+                        @if ($detail->package)
+                            <div>
+                                <dt>Package</dt>
+                                <dd>{{ $detail->package->name }}</dd>
+                            </div>
+                        @endif
+                        <div>
+                            <dt>Guests</dt>
+                            <dd>{{ $detail->guest_count }}</dd>
+                        </div>
+                        <div>
+                            <dt>Price</dt>
+                            <dd>{{ number_format((float) $detail->total_price, 2) }} JOD</dd>
+                        </div>
+                    </dl>
+                @endforeach
+            </details>
+        @endif
+
+        @if ($canReview)
+            @php($editingReview = $booking->review !== null)
+            @php($showReviewErrors = (string) old('review_booking') === (string) $booking->id)
+            <details class="site-booking-review" @if ($showReviewErrors && $errors->any()) open @endif>
+                <summary class="site-booking-review-toggle">{{ $editingReview ? 'Edit review' : 'Write a review' }}</summary>
+                <form class="site-review-form" action="{{ route($editingReview ? 'my-bookings.reviews.update' : 'my-bookings.reviews.store', $booking) }}" method="POST">
+                    @csrf
+                    @if ($editingReview)
+                        @method('PATCH')
                     @endif
-                    <div>
-                        <dt>Guests</dt>
-                        <dd>{{ $detail->guest_count }}</dd>
-                    </div>
-                    <div>
-                        <dt>Price</dt>
-                        <dd>{{ number_format((float) $detail->total_price, 2) }} JOD</dd>
-                    </div>
-                </dl>
-            @endforeach
-        </details>
-    @endif
+                    <input type="hidden" name="review_booking" value="{{ $booking->id }}">
+                    <input type="hidden" name="page" value="{{ $page }}">
 
-    @if ($booking->status === 'completed' && ! $booking->review)
-        @php($showReviewErrors = (string) old('review_booking') === (string) $booking->id)
-        <details @if ($showReviewErrors && $errors->any()) open @endif>
-            <summary>Add review</summary>
-            <form class="site-review-form" action="{{ route('my-bookings.reviews.store', $booking) }}" method="POST">
-                @csrf
-                <input type="hidden" name="review_booking" value="{{ $booking->id }}">
-                <input type="hidden" name="page" value="{{ $page }}">
+                    <label for="rating-{{ $booking->id }}">Rating</label>
+                    <select id="rating-{{ $booking->id }}" name="rating" required
+                            @if ($showReviewErrors && $errors->has('rating')) aria-invalid="true" aria-describedby="rating-error-{{ $booking->id }}" @endif>
+                        <option value="">Select a rating</option>
+                        @foreach (range(1, 5) as $rating)
+                            <option value="{{ $rating }}" @selected((string) ($showReviewErrors ? old('rating') : $booking->review?->rating) === (string) $rating)>{{ $rating }} / 5</option>
+                        @endforeach
+                    </select>
+                    @if ($showReviewErrors)
+                        @error('rating')
+                            <p id="rating-error-{{ $booking->id }}" role="alert">{{ $message }}</p>
+                        @enderror
+                    @endif
 
-                <label for="rating-{{ $booking->id }}">Rating</label>
-                <select id="rating-{{ $booking->id }}" name="rating" required
-                        @if ($showReviewErrors && $errors->has('rating')) aria-invalid="true" aria-describedby="rating-error-{{ $booking->id }}" @endif>
-                    <option value="">Select a rating</option>
-                    @foreach (range(1, 5) as $rating)
-                        <option value="{{ $rating }}" @selected($showReviewErrors && (string) old('rating') === (string) $rating)>{{ $rating }} / 5</option>
-                    @endforeach
-                </select>
-                @if ($showReviewErrors)
-                    @error('rating')
-                        <p id="rating-error-{{ $booking->id }}" role="alert">{{ $message }}</p>
-                    @enderror
-                @endif
+                    <label for="comment-{{ $booking->id }}">Comment <small>(optional)</small></label>
+                    <textarea id="comment-{{ $booking->id }}" name="comment" rows="3" maxlength="2000"
+                              @if ($showReviewErrors && $errors->has('comment')) aria-invalid="true" aria-describedby="comment-error-{{ $booking->id }}" @endif>{{ $showReviewErrors ? old('comment') : $booking->review?->comment }}</textarea>
+                    @if ($showReviewErrors)
+                        @error('comment')
+                            <p id="comment-error-{{ $booking->id }}" role="alert">{{ $message }}</p>
+                        @enderror
+                    @endif
 
-                <label for="comment-{{ $booking->id }}">Comment <small>(optional)</small></label>
-                <textarea id="comment-{{ $booking->id }}" name="comment" rows="3" maxlength="2000"
-                          @if ($showReviewErrors && $errors->has('comment')) aria-invalid="true" aria-describedby="comment-error-{{ $booking->id }}" @endif>{{ $showReviewErrors ? old('comment') : '' }}</textarea>
-                @if ($showReviewErrors)
-                    @error('comment')
-                        <p id="comment-error-{{ $booking->id }}" role="alert">{{ $message }}</p>
-                    @enderror
-                @endif
-
-                <button class="site-button" type="submit">Submit review</button>
-            </form>
-        </details>
-    @endif
+                    <button class="site-button" type="submit">{{ $editingReview ? 'Save review' : 'Submit review' }}</button>
+                </form>
+            </details>
+        @endif
+    </div>
 </div>

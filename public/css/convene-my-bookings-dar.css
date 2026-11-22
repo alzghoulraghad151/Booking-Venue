@@ -209,3 +209,60 @@
     .favourites-page :is(.favourite-card__details, .favourites-empty) { padding: 32px; }
     .site-bookings :is(.site-booking-card, .site-bookings-empty) { padding: 32px; }
 }
+
+
+.site-booking-disclosures {
+    position: relative;
+    display: grid;
+    gap: 8px;
+}
+
+.site-bookings .site-booking-disclosures:has(.site-booking-review) .site-booking-details > summary {
+    min-height: 44px;
+    padding-inline-end: 10rem;
+}
+
+.site-bookings .site-booking-actions .site-booking-review-toggle,
+.site-bookings .site-booking-actions .site-booking-review[open] > .site-booking-review-toggle {
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    min-height: 32px;
+    margin: 6px 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--booking-brass);
+    border-radius: 999px;
+    background: var(--booking-ivory);
+    color: var(--booking-brass);
+    cursor: pointer;
+}
+
+.site-bookings .site-booking-review-toggle:hover {
+    background: var(--dar-brass-highlight, #ffeedc);
+}
+
+@media (min-width: 341px) {
+    .site-bookings .site-booking-disclosures:has(.site-booking-details + .site-booking-review:not([open])) {
+        row-gap: 0;
+    }
+
+    .site-bookings .site-booking-details + .site-booking-review:not([open]) {
+        border: 0;
+    }
+}
+
+.site-bookings .site-booking-details + .site-booking-review > .site-booking-review-toggle {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+}
+
+@media (max-width: 340px) {
+    .site-bookings .site-booking-disclosures:has(.site-booking-review) .site-booking-details > summary {
+        padding-inline-end: 12px;
+    }
+
+    .site-bookings .site-booking-details + .site-booking-review > .site-booking-review-toggle {
+        position: static;
+    }
+}

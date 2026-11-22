@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="@yield('language', 'en')" dir="@yield('direction', 'ltr')">
 <head>
+    @include('partials.site.favicon')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Find event spaces') | Convene</title>
