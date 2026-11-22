@@ -15,24 +15,15 @@
                     <div>
                         <p class="space-details__eyebrow">{{ $venue->name }}</p>
                         <h1>{{ $space->name }}</h1>
+                        @if (filled($venue->address))
+                            <p>{{ $venue->address }}</p>
+                        @endif
+                        @if ($reviews->isNotEmpty())
+                            <a href="#reviews-heading">{{ $reviews->count() }} {{ Str::plural('review', $reviews->count()) }}</a>
+                        @endif
                     </div>
-                    <button class="space-booking-options__submit"
-                            type="submit" form="space-booking-form"
-                            disabled>
-                        Book Now
-                    </button>
+                    <a class="space-details__book-link" href="#space-booking-form">Book Now</a>
                 </div>
-
-                @if (filled($venue->address))
-                <p>{{ $venue->address }}</p>
-            @endif
-
-                @if ($reviews->isNotEmpty())
-                    <a href="#reviews-heading">
-                        {{ $reviews->count() }}
-                        {{ $reviews->count() === 1 ? 'review' : 'reviews' }}
-                    </a>
-                @endif
             </header>
 
             <section class="space-gallery" aria-label="Space photos">
@@ -47,79 +38,24 @@
                 @endforelse
             </section>
 
-            <div class="space-details__columns">
-                <div class="space-details__information">
-                    <section class="space-overview" aria-labelledby="overview-heading">
-                        <h2 id="overview-heading">Overview</h2>
-                        <p>{{ $space->description ?: 'No description available.' }}</p>
+            <div class="space-details__sections">
+                <section class="space-overview" aria-labelledby="overview-heading">
+                    <h2 id="overview-heading">Overview</h2>
+                    <p>{{ $space->description ?: 'No description available.' }}</p>
 
-                        <dl class="space-overview__facts">
+                    <dl class="space-overview__facts">
+                        <div>
+                            <dt>Capacity</dt>
+                            <dd>{{ $space->capacity }} guests</dd>
+                        </div>
+                        @if ($space->hourly_rate !== null)
                             <div>
-                                <dt>Capacity</dt>
-                                <dd>{{ $space->capacity }} guests</dd>
+                                <dt>Hourly rate</dt>
+                                <dd>{{ number_format((float) $space->hourly_rate, 2) }} JOD</dd>
                             </div>
-                            @if ($space->hourly_rate !== null)
-                                <div>
-                                    <dt>Hourly rate</dt>
-                                    <dd>{{ number_format((float) $space->hourly_rate, 2) }} JOD</dd>
-                                </div>
-                            @endif
-                        </dl>
-                    </section>
-
-                    <section aria-labelledby="reviews-heading">
-                        <h2 id="reviews-heading">Reviews</h2>
-
-                        @forelse ($reviews->take(5) as $review)
-                            <article>
-                                <div class="space-review__byline">
-                                    <strong>{{ $review->booking?->customer?->name ?? 'Guest' }}</strong>
-                                    <span class="space-review__stars" role="img" aria-label="{{ $review->rating }} out of 5 stars">
-                                        @for ($star = 1; $star <= 5; $star++)
-                                            <span aria-hidden="true" @class(['space-review__star--filled' => $star <= $review->rating])>★</span>
-                                        @endfor
-                                    </span>
-                                </div>
-
-                                @if (filled($review->comment))
-                                    <p>{{ $review->comment }}</p>
-                                @endif
-                            </article>
-                        @empty
-                            <p>No reviews yet for this space.</p>
-                        @endforelse
-
-                        @if ($reviews->count() > 5)
-                            <button type="button" class="space-details__more" data-reviews-open>
-                                View all {{ $reviews->count() }} reviews
-                            </button>
-
-                            <dialog class="space-reviews-dialog" aria-labelledby="all-reviews-heading">
-                                <header>
-                                    <h2 id="all-reviews-heading">All reviews</h2>
-                                    <form method="dialog">
-                                        <button type="submit" class="space-details__more" autofocus>Close</button>
-                                    </form>
-                                </header>
-                                @foreach ($reviews as $review)
-                                    <article>
-                                        <div class="space-review__byline">
-                                            <strong>{{ $review->booking?->customer?->name ?? 'Guest' }}</strong>
-                                            <span class="space-review__stars" role="img" aria-label="{{ $review->rating }} out of 5 stars">
-                                                @for ($star = 1; $star <= 5; $star++)
-                                                    <span aria-hidden="true" @class(['space-review__star--filled' => $star <= $review->rating])>★</span>
-                                                @endfor
-                                            </span>
-                                        </div>
-                                        @if (filled($review->comment))
-                                            <p>{{ $review->comment }}</p>
-                                        @endif
-                                    </article>
-                                @endforeach
-                            </dialog>
                         @endif
-                    </section>
-                </div>
+                    </dl>
+                </section>
 
                 <form id="space-booking-form" class="space-booking-options"
                       method="GET"
@@ -238,7 +174,63 @@
                         @enderror
                     </section>
 
+                    <button class="space-booking-options__submit" type="submit" form="space-booking-form" disabled>
+                        Continue to booking
+                    </button>
                 </form>
+
+                <section class="space-overview" aria-labelledby="reviews-heading">
+                    <h2 id="reviews-heading">Reviews</h2>
+
+                    @forelse ($reviews->take(5) as $review)
+                        <article>
+                            <div class="space-review__byline">
+                                <strong>{{ $review->booking?->customer?->name ?? 'Guest' }}</strong>
+                                <span class="space-review__stars" role="img" aria-label="{{ $review->rating }} out of 5 stars">
+                                    @for ($star = 1; $star <= 5; $star++)
+                                        <span aria-hidden="true" @class(['space-review__star--filled' => $star <= $review->rating])>★</span>
+                                    @endfor
+                                </span>
+                            </div>
+
+                            @if (filled($review->comment))
+                                <p>{{ $review->comment }}</p>
+                            @endif
+                        </article>
+                    @empty
+                        <p>No reviews yet for this space.</p>
+                    @endforelse
+
+                    @if ($reviews->count() > 5)
+                        <button type="button" class="space-details__more" data-reviews-open>
+                            View all {{ $reviews->count() }} reviews
+                        </button>
+
+                        <dialog class="space-reviews-dialog" aria-labelledby="all-reviews-heading">
+                            <header>
+                                <h2 id="all-reviews-heading">All reviews</h2>
+                                <form method="dialog">
+                                    <button type="submit" class="space-details__more" autofocus>Close</button>
+                                </form>
+                            </header>
+                            @foreach ($reviews as $review)
+                                <article>
+                                    <div class="space-review__byline">
+                                        <strong>{{ $review->booking?->customer?->name ?? 'Guest' }}</strong>
+                                        <span class="space-review__stars" role="img" aria-label="{{ $review->rating }} out of 5 stars">
+                                            @for ($star = 1; $star <= 5; $star++)
+                                                <span aria-hidden="true" @class(['space-review__star--filled' => $star <= $review->rating])>★</span>
+                                            @endfor
+                                        </span>
+                                    </div>
+                                    @if (filled($review->comment))
+                                        <p>{{ $review->comment }}</p>
+                                    @endif
+                                </article>
+                            @endforeach
+                        </dialog>
+                    @endif
+                </section>
             </div>
         </div>
     </div>
