@@ -19,18 +19,45 @@ Thanks!`;
     invitation.focus();
 });
 
+// The review panel is plain content on the page (visible without JavaScript).
+// With JavaScript it can be closed and reopened, and it starts collapsed once suggestions are shown.
 const review = document.querySelector('#invite-review');
 const edit = document.querySelector('[data-invite-review-open]');
+const close = document.querySelector('[data-invite-review-close]');
+const results = document.querySelector('#invite-results');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (review && typeof review.showModal === 'function') {
-    review.close();
+function reveal(section) {
+    section.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    section.querySelector('h2')?.focus({ preventScroll: true });
+}
 
-    if (review.hasAttribute('data-invite-auto-open')) {
-        review.showModal();
+if (review) {
+    const setOpen = (open) => {
+        review.hidden = !open;
+        if (edit) edit.hidden = open;
+    };
+
+    if (close) close.hidden = false;
+
+    close?.addEventListener('click', () => {
+        setOpen(false);
+        edit?.focus();
+    });
+
+    edit?.addEventListener('click', () => {
+        setOpen(true);
+        reveal(review);
+    });
+
+    if (review.hasAttribute('data-invite-collapsed')) {
+        setOpen(false);
+    } else {
+        setOpen(true);
+        reveal(review);
     }
+}
 
-    if (edit) {
-        edit.hidden = false;
-        edit.addEventListener('click', () => review.showModal());
-    }
+if (results) {
+    reveal(results);
 }
