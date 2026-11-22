@@ -59,7 +59,7 @@ if (arrivalsTrack && arrivalsGroup) {
             duplicate = arrivalsGroup.cloneNode(true);
             duplicate.removeAttribute('data-arrivals-group');
             duplicate.setAttribute('aria-hidden', 'true');
-            duplicate.inert = true;
+            // Keep the visible duplicate row mouse-clickable; links stay out of keyboard tab order.
             duplicate.querySelectorAll('a').forEach((link) => link.setAttribute('tabindex', '-1'));
             arrivalsTrack.append(duplicate);
 
