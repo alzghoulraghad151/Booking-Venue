@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
@@ -50,6 +51,7 @@ class StripeBookingCheckout
                 'status' => 'pending',
             ]);
             $payment->stripe_usd_cents = $usdCents;
+            $payment->stripe_checkout_key = (string) Str::uuid();
             $payment->save();
 
             return $payment;
@@ -90,7 +92,7 @@ class StripeBookingCheckout
                     'metadata' => ['convene_payment_id' => (string) $payment->getKey()],
                     'success_url' => route('my-bookings.index', ['checkout' => 'submitted']),
                     'cancel_url' => route('my-bookings.index', ['checkout' => 'cancelled']),
-                ], ['idempotency_key' => 'convene-checkout-'.$payment->getKey()]);
+                ], ['idempotency_key' => 'convene-checkout-'.($payment->stripe_checkout_key ?? $payment->getKey())]);
 
                 $payment->update(['transaction_reference' => $session->id]);
             }
