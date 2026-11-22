@@ -4,27 +4,6 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/convene-bookings.css') }}">
-    <style>
-        .convene-admin-ui #admin-content .admin-table-actions .admin-table-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 38px;
-            padding: 0 14px;
-            border: 1px solid var(--admin-ui-border);
-            border-radius: 10px;
-            background: var(--convene-cream);
-            color: var(--convene-navy);
-            font-weight: 700;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            text-decoration: none;
-        }
-        .convene-admin-ui #admin-content .admin-table-actions .admin-table-link:hover {
-            border-color: var(--convene-sage);
-            background: var(--convene-white);
-        }
-    </style>
 @endpush
 
 @section('content')
@@ -129,7 +108,7 @@
                         @forelse ($bookings as $booking)
                             @php
                                 $firstDetail = $booking->details->sortBy('start_at')->first();
-                                $total = $booking->details->sum('total_price');
+                                $total = $booking->details_sum_total_price ?? $booking->details->sum('total_price');
                             @endphp
                             <tr>
                                 <td><a class="booking-id" href="{{ route('admin.bookings.show', $booking) }}">#{{ $booking->id }}</a></td>
@@ -139,12 +118,14 @@
                                 </td>
                                 <td>{{ $booking->venue?->name ?? '—' }}</td>
                                 <td>{{ $firstDetail?->eventType?->name ?? '—' }}</td>
-                                <td>{{ $firstDetail?->start_at?->format('d M Y') ?? '—' }}</td>
-                                <td class="amount">{{ number_format((float) $total, 2) }}</td>
+                                <td class="nowrap">{{ $firstDetail?->start_at?->format('d M Y') ?? '—' }}</td>
+                                <td class="amount">{{ number_format((float) $total, 2) }} JOD</td>
                                 <td><span class="status-badge status-badge--{{ $booking->status }}">{{ ucfirst($booking->status) }}</span></td>
                                 <td class="admin-table-actions">
-                                <a class="admin-table-link" href="{{ route('admin.bookings.show', $booking) }}" aria-label="View details for booking {{ $booking->id }}">View details</a>
-                            </td>
+                                    <a class="admin-table-icon" href="{{ route('admin.bookings.show', $booking) }}" aria-label="View details for booking {{ $booking->id }}" title="View">
+                                        <x-admin.table-action-icon name="view" />
+                                    </a>
+                                </td>
                             </tr>
                         @empty
                             <tr>

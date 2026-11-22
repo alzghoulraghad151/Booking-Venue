@@ -128,3 +128,78 @@ body:has(.management-dialog[open]) { overflow: hidden; }
 .management-create-grid > .management-form-wide {
     grid-column: 1 / -1;
 }
+
+
+/* ---- Confirmation dialog: match the Dar admin theme (works with or without convene-admin-actions.css) ---- */
+.management-dialog::backdrop { background: rgb(30 27 25 / 45%); }
+
+.convene-admin-ui #admin-content .management-dialog-header h2 {
+    font-family: var(--admin-ui-heading);
+    font-weight: 600;
+    color: var(--convene-navy);
+}
+
+.convene-admin-ui #admin-content .management-dialog-header [data-dialog-close] {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--convene-navy);
+}
+
+.convene-admin-ui #admin-content .management-dialog-header [data-dialog-close]:hover {
+    background: var(--dar-stone, var(--convene-cream));
+    border-color: var(--admin-ui-border);
+}
+
+.management-dialog--delete #management-delete-message {
+    color: var(--convene-sage);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.convene-admin-ui #admin-content .management-dialog-footer .admin-button {
+    min-height: 40px;
+    padding: 8px 20px;
+    border: 1px solid var(--admin-ui-border);
+    border-radius: 999px;
+    background: var(--dar-ivory, var(--convene-white));
+    color: var(--convene-navy);
+    font: 700 13px/1.4 var(--admin-ui-body);
+    letter-spacing: .03em;
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.convene-admin-ui #admin-content .management-dialog-footer .admin-button:hover {
+    background: var(--convene-cream);
+    border-color: var(--convene-sage);
+}
+
+/* Destructive confirm button */
+.convene-admin-ui #admin-content .management-dialog-footer .admin-button--danger {
+    border-color: #881c24;
+    background: #881c24;
+    color: var(--dar-ivory, #fff);
+}
+
+.convene-admin-ui #admin-content .management-dialog-footer .admin-button--danger:hover {
+    border-color: #6d161d;
+    background: #6d161d;
+}
+
+/* Non-destructive confirm (e.g. activate / deactivate) */
+.convene-admin-ui #admin-content .management-dialog-footer .admin-button--primary {
+    border-color: var(--convene-navy);
+    background: var(--convene-navy);
+    color: var(--dar-ivory, #fff);
+}
+
+.convene-admin-ui #admin-content .management-dialog-footer .admin-button--primary:hover {
+    border-color: #33302d;
+    background: #33302d;
+}
+
+.convene-admin-ui #admin-content .management-dialog-footer .admin-button:focus-visible {
+    outline: 2px solid var(--dar-brass, var(--convene-sage));
+    outline-offset: 2px;
+}

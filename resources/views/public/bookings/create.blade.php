@@ -52,6 +52,7 @@
           data-hourly-rate="{{ $space->hourly_rate }}"
           data-package-price="{{ $package?->price ?? 0 }}"
           data-has-package="{{ $package ? 1 : 0 }}"
+          data-included-hours="{{ $package ? \App\Services\BookingPriceCalculator::PACKAGE_INCLUDED_HOURS : 0 }}"
           novalidate>
         @csrf
 
@@ -148,22 +149,22 @@
                     </div>
                     @if ($package)
                         <div class="bc-price__row">
-                            <dt>Space</dt>
-                            <dd>Included in package</dd>
+                            <dt>Package: {{ $package->name }} <span class="bc-muted">(includes 1 hour of the space)</span></dt>
+                            <dd>{{ number_format((float) $package->price, 2) }} JOD</dd>
                         </div>
                         <div class="bc-price__row">
-                            <dt>Package: {{ $package->name }}</dt>
-                            <dd>{{ number_format((float) $package->price, 2) }} JOD</dd>
+                            <dt>Extra hours ({{ number_format((float) $space->hourly_rate, 2) }} JOD / h) &times; <span id="bc-extra-hours">&mdash;</span></dt>
+                            <dd><span id="bc-space-price">&mdash;</span> JOD</dd>
                         </div>
                     @else
                         <div class="bc-price__row">
-                            <dt>Space</dt>
+                            <dt>Space ({{ number_format((float) $space->hourly_rate, 2) }} JOD / h)</dt>
                             <dd><span id="bc-space-price">&mdash;</span> JOD</dd>
                         </div>
                     @endif
                     <div class="bc-price__row bc-price__row--total">
                         <dt>Total</dt>
-                        <dd><span id="bc-total">{{ $package ? number_format((float) $package->price, 2) : '—' }}</span> JOD</dd>
+                        <dd><span id="bc-total">&mdash;</span> JOD</dd>
                     </div>
                 </dl>
 
