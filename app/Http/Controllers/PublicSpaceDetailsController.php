@@ -40,6 +40,7 @@ class PublicSpaceDetailsController extends Controller
 $packages = Package::query()
     ->with(['items', 'eventTypes'])
     ->where('is_active', true)
+    ->where('owner_id', $venue->owner_id)
     ->whereHas('items', fn ($items) => $items->where('space_id', $space->getKey()))
     ->latest()
     ->orderByDesc('id')
