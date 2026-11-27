@@ -118,19 +118,19 @@
     padding: 6px;
     border: 0;
     border-radius: 50%;
-    background: #dc2626;
-    color: #fff;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 28%);
+    background: #9B404A;
+    color: #F7F5F0;
+    box-shadow: 0 2px 8px rgba(14, 31, 56, 0.28);
     cursor: pointer;
 }
-.convene-admin-ui #admin-content .owner-editor .owner-space-image__delete:hover { background: #b91c1c; }
+.convene-admin-ui #admin-content .owner-editor .owner-space-image__delete:hover { background: #902B37; }
 .convene-admin-ui #admin-content .owner-editor .owner-space-image__delete:disabled {
-    background: #737b80;
+    background: #727A87;
     cursor: not-allowed;
 }
 .owner-space-image__delete svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .convene-admin-ui #admin-content .owner-space-image figcaption { padding: 5px 8px; color: var(--convene-sage); font-size: 12px; font-weight: 700; }
-.convene-admin-ui #admin-content .owner-space-images__hint { grid-column: 1 / -1; margin: 0; color: #657078; font-size: 12px; }
+.convene-admin-ui #admin-content .owner-space-images__hint { grid-column: 1 / -1; margin: 0; color: #656F7D; font-size: 12px; }
 .convene-admin-ui #admin-content .owner-record .dashboard-panel h2 { margin-bottom: 8px; }
 .convene-admin-ui #admin-content .owner-record .dashboard-panel ul { margin: 0; padding-inline-start: 20px; }
 .convene-admin-ui #admin-content .owner-record .dashboard-panel > p { margin: 0 0 8px; }

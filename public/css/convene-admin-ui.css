@@ -16,11 +16,11 @@
     --admin-sidebar-width: 240px;
     --admin-ui-body: Nunito, system-ui, sans-serif;
     --admin-ui-heading: 'Baloo 2', system-ui, sans-serif;
-    --admin-ui-border: #dedbd5;
-    --admin-ui-hover: #faf6ef;
+    --admin-ui-border: #DBDBDA;
+    --admin-ui-hover: #F7F5F0;
     --admin-ui-radius: 16px;
     --admin-ui-gap: 16px;
-    --admin-ui-shadow: 0 4px 16px rgb(23 43 58 / 5%);
+    --admin-ui-shadow: 0 4px 16px rgba(25, 41, 64, 0.05);
     font: 600 14px/1.5 var(--admin-ui-body);
 }
 
@@ -84,8 +84,8 @@
     padding: 9px 16px;
     border: 1px solid var(--admin-ui-border);
     border-radius: 10px;
-    background: #172b3a;
-    color: #ffffff;
+    background: #192940;
+    color: #F7F5F0;
     font: 700 14px/1.4 var(--admin-ui-body);
     text-align: center;
     text-decoration: none;
@@ -108,9 +108,9 @@
 }
 
 .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) button:disabled { opacity: .65; cursor: not-allowed; }
-.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .event-types-delete button.event-types-error { color: #981d1d; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .event-types-delete button.event-types-error { color: #8B212D; }
 .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) .event-types-delete[open] > summary { background: var(--convene-cream); }
-.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [role="alert"] { color: #981d1d; overflow-wrap: anywhere; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [role="alert"] { color: #8B212D; overflow-wrap: anywhere; }
 .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [role="status"] { color: var(--convene-sage); overflow-wrap: anywhere; }
 
 .convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) :is(.admin-edit-form, .event-types-form) { max-width: 960px; }
@@ -135,7 +135,7 @@
 
 .convene-admin-ui .admin-edit-form { margin-top: var(--admin-ui-gap); }
 .convene-admin-ui .admin-edit-form :is(input:not([type="hidden"]), select) { margin-bottom: var(--admin-ui-gap); }
-.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [aria-invalid="true"] { border-color: #981d1d; }
+.convene-admin-ui .admin-content:where(:not(.admin-content--unstyled)) [aria-invalid="true"] { border-color: #8B212D; }
 
 .convene-admin-ui .admin-record { max-width: 960px; }
 .convene-admin-ui .admin-record > a:first-child { margin-bottom: var(--admin-ui-gap); }
@@ -148,7 +148,7 @@
 }
 .convene-admin-ui .admin-record-header h1 { flex: 1 0 100%; margin-bottom: 4px; }
 .convene-admin-ui .admin-record-header form { margin: 0; }
-.convene-admin-ui .admin-record-header form button { color: #981d1d; }
+.convene-admin-ui .admin-record-header form button { color: #8B212D; }
 .convene-admin-ui .admin-record dl {
     display: grid;
     grid-template-columns: minmax(85px, max-content) minmax(0, 1fr);
@@ -218,7 +218,7 @@
     background: var(--convene-navy);
     color: var(--convene-white);
 }
-.convene-admin-ui .admin-nav-drawer::backdrop { background: rgb(23 43 58 / 65%); }
+.convene-admin-ui .admin-nav-drawer::backdrop { background: rgba(25, 41, 64, 0.65); }
 .convene-admin-ui .admin-nav-drawer .admin-sidebar { position: static; min-height: calc(100dvh - 64px); max-height: none; }
 .convene-admin-ui .admin-nav-close {
     min-height: 44px;
@@ -500,10 +500,10 @@
     background: var(--convene-white);
 }
 
-.convene-admin-ui #admin-content .admin-table-actions .admin-table-icon--danger { color: #981d1d; }
+.convene-admin-ui #admin-content .admin-table-actions .admin-table-icon--danger { color: #8B212D; }
 .convene-admin-ui #admin-content .admin-table-actions .admin-table-icon--danger:hover {
     border-color: currentColor;
-    background: #fbeaec;
+    background: #F4EEEA;
 }
 
 #admin-content .admin-table-icon svg { width: 16px; height: 16px; }

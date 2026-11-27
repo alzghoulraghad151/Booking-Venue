@@ -1,10 +1,10 @@
 :is(.site-bookings, .account-page:has(:is(.account-profile, .account-settings)), .favourites-page) {
-    --booking-ink: #1e1b19;
-    --booking-ivory: #fdf8f7;
-    --booking-stone: #f7f3f1;
-    --booking-brass: #77592e;
-    --booking-border: #d0c4be;
-    --booking-muted: #615e5c;
+    --booking-ink: #0E1F38;
+    --booking-ivory: #F7F5F0;
+    --booking-stone: #F6F4EF;
+    --booking-brass: #9B414B;
+    --booking-border: #C5C7C9;
+    --booking-muted: #556070;
     color: var(--booking-ink);
     font-family: 'Raleway', system-ui, sans-serif;
 }
@@ -23,12 +23,12 @@
 .convene-site .site-main:has(> :is(.account-page:has(:is(.account-profile, .account-settings)), .favourites-page)),
 .account-page:has(:is(.account-profile, .account-settings)),
 .favourites-page {
-    background: var(--booking-ivory, #fdf8f7);
+    background: var(--booking-ivory, #F7F5F0);
 }
 
 .convene-site .site-main:has(> .site-bookings) {
     flex-grow: 0;
-    background: #fdf8f7;
+    background: #F7F5F0;
 }
 
 .site-bookings .site-bookings-heading,
@@ -74,22 +74,22 @@
 .site-bookings :is(.site-booking-card, .site-bookings-empty) {
     border-color: var(--booking-border);
     border-radius: 6px;
-    background: #fff;
+    background: #F7F5F0;
     padding: 24px;
 }
 
 .site-booking-indicators { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .site-bookings .site-booking-status {
-    background: #f1edec;
+    background: #F0EEEA;
     color: var(--booking-ink);
     font-size: 10px;
     letter-spacing: .06em;
     text-transform: uppercase;
 }
-.site-bookings :is(.site-booking-status--pending, .site-booking-status--confirmed) { background: #ffeedc; color: #604521; }
-.site-bookings .site-booking-status--paid { background: #e8f1e9; color: #2d5a3c; }
-.site-bookings .site-booking-status--rejected { background: #fcebea; color: #8c2424; }
+.site-bookings :is(.site-booking-status--pending, .site-booking-status--confirmed) { background: #F5F0EC; color: #8F2935; }
+.site-bookings .site-booking-status--paid { background: #EFEDEA; color: #3E4B5E; }
+.site-bookings .site-booking-status--rejected { background: #F4EFEB; color: #8C222F; }
 
 .site-bookings .site-booking-actions { gap: 8px; }
 .site-bookings .site-booking-actions details {
@@ -122,8 +122,8 @@
 .site-booking-payment { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 .site-booking-payment small { color: var(--booking-muted); }
 .site-bookings .site-review-form { margin: 0; padding: 12px; max-width: 100%; background: transparent; }
-.site-bookings .site-review-form :is(select, textarea) { border-color: var(--booking-border); border-radius: 4px; background: #fff; }
-.site-bookings .site-review-form [aria-invalid="true"] { border-color: #ba1a1a; }
+.site-bookings .site-review-form :is(select, textarea) { border-color: var(--booking-border); border-radius: 4px; background: #F7F5F0; }
+.site-bookings .site-review-form [aria-invalid="true"] { border-color: #902A36; }
 
 .site-bookings .site-button {
     border-radius: 999px;
@@ -133,7 +133,7 @@
     letter-spacing: .07em;
     text-transform: uppercase;
 }
-.site-bookings .site-button:hover { background: #33302d; }
+.site-bookings .site-button:hover { background: #233349; }
 .site-bookings :focus-visible { outline-color: var(--booking-brass); }
 
 .site-bookings .site-booking-pagination .site-link {
@@ -183,14 +183,14 @@
 }
 
 .account-content.account-profile form:has(input[name="_method"][value="DELETE"]) button {
-    background: #fff;
+    background: #F7F5F0;
     color: var(--booking-ink);
 }
 
 .account-content.account-settings .settings-card button[type="submit"] {
-    border-color: #8c2424;
-    background: #8c2424;
-    color: #fff;
+    border-color: #8C222F;
+    background: #8C222F;
+    color: #F7F5F0;
 }
 
 .account-settings .settings-card p { color: var(--booking-muted); }
@@ -238,7 +238,7 @@
 }
 
 .site-bookings .site-booking-review-toggle:hover {
-    background: var(--dar-brass-highlight, #ffeedc);
+    background: var(--dar-brass-highlight, #F5F0EC);
 }
 
 @media (min-width: 341px) {

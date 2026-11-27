@@ -282,7 +282,7 @@
 }
 
 .space-reviews-dialog::backdrop {
-    background: rgb(23 43 58 / 60%);
+    background: rgba(25, 41, 64, 0.6);
 }
 
 .space-reviews-dialog header {
@@ -583,7 +583,7 @@
 }
 
 .package-details-dialog::backdrop {
-    background: rgb(30 27 25 / 65%);
+    background: rgba(14, 31, 56, 0.65);
 }
 
 .package-details-dialog > button {

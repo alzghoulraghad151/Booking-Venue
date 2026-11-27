@@ -3,18 +3,18 @@
    Fonts (Playfair Display, Raleway) are linked from the Blade file, with safe fallbacks here.
    Uses logical properties so the review and results sections work in both LTR and RTL. */
 :root {
-    --ia-ink: #1E1B19;
-    --ia-ink-hover: #33302D;
-    --ia-accent: #77592E;
-    --ia-bg: #FDF8F7;
-    --ia-card: #FFFFFF;
-    --ia-low: #F7F3F1;
-    --ia-container: #F1EDEC;
-    --ia-text: #1C1B1B;
-    --ia-muted: #4D4540;
-    --ia-outline: #7E7570;
-    --ia-line: #D0C4BE;
-    --ia-error: #BA1A1A;
+    --ia-ink: #0E1F38;
+    --ia-ink-hover: #233349;
+    --ia-accent: #9B414B;
+    --ia-bg: #F7F5F0;
+    --ia-card: #F7F5F0;
+    --ia-low: #F6F4EF;
+    --ia-container: #F0EEEA;
+    --ia-text: #0E1F38;
+    --ia-muted: #3B495C;
+    --ia-outline: #6F7885;
+    --ia-line: #C5C7C9;
+    --ia-error: #902A36;
     --ia-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
     --ia-body: 'Raleway', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
@@ -100,7 +100,7 @@
 .invite-assistant textarea { min-height: 12rem; padding: 16px; background: var(--ia-bg); resize: vertical; }
 .invite-assistant textarea::placeholder { color: var(--ia-outline); }
 .invite-assistant input:not([type=hidden]) { padding: 10px 14px; background: var(--ia-card); font-variant-numeric: tabular-nums; }
-.invite-assistant :is(textarea, input:not([type=hidden])):focus { border-color: var(--ia-accent); outline: 0; box-shadow: 0 0 0 3px rgb(119 89 46 / 18%); }
+.invite-assistant :is(textarea, input:not([type=hidden])):focus { border-color: var(--ia-accent); outline: 0; box-shadow: 0 0 0 3px rgba(155, 65, 75, 0.18); }
 
 .invite-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-block-start: 8px; }
 
@@ -113,7 +113,7 @@
     border: 0;
     border-radius: 999px;
     background: var(--ia-ink);
-    color: #fff;
+    color: #F7F5F0;
     font: 600 13px/18px var(--ia-body);
     letter-spacing: .06em;
     text-transform: uppercase;
@@ -193,7 +193,7 @@
 .invite-space:is(:hover, :focus-within) { border-color: var(--ia-accent); }
 .invite-space__media { aspect-ratio: 4 / 3; overflow: hidden; background: var(--ia-container); }
 .invite-space__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.invite-space__empty { display: block; width: 100%; height: 100%; background: linear-gradient(135deg, var(--ia-container), #E7E1DF); }
+.invite-space__empty { display: block; width: 100%; height: 100%; background: linear-gradient(135deg, var(--ia-container), #E3E3E0); }
 .invite-space__body { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 16px; padding: 24px; }
 .invite-space h3 { font: 600 22px/28px var(--ia-display); overflow-wrap: anywhere; }
 .invite-space p { margin-block-start: 4px; font-size: 14px; line-height: 22px; color: var(--ia-muted); overflow-wrap: anywhere; }

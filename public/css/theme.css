@@ -1,19 +1,19 @@
 :root {
-    --color-navy: #172B3A;
-    --color-cream: #F5F2EC;
-    --color-warm: #E5A66A;
-    --color-white: #FFFFFF;
-    --color-sage: #526C68;
+    --color-navy: #192940;
+    --color-cream: #F5F2ED;
+    --color-warm: #CFA6A7;
+    --color-white: #F7F5F0;
+    --color-sage: #5A6574;
 }
 
 :root {
-    --dar-brass-ink: #1e1b19;
-    --dar-brass-ivory: #fdf8f7;
-    --dar-brass-surface: #f7f3f1;
-    --dar-brass-accent: #77592e;
-    --dar-brass-muted: #4d4540;
-    --dar-brass-border: #d0c4be;
-    --dar-brass-highlight: #ffeedc;
+    --dar-brass-ink: #0E1F38;
+    --dar-brass-ivory: #F7F5F0;
+    --dar-brass-surface: #F6F4EF;
+    --dar-brass-accent: #9B414B;
+    --dar-brass-muted: #3B495C;
+    --dar-brass-border: #C5C7C9;
+    --dar-brass-highlight: #F5F0EC;
     --dar-brass-heading: "Playfair Display", Georgia, serif;
     --dar-brass-body: Raleway, system-ui, sans-serif;
 }
