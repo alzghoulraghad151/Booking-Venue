@@ -24,34 +24,9 @@
     /* ---------------- hero ---------------- */
     const figures = $$('.nvh-photos figure');
     const circles = $$('.nvh-circles button');
-    const title = $('#nvh-title');
-    const kick = $('#nvh-kick');
     const cnt = $('#nvh-cnt');
     let hi = 0;
     let heroTimer = null;
-
-    function paintTitle(i, first) {
-        const c = circles[i];
-        const city = c ? c.dataset.city : null;
-        const en = city ? `Meet in ${city}` : title.textContent.trim();
-        const ar = city ? `اجتمع في ${c.dataset.cityAr}` : en;
-        title.classList.remove('in');
-        const swap = () => {
-            title.innerHTML = '';
-            const span = document.createElement('span');
-            T(en, ar).split(' ').forEach((word, k) => {
-                const w = document.createElement('span');
-                w.className = 'w';
-                w.style.transitionDelay = `${k * 90}ms`;
-                w.textContent = word;
-                span.append(w, ' ');
-            });
-            title.append(span);
-            if (c) kick.textContent = `${c.dataset.name} · ${lang === 'ar' ? c.dataset.cityAr : city}`;
-            requestAnimationFrame(() => requestAnimationFrame(() => title.classList.add('in')));
-        };
-        first || isCalm() ? swap() : setTimeout(swap, 420);
-    }
 
     function setHero(i, first) {
         hi = i;
@@ -61,7 +36,6 @@
             b.setAttribute('aria-pressed', String(k === i));
         });
         if (cnt) cnt.textContent = String(i + 1).padStart(2, '0');
-        paintTitle(i, first);
     }
 
     function restartHero() {
@@ -249,12 +223,12 @@
     function setCalm(on) {
         html.classList.toggle('nv-calm', on);
         html.classList.toggle('nv-motion', !on);
-        calmBtn.setAttribute('aria-pressed', String(on));
+        calmBtn?.setAttribute('aria-pressed', String(on));
         if (on) resetMotion();
     }
     const savedCalm = store.get('convene-calm');
     if (savedCalm !== null) setCalm(savedCalm === '1');
-    calmBtn.addEventListener('click', () => {
+    calmBtn?.addEventListener('click', () => {
         const on = !html.classList.contains('nv-calm');
         setCalm(on);
         store.set('convene-calm', on ? '1' : '0');

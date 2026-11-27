@@ -12,7 +12,8 @@
     $cityAr = [
         'amman' => 'عمّان', 'irbid' => 'إربد', 'ajloun' => 'عجلون', 'jerash' => 'جرش', 'balqa' => 'البلقاء',
         'aqaba' => 'العقبة', 'madaba' => 'مادبا', 'zarqa' => 'الزرقاء', 'maan' => 'معان', 'karak' => 'الكرك',
-        'salt' => 'السلط', 'mafraq' => 'المفرق', 'tafilah' => 'الطفيلة',
+        'salt' => 'السلط', 'mafraq' => 'المفرق', 'tafilah' => 'الطفيلة', 'dead sea' => 'البحر الميت', 'petra' => 'البتراء',
+        'wadi rum' => 'وادي رم',
     ];
     $ar = fn (?string $city) => $cityAr[Str::lower(trim((string) $city))] ?? $city;
     $typeAr = [
@@ -64,8 +65,8 @@
         </div>
 
         <div class="nvh-headline" data-parallax="headline">
-            <p class="nvh-kick" id="nvh-kick">{{ $heroSlides->first()?->name }} · {{ $heroSlides->first()?->address }}</p>
-            <h1 id="nvh-title"><span data-en="Meet in {{ $heroSlides->first()?->address ?? 'Jordan' }}" data-ar="اجتمع في {{ $ar($heroSlides->first()?->address ?? 'الأردن') }}">Meet in {{ $heroSlides->first()?->address ?? 'Jordan' }}</span></h1>
+            <h1 id="nvh-title" data-en="Book the right venue for your company&#39;s events in Jordan" data-ar="احجز مكان فعاليات شركتك في الأردن بسهولة">Book the right venue for your company's events in Jordan</h1>
+            <p class="nvh-sub" data-en="Conference halls, workshop rooms and corporate event spaces in every city of the Kingdom." data-ar="قاعات مؤتمرات، ورش عمل، وفعاليات شركات في كل مدن المملكة.">Conference halls, workshop rooms and corporate event spaces in every city of the Kingdom.</p>
         </div>
 
         <div class="nvh-fog" data-parallax="fog" aria-hidden="true">
@@ -250,7 +251,12 @@
             <div class="nvh-crow">
                 @forelse ($locations as $i => $location)
                     <a class="nvh-city nvh-rv" style="transition-delay:{{ $i * 80 }}ms" href="{{ route('spaces.search', ['address' => $location['address']]) }}">
-                        <span class="nvh-ph"><img src="{{ $img($location['image_url'], 400) }}" alt="" loading="lazy"></span>
+                        @php($cityKey = Str::slug($location['address']))
+                        @if (is_file(public_path('images/cities/'.$cityKey.'.jpg')))
+                            <span class="nvh-ph"><img src="{{ asset('images/cities/'.$cityKey.'.jpg') }}" alt="" loading="lazy"></span>
+                        @else
+                            <span class="nvh-ph nvh-ph--mono" aria-hidden="true"><span lang="ar">{{ $ar($location['address']) }}</span></span>
+                        @endif
                         <b data-en="{{ $location['address'] }}" data-ar="{{ $ar($location['address']) }}">{{ $location['address'] }}</b>
                         <small>{{ $location['space_count'] }} <span data-en="{{ Str::plural('space', $location['space_count']) }}" data-ar="مساحة">{{ Str::plural('space', $location['space_count']) }}</span></small>
                     </a>
