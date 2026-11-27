@@ -110,7 +110,7 @@ class PublicHomeController extends Controller
             ->limit(6)
             ->get();
 
-        return view('public.home', [
+        return view('public.home-navy', [
             'locations' => $venues,
             'featuredVenues' => $featuredVenues,
             'latestPlaces' => $latestPlaces,
