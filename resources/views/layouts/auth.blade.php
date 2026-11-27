@@ -11,11 +11,11 @@
 @section('content')
     <div class="auth-page">
         <div class="auth-visual">
-            <a class="auth-brand" href="{{ route(Route::has('home') ? 'home' : 'spaces.search') }}">Convene</a>
+            <a class="auth-brand" href="{{ route(Route::has('home') ? 'home' : 'spaces.search') }}"><i class="nv-mark" aria-hidden="true"></i><span class="nv-word">CON<b>VENE</b></span></a>
             <p>Discover and reserve curated spaces for your events.</p>
         </div>
         <div class="auth-card">
-            <a class="auth-brand auth-brand--mobile" href="{{ route(Route::has('home') ? 'home' : 'spaces.search') }}">Convene</a>
+            <a class="auth-brand auth-brand--mobile" href="{{ route(Route::has('home') ? 'home' : 'spaces.search') }}"><i class="nv-mark" aria-hidden="true"></i><span class="nv-word">CON<b>VENE</b></span></a>
             @yield('auth-form')
         </div>
     </div>

@@ -1,7 +1,7 @@
 <aside class="admin-sidebar admin-sidebar--management admin-sidebar--owner">
     <div class="admin-brand">
         <a href="{{ route('owner.dashboard') }}">
-            <span class="dar-sidebar-wordmark">CONVENE</span>
+            <span class="dar-sidebar-wordmark"><i class="nv-mark" aria-hidden="true"></i><span class="nv-word">CON<b>VENE</b></span></span>
             <span class="dar-sidebar-role">Venue Partner</span>
         </a>
     </div>
