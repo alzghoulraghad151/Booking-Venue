@@ -19,6 +19,7 @@
             </div>
 
             <div class="site-nav-account">
+                @stack('nav-tools')
                 @guest
                     @if (Route::has('login'))
                         <a class="site-link" href="{{ route('login') }}">Login</a>

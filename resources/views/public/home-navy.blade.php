@@ -24,7 +24,13 @@
 
     $locations = collect($locations);
     $occasionCards = collect($occasionCards);
-    $heroSlides = $featuredVenues->filter(fn ($v) => $v->images->isNotEmpty())->take(4)->values();
+    // Hero photos: real, licensed photos stored in public/images/hero (see design-reference/IMAGE-CREDITS.md).
+    $heroSlides = collect([
+        ['file' => 'conference', 'label' => 'Conference hall', 'label_ar' => 'قاعة مؤتمرات'],
+        ['file' => 'boardroom', 'label' => 'Boardroom', 'label_ar' => 'قاعة اجتماعات'],
+        ['file' => 'gala', 'label' => 'Gala dinner', 'label_ar' => 'عشاء رسمي'],
+        ['file' => 'wadi-rum', 'label' => 'Desert retreat, Wadi Rum', 'label_ar' => 'مخيم وادي رم'],
+    ]);
     $cards = $latestPlaces->take(4);
     $favoriteIds = auth()->check() && method_exists(auth()->user(), 'favoriteSpaces')
         ? auth()->user()->favoriteSpaces()->whereIn('spaces.id', $cards->pluck('id'))->pluck('spaces.id')->all()
@@ -47,6 +53,10 @@
     });
 @endphp
 
+@push('nav-tools')
+    <button type="button" class="site-lang" id="nvh-lang" aria-label="التبديل إلى العربية" lang="ar">ع</button>
+@endpush
+
 @push('styles')
     <meta name="description" content="Find a business venue in Jordan. Explore event spaces by city, event type and guest count with Convene.">
     <link rel="stylesheet" href="{{ asset('css/convene-navy-home.css') }}?v={{ @filemtime(public_path('css/convene-navy-home.css')) }}">
@@ -59,88 +69,85 @@
     <section class="nvh-hero" id="top" aria-labelledby="nvh-title">
         <div class="nvh-sky" aria-hidden="true"></div>
         <div class="nvh-photos" data-parallax="photos" aria-hidden="true">
-            @foreach ($heroSlides as $i => $venue)
-                <figure class="{{ $i === 0 ? 'on' : '' }}"><img src="{{ $img($venue->images->first()->image_url, 2000) }}" alt="" @if ($i) loading="lazy" @endif></figure>
+            @foreach ($heroSlides as $i => $slide)
+                <figure class="{{ $i === 0 ? 'on' : '' }}"><img src="{{ asset('images/hero/'.$slide['file'].'.jpg') }}" alt="" @if ($i) loading="lazy" @endif></figure>
             @endforeach
         </div>
-
-        <div class="nvh-headline" data-parallax="headline">
-            <h1 id="nvh-title" data-en="Book the right venue for your company&#39;s events in Jordan" data-ar="احجز مكان فعاليات شركتك في الأردن بسهولة">Book the right venue for your company's events in Jordan</h1>
-            <p class="nvh-sub" data-en="Conference halls, workshop rooms and corporate event spaces in every city of the Kingdom." data-ar="قاعات مؤتمرات، ورش عمل، وفعاليات شركات في كل مدن المملكة.">Conference halls, workshop rooms and corporate event spaces in every city of the Kingdom.</p>
-        </div>
-
         <div class="nvh-fog" data-parallax="fog" aria-hidden="true">
-            <i style="width:46%;height:70%;left:0;bottom:0;animation-duration:38s"></i>
-            <i style="width:40%;height:80%;left:28%;bottom:-10%;animation-duration:44s;animation-delay:-8s"></i>
-            <i style="width:50%;height:66%;left:58%;bottom:4%;animation-duration:52s;animation-delay:-20s"></i>
-            <i style="width:34%;height:50%;left:84%;bottom:16%;animation-duration:36s;animation-delay:-4s"></i>
-            <i style="width:60%;height:40%;left:15%;bottom:-18%;animation-duration:60s"></i>
+            <i style="width:46%;height:60%;left:0;bottom:0;animation-duration:38s"></i>
+            <i style="width:40%;height:70%;left:28%;bottom:-10%;animation-duration:44s;animation-delay:-8s"></i>
+            <i style="width:50%;height:56%;left:58%;bottom:4%;animation-duration:52s;animation-delay:-20s"></i>
         </div>
 
-        @if ($heroSlides->count() > 1)
-            <div class="nvh-circles" role="group" aria-label="Featured venues">
-                @foreach ($heroSlides as $i => $venue)
-                    <button type="button" class="{{ $i === 0 ? 'on' : '' }}" data-slide="{{ $i }}"
-                            data-name="{{ $venue->name }}" data-city="{{ $venue->address }}" data-city-ar="{{ $ar($venue->address) }}"
-                            aria-label="{{ $venue->name }}, {{ $venue->address }}" aria-pressed="{{ $i === 0 ? 'true' : 'false' }}">
-                        <img src="{{ $img($venue->images->first()->image_url, 300) }}" alt="">
-                    </button>
-                @endforeach
+        <div class="nvh-hero__inner">
+            <div class="nvh-headline" data-parallax="headline">
+                <h1 id="nvh-title" data-en="Book the right venue for your company&#39;s events in Jordan" data-ar="احجز مكان فعاليات شركتك في الأردن بسهولة">Book the right venue for your company's events in Jordan</h1>
+                <p class="nvh-sub" data-en="Conference halls, workshop rooms and corporate event spaces in every city of the Kingdom." data-ar="قاعات مؤتمرات، ورش عمل، وفعاليات شركات في كل مدن المملكة.">Conference halls, workshop rooms and corporate event spaces in every city of the Kingdom.</p>
             </div>
-        @endif
 
-        <div class="nvh-tools">
-            <button type="button" class="nvh-tg" id="nvh-calm" aria-pressed="false" title="Reduce motion" aria-label="Reduce motion">◐</button>
-            <button type="button" class="nvh-tg" id="nvh-lang" aria-label="التبديل إلى العربية" lang="ar">ع</button>
-        </div>
-
-        <div class="nvh-searchbox">
-            <form id="landing-search" class="nvh-sbar" action="{{ route('spaces.search') }}" method="GET" aria-label="Search event spaces">
-                <label class="nvh-field">
-                    <span class="nvh-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-                    <span class="nvh-fl">
-                        <b data-en="City" data-ar="المدينة">City</b>
-                        <input id="landing-address" name="address" type="text" list="landing-locations" placeholder="All of Jordan" data-ph-ar="كل الأردن" autocomplete="off">
-                        <datalist id="landing-locations">
-                            @foreach ($locations as $location)
-                                <option value="{{ $location['address'] }}"></option>
-                            @endforeach
-                        </datalist>
-                    </span>
-                </label>
-                <label class="nvh-field">
-                    <span class="nvh-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
-                    <span class="nvh-fl">
-                        <b data-en="Event type" data-ar="نوع الفعالية">Event type</b>
-                        <select name="event_type_id" id="landing-type">
-                            <option value="" data-en="Any type" data-ar="أي نوع">Any type</option>
-                            @foreach ($occasionCards as $card)
-                                <option value="{{ $card['id'] }}" data-en="{{ $card['name'] }}" data-ar="{{ $tAr($card['name']) }}">{{ $card['name'] }}</option>
-                            @endforeach
-                        </select>
-                    </span>
-                </label>
-                <label class="nvh-field">
-                    <span class="nvh-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.6c2 .7 3.2 2.5 3.6 5.4"/></svg></span>
-                    <span class="nvh-fl">
-                        <b data-en="Guests" data-ar="الضيوف">Guests</b>
-                        <input id="landing-capacity" name="capacity" type="number" min="1" placeholder="How many?" data-ph-ar="كم شخص؟">
-                    </span>
-                </label>
-                <input type="hidden" name="lang" value="en" id="landing-lang">
-                <div class="nvh-row2">
-                    <button type="button" class="nvh-mic" data-nv-voice aria-label="Search by voice">
-                        <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></i>
-                        <span data-en="Tell us about your event" data-ar="احكِ لنا عن فعاليتك">Tell us about your event</span>
-                    </button>
-                    <button type="submit" class="nvh-go" aria-label="Search spaces"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+            <div class="nvh-hero__row">
+                <div class="nvh-circles" role="group" aria-label="Hero photos">
+                    @foreach ($heroSlides as $i => $slide)
+                        <button type="button" class="{{ $i === 0 ? 'on' : '' }}" data-slide="{{ $i }}" data-label="{{ $slide['label'] }}" data-label-ar="{{ $slide['label_ar'] }}" aria-pressed="{{ $i === 0 ? 'true' : 'false' }}" aria-label="{{ $slide['label'] }}" title="{{ $slide['label'] }}">
+                            <img src="{{ asset('images/hero/'.$slide['file'].'-thumb.jpg') }}" alt="">
+                        </button>
+                    @endforeach
                 </div>
-            </form>
-            <p class="nvh-hint" data-en="Or talk to <b>Nashmi</b>: say the city and the number of guests." data-ar="أو كلّم <b>نشمي</b>: احكِ المدينة وعدد الضيوف.">Or talk to <b>Nashmi</b>: say the city and the number of guests.</p>
-        </div>
+                <span class="nvh-slide-label" id="nvh-slide-label">{{ $heroSlides[0]['label'] }}</span>
+                <span class="nvh-count" dir="ltr" aria-hidden="true"><b id="nvh-cnt">01</b> / {{ str_pad((string) $heroSlides->count(), 2, '0', STR_PAD_LEFT) }}</span>
+            </div>
 
-        <div class="nvh-scue" aria-hidden="true"><i></i><span data-en="Scroll" data-ar="مرّر للأسفل">Scroll</span></div>
-        <div class="nvh-count" dir="ltr" aria-hidden="true"><b id="nvh-cnt">01</b> / {{ str_pad((string) max(1, $heroSlides->count()), 2, '0', STR_PAD_LEFT) }}</div>
+            <div class="nvh-searchbox">
+                <form id="landing-search" class="nvh-sbar" action="{{ route('spaces.search') }}" method="GET" aria-label="Search event spaces">
+                    <label class="nvh-field nvh-field--kw">
+                        <span class="nvh-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+                        <span class="nvh-fl">
+                            <b data-en="Venue or space" data-ar="المكان أو القاعة">Venue or space</b>
+                            <input id="landing-search-name" name="search" type="search" placeholder="Name or keyword" data-ph-ar="الاسم أو كلمة بحث" autocomplete="off">
+                        </span>
+                    </label>
+                    <label class="nvh-field">
+                        <span class="nvh-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+                        <span class="nvh-fl">
+                            <b data-en="City" data-ar="المدينة">City</b>
+                            <input id="landing-address" name="address" type="text" list="landing-locations" placeholder="All of Jordan" data-ph-ar="كل الأردن" autocomplete="off">
+                            <datalist id="landing-locations">
+                                @foreach ($locations as $location)
+                                    <option value="{{ $location['address'] }}"></option>
+                                @endforeach
+                            </datalist>
+                        </span>
+                    </label>
+                    <label class="nvh-field">
+                        <span class="nvh-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
+                        <span class="nvh-fl">
+                            <b data-en="Event type" data-ar="نوع الفعالية">Event type</b>
+                            <select name="event_type_id" id="landing-type">
+                                <option value="" data-en="Any type" data-ar="أي نوع">Any type</option>
+                                @foreach ($occasionCards as $card)
+                                    <option value="{{ $card['id'] }}" data-en="{{ $card['name'] }}" data-ar="{{ $tAr($card['name']) }}">{{ $card['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </span>
+                    </label>
+                    <label class="nvh-field nvh-field--guests">
+                        <span class="nvh-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.6c2 .7 3.2 2.5 3.6 5.4"/></svg></span>
+                        <span class="nvh-fl">
+                            <b data-en="Guests" data-ar="الضيوف">Guests</b>
+                            <input id="landing-capacity" name="capacity" type="number" min="1" placeholder="How many?" data-ph-ar="كم شخص؟">
+                        </span>
+                    </label>
+                    <input type="hidden" name="lang" value="en" id="landing-lang">
+                    <div class="nvh-row2">
+                        <button type="button" class="nvh-mic" data-nv-voice aria-label="Search by voice" title="Search by voice">
+                            <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></i>
+                            <span data-en="Voice" data-ar="بالصوت">Voice</span>
+                        </button>
+                        <button type="submit" class="nvh-go" aria-label="Search spaces"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span data-en="Search" data-ar="ابحث">Search</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
 
     {{-- ================= SELECTED PLACES ================= --}}

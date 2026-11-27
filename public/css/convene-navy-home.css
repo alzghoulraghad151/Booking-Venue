@@ -348,3 +348,97 @@ html.no-js .nvh :is(.nvh-rv, .nvh-card, .nvh-tile) { opacity: 1; transform: none
     .nvh-searchbox { bottom: 16vh; }
     .nvh-circles { top: 20vh; }
 }
+
+/* ==========================================================================
+   Hero layout v3: one flex column between the nav and the search bar, so the
+   headline, the photo switcher and the search bar can never overlap.
+   ========================================================================== */
+.nvh-hero { height: 100vh; height: 100svh; min-height: 620px; }
+.nvh-photos { inset: 0; }
+.nvh-photos img { -webkit-mask-image: none; mask-image: none; filter: saturate(.9) brightness(.92); }
+.nvh-photos::after { background: linear-gradient(180deg, rgba(14, 31, 56, 0.82) 0%, rgba(14, 31, 56, 0.58) 38%, rgba(14, 31, 56, 0.5) 62%, rgba(14, 31, 56, 0.8) 100%); }
+.nvh-fog { opacity: .35; }
+.nvh-hero__inner {
+    position: relative; z-index: 5;
+    height: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    gap: clamp(14px, 2.4vh, 26px);
+    padding: calc(76px + 2vh) 4vw clamp(24px, 4.5vh, 52px);
+}
+.nvh-headline {
+    position: static; top: auto; inset: auto; z-index: auto;
+    flex: 1 1 auto; min-height: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    width: min(1180px, 100%); padding: 0;
+    text-align: center;
+}
+.nvh-headline h1 {
+    max-width: none; margin: 0 auto !important;
+    font-size: clamp(34px, 3.9vw, 64px); line-height: 1.14; font-weight: 600;
+    text-wrap: balance;
+}
+html[lang="ar"] .nvh-headline h1 { font-size: clamp(34px, 4.2vw, 68px); line-height: 1.35; }
+.nvh-sub { margin-top: 16px !important; max-width: 620px; text-wrap: balance; }
+
+.nvh-hero__row { display: flex; align-items: center; justify-content: center; gap: 14px; min-height: 56px; color: rgba(247, 245, 240, 0.85); font-size: 13px; }
+.nvh .nvh-circles { position: static; inset: auto; transform: none; display: flex; flex-direction: row; align-items: center; gap: 8px; }
+.nvh .nvh-circles button { width: 40px; height: 40px; border: 2px solid rgba(247, 245, 240, 0.7) !important; transition: width .5s var(--ease), height .5s var(--ease), border-color .3s; }
+.nvh .nvh-circles button.on { width: 54px; height: 54px; border-color: #F7F5F0 !important; }
+.nvh-slide-label { min-width: 9ch; font-weight: 500; }
+.nvh .nvh-count { position: static; inset: auto; color: rgba(247, 245, 240, 0.7); font: 300 12px 'Unbounded', var(--ar); letter-spacing: .1em; }
+.nvh .nvh-count b { color: #F7F5F0; }
+
+.nvh-searchbox { position: static; inset: auto; width: min(1080px, 100% - 220px); flex: none; }
+.nvh-sbar { max-width: none; }
+.nvh-field--kw { flex-grow: 1.35; }
+.nvh-field--guests { flex-grow: .75; }
+.nvh-mic { padding-inline: 8px 14px !important; }
+.nvh-go { display: inline-flex; align-items: center; justify-content: center; width: auto; padding-inline: 20px; gap: 8px; font-weight: 600; font-size: 14px; white-space: nowrap; }
+.nvh-hint, .nvh-scue, .nvh-tools { display: none !important; }
+
+/* Language toggle in the nav bar */
+.site-lang {
+    display: inline-grid; place-items: center;
+    min-width: 40px; height: 40px; padding: 0 10px;
+    border: 1px solid rgba(14, 31, 56, 0.22); border-radius: 999px;
+    background: transparent; color: inherit;
+    font: 600 13px 'Unbounded', 'IBM Plex Sans Arabic', sans-serif; cursor: pointer;
+    transition: background .3s, color .3s, border-color .3s;
+}
+.site-lang:hover { background: #0E1F38; color: #F7F5F0; border-color: #0E1F38; }
+.convene-site:has(.nvh) .site-header--dar:not(.nv-solid) .site-lang { border-color: rgba(247, 245, 240, 0.4); color: #F7F5F0; }
+.convene-site:has(.nvh) .site-header--dar:not(.nv-solid) .site-lang:hover { background: #F7F5F0; color: #0E1F38; }
+
+/* Nashmi never covers the hero search bar on small screens */
+.nvh-nash.is-hero:not(:has(#voice-status:not(:empty))) { opacity: 0; transform: translateY(16px); pointer-events: none; }
+.nvh-nash { transition: opacity .4s, transform .4s var(--ease); }
+
+@media (max-width: 1180px) {
+    .nvh-searchbox { width: min(1080px, 100%); }
+    .nvh-mic span { display: none; }
+}
+@media (max-width: 980px) {
+    .nvh-hero__inner { padding: calc(70px + 2vh) 16px 20px; gap: 14px; }
+    .nvh-headline h1 { font-size: clamp(27px, 6.6vw, 44px); }
+    .nvh-sub { font-size: 14px; margin-top: 10px !important; }
+    .nvh .nvh-circles { display: flex; }
+    .nvh .nvh-circles button { width: 32px; height: 32px; }
+    .nvh .nvh-circles button.on { width: 42px; height: 42px; }
+    .nvh-hero__row { min-height: 44px; }
+    .nvh-sbar { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 6px; }
+    .nvh-field { border: 0; border-bottom: 1px solid var(--nv-line); padding: 8px 10px; gap: 8px; min-height: 52px; }
+    .nvh-field--kw { grid-column: 1 / -1; }
+    .nvh-field .nvh-ic { width: 26px; height: 26px; }
+    .nvh-row2 { grid-column: 1 / -1; display: flex; gap: 8px; padding-top: 6px; }
+    .nvh-mic { flex: 0 0 auto; min-height: 48px; padding: 0 12px !important; }
+    .nvh-mic span { display: inline; }
+    .nvh-go { flex: 1; height: 48px; justify-content: center; }
+}
+@media (max-width: 560px) {
+    .nvh-slide-label { display: none; }
+    .nvh-field:nth-of-type(2) { border-inline-end: 1px solid var(--nv-line); }
+}
+.nvh-nash.in-hero .nvh-bub:not(:has(#voice-status:not(:empty))) { display: none; }
+@media (max-width: 560px) {
+    html[lang="ar"] .nvh-headline h1 { font-size: clamp(25px, 7vw, 36px); line-height: 1.4; }
+}
