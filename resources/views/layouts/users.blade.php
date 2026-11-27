@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;500;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Unbounded:wght@200;300;500;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Amiri:wght@400;700&display=swap">
     <link rel="stylesheet" href="{{ asset('css/convene-navy.css') }}?v={{ @filemtime(public_path('css/convene-navy.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/convene-navy-pages.css') }}?v={{ @filemtime(public_path('css/convene-navy-pages.css')) }}">
 </head>
 <body class="convene-site">
     @php($brandRoute = Route::has('home') ? 'home' : 'spaces.search')

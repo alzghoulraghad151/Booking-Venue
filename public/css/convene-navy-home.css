@@ -342,6 +342,7 @@ html.no-js .nvh :is(.nvh-rv, .nvh-card, .nvh-tile) { opacity: 1; transform: none
 @media (max-width: 560px) {
     .nvh-cta { padding: 110px 0 130px; }
     .nvh-cities { padding-top: 80px; }
+    .nvh-circles { display: none; }
 }
 @media (max-height: 700px) and (min-width: 981px) {
     .nvh-searchbox { bottom: 16vh; }
