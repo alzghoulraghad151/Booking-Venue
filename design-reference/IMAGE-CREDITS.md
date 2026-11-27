@@ -23,15 +23,3 @@ monogram with the city name for them instead of a photo.
 
 Other images: `public/images/convene-shemagh.jpg` is the shemagh texture from
 `design-reference/shemagh.jpg`. Venue and space photos come from the app's own Cloudinary uploads.
-
-## Homepage hero photos (`public/images/hero/`)
-
-Real photographs from Unsplash (Unsplash License). Saved locally at 1920 × 1080 (JPEG, under 350 KB)
-plus a 240 px thumbnail for the circle switcher. A navy overlay is added in CSS so the text stays readable.
-
-| File | Subject | Photographer | Source |
-|---|---|---|---|
-| conference.jpg | Conference hall set up theatre-style | Product School | https://unsplash.com/photos/8ohCiNjxOls |
-| boardroom.jpg | Modern boardroom with a long table | Benjamin Child | https://unsplash.com/photos/GWe0dlVD9e0 |
-| gala.jpg | Gala dinner hall with chandeliers | DJFrancisco Perez | https://unsplash.com/photos/XG-bLu2bxaI |
-| wadi-rum.jpg | Luxury desert camp, Wadi Rum, Jordan | Tommaso Ubezio | https://unsplash.com/photos/MOA574Tp41s |

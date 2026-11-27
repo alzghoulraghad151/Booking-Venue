@@ -36,8 +36,6 @@
             b.setAttribute('aria-pressed', String(k === i));
         });
         if (cnt) cnt.textContent = String(i + 1).padStart(2, '0');
-        const label = $('#nvh-slide-label');
-        if (label && circles[i]) label.textContent = lang === 'ar' ? circles[i].dataset.labelAr : circles[i].dataset.label;
     }
 
     function restartHero() {
@@ -195,9 +193,6 @@
         const y = scrollY;
         const h = innerHeight;
         header?.classList.toggle('nv-solid', y > 40);
-        // Below 1300px the hero search bar reaches the corner where Nashmi sits, so Nashmi waits until the hero scrolls away.
-        $('#nvh-nash')?.classList.toggle('is-hero', innerWidth < 1300 && y < h * 0.55);
-        $('#nvh-nash')?.classList.toggle('in-hero', y < h * 0.55);
         updateTip();
         if (isCalm()) return;
         if (y < h * 1.2) {
