@@ -90,7 +90,7 @@
         @endif
 
         <div class="nvh-tools">
-            <button type="button" class="nvh-tg" id="nvh-calm" aria-pressed="false" title="Reduce motion" aria-label="Reduce motion">◐</button>
+           
             <button type="button" class="nvh-tg" id="nvh-lang" aria-label="التبديل إلى العربية" lang="ar">ع</button>
         </div>
 
@@ -139,7 +139,7 @@
             <p class="nvh-hint" data-en="Or talk to <b>Nashmi</b>: say the city and the number of guests." data-ar="أو كلّم <b>نشمي</b>: احكِ المدينة وعدد الضيوف.">Or talk to <b>Nashmi</b>: say the city and the number of guests.</p>
         </div>
 
-        <div class="nvh-scue" aria-hidden="true"><i></i><span data-en="Scroll" data-ar="مرّر للأسفل">Scroll</span></div>
+        
         <div class="nvh-count" dir="ltr" aria-hidden="true"><b id="nvh-cnt">01</b> / {{ str_pad((string) max(1, $heroSlides->count()), 2, '0', STR_PAD_LEFT) }}</div>
     </section>
 
@@ -297,17 +297,7 @@
         </div>
     </section>
 
-    {{-- ================= SHEMAGH BAND ================= --}}
-    <div class="nvh-band" aria-hidden="true">
-        <div class="nvh-mq">
-            @for ($r = 0; $r < 4; $r++)
-                @foreach ($occasionCards as $card)
-                    <span data-en="{{ $card['name'] }}" data-ar="{{ $tAr($card['name']) }}">{{ $card['name'] }}</span>
-                @endforeach
-                <span data-en="Jordanian hospitality" data-ar="ضيافة أردنية">Jordanian hospitality</span>
-            @endfor
-        </div>
-    </div>
+ 
 
     {{-- ================= CTA ================= --}}
     <section class="nvh-cta" id="cta" aria-labelledby="nvh-cta-title">
