@@ -7,11 +7,7 @@ use App\Models\BookingDetail;
 use App\Models\Space;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Decides whether a pending booking can be confirmed by the venue owner.
- *
- * confirm() returns NULL on success, or a human readable failure message.
- */
+
 class AvailabilityService
 {
     public function confirm(int $bookingId, int $ownerId): ?string
@@ -22,7 +18,7 @@ class AvailabilityService
 
             $venue = $booking->venue;
 
-            // The booking must belong to a venue of this owner (404 hides other owners' data).
+          
             abort_unless($venue && (int) $venue->owner_id === $ownerId, 404);
 
             if ($booking->status !== 'pending') {
@@ -37,7 +33,7 @@ class AvailabilityService
                 return 'This booking has no details to confirm.';
             }
 
-            // Lock the involved spaces so two owners/requests cannot confirm overlapping slots at once.
+           
             Space::query()
                 ->whereIn('id', $booking->details->pluck('space_id')->unique())
                 ->lockForUpdate()

@@ -6,36 +6,15 @@ use App\Models\Package;
 use App\Models\Space;
 use Carbon\CarbonInterface;
 
-/**
- * Single source of truth for the price of one booking detail.
- *
- * Without a package:
- *   total = space.hourly_rate x hours
- * With a package (the package price already includes 1 hour of the space):
- *   total = package price + space.hourly_rate x (hours - 1)
- *   (never less than the package price: if hours <= 1 there are no extra hours)
- */
 class BookingPriceCalculator
 {
-    /** Same platform commission used in OwnerBookingController. */
+   
     public const COMMISSION_RATE = 10;
 
-    /** Hours of the space that are already included in a package price. */
+   
     public const PACKAGE_INCLUDED_HOURS = 1;
 
-    /**
-     * @return array{
-     *     hours: float,
-     *     hourly_rate: float,
-     *     space_price: float,
-     *     package_price: float,
-     *     total: float,
-     *     pricing_type: string,
-     *     unit_price: float,
-     *     commission_rate: int,
-     *     commission_amount: float
-     * }
-     */
+  
     public function calculate(Space $space, ?Package $package, CarbonInterface $start, CarbonInterface $end): array
     {
         $seconds = max(0, $end->getTimestamp() - $start->getTimestamp());

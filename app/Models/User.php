@@ -64,4 +64,10 @@ public function bookings(): HasMany
     {
         return $this->hasMany(Venue::class, 'owner_id');
     }
+
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'category_id');
+    }
 }

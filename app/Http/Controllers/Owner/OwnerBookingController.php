@@ -18,7 +18,7 @@ use Illuminate\View\View;
 
 class OwnerBookingController extends Controller
 {
-    /** The only booking statuses in the system. */
+
     public const STATUSES = ['pending', 'confirmed', 'completed', 'rejected'];
 
     private const RELATIONS = [
@@ -71,8 +71,6 @@ class OwnerBookingController extends Controller
             $query->where('status', $filters['status']);
         }
 
-        // Filter by event date. Dates are stored in UTC but the owner picks a
-        // day in Amman time, so compare against that day's UTC range.
         if (!empty($filters['date'])) {
             $dayStart = CarbonImmutable::createFromFormat(
                 '!Y-m-d',
@@ -93,7 +91,6 @@ class OwnerBookingController extends Controller
             );
         }
 
-        // Search by organizer name or email.
         if (!empty($filters['organizer'])) {
             $search = '%' . $filters['organizer'] . '%';
 
@@ -105,7 +102,6 @@ class OwnerBookingController extends Controller
             });
         }
 
-        // Sorting.
         match ($filters['sort'] ?? 'newest') {
             'oldest' => $query->orderBy('created_at')->orderBy('id'),
 
@@ -132,7 +128,7 @@ class OwnerBookingController extends Controller
 
         $bookings = $query->paginate(10)->withQueryString();
 
-        // Get all spaces belonging to the owner's venues.
+
         $spaces = Space::query()
             ->with(['venue' => fn ($venue) => $venue->withTrashed()])
             ->whereIn('venue_id', $ownerVenueIds)
@@ -155,8 +151,7 @@ class OwnerBookingController extends Controller
             ->with([
                 ...self::RELATIONS,
                 'review',
-                // Only the successful payment counts. Failed or abandoned attempts are
-                // ignored: the organizer simply tries again.
+       
                 'payments' => fn ($payments) => $payments->where('status', 'paid')->orderBy('id'),
             ])
             ->whereKey($booking->getKey())
@@ -173,27 +168,17 @@ class OwnerBookingController extends Controller
         );
     }
 
-    /**
-     * Money figures of one booking, all in JOD.
-     *
-     * Payment works as one successful payment for the whole booking amount
-     * (a failed attempt can be retried), so only the "paid" payment is read.
-     *
-     * - amount / commission come from the booking details (frozen when the booking is created).
-     * - paid is the amount of the successful payment.
-     * - payout tells whether the owner's share has already been transferred.
-     */
+
     private function totals(Booking $booking): array
     {
         $amount = round((float) $booking->details->sum('total_price'), 2);
         $rejected = $booking->status === 'rejected';
 
-        // Rejected bookings are never charged, so no commission applies.
         $commission = $rejected
             ? 0.0
             : round((float) $booking->details->sum('commission_amount'), 2);
 
-        // Older rows may have been saved without a commission: use the default rate.
+    
         if (! $rejected && $commission <= 0 && $amount > 0) {
             $commission = round($amount * BookingPriceCalculator::COMMISSION_RATE / 100, 2);
         }
@@ -202,7 +187,7 @@ class OwnerBookingController extends Controller
             ? round($commission / $amount * 100, 2)
             : (float) BookingPriceCalculator::COMMISSION_RATE;
 
-        // The relation only holds paid payments (see show()).
+      
         $payment = $booking->payments->first();
         $isPaid = $payment !== null;
 

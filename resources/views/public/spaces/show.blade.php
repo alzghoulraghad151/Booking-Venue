@@ -62,17 +62,7 @@
                       action="{{ route('bookings.create', ['space' => $space]) }}">
                     <h2 class="space-booking-options__heading">Configure Your Booking</h2>
                     @if (is_string(request()->query('guest_count')))
-                        <section aria-labelledby="invite-guests-heading">
-                            <h2 id="invite-guests-heading">Guests</h2>
-                            <label for="invite-guest-count">Guests in the room</label>
-                            <input id="invite-guest-count"
-                                   name="guest_count"
-                                   type="number"
-                                   min="1"
-                                   max="{{ $space->capacity }}"
-                                   value="{{ old('guest_count', request()->query('guest_count')) }}"
-                                   required>
-                        </section>
+                        
 
                         @foreach (['date', 'start_time', 'end_time'] as $field)
                             @if (is_string(request()->query($field)))

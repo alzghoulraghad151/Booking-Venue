@@ -30,13 +30,7 @@ class BookingDetail extends Model
         'commission_amount' => 'decimal:2',
     ];
 
-    /**
-     * Number of guests of this detail.
-     *
-     * The guest count of a booking is the capacity of the selected layout
-     * (same rule as the public booking page). The stored guest_count is only
-     * a fallback for rows whose layout is missing.
-     */
+   
     public function getGuestsAttribute(): int
     {
         return (int) ($this->spaceLayout?->capacity ?? $this->guest_count ?? 0);
