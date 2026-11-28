@@ -1,0 +1,459 @@
+/* ==========================================================================
+   Convene · Navy theme
+   One shared stylesheet loaded last by layouts/users and layouts/admin.
+   It re-points the older palettes (dar/brass, sage/warm, ob-*, bc-*, ia-*)
+   to the navy + ivory + shemagh-burgundy system from design-reference/
+   and adds a few targeted overrides. Remove the <link> to roll back.
+   ========================================================================== */
+
+:root {
+    --nv-navy: #0E1F38;
+    /* Strict palette: navy #0E1F38, ivory #F7F5F0, shemagh red #8A1F2C.
+       Every other token below is a mix of these three (or one of them with alpha). */
+    --nv-navy2: #213047;   /* navy 92% + ivory */
+    --nv-navy3: #3D4A5D;   /* navy 80% + ivory */
+    --nv-cream: #F7F5F0;
+    --nv-ground: #EBEAE7;  /* ivory 95% + navy, page ground behind ivory cards */
+    --nv-sand: #E8E7E4;    /* ivory 93.5% + navy */
+    --nv-ink2: #414E60;    /* navy 78% + ivory */
+    --nv-mute: #707985;    /* navy 58% + ivory */
+    --nv-wine: #8A1F2C;
+    --nv-wine2: #973944;   /* red 88% + ivory */
+    --nv-wine-soft: #EEE4E0; /* red 8% + ivory */
+    --nv-gold: var(--nv-wine);
+    --nv-line: rgba(14, 31, 56, 0.12);
+    --nv-line-strong: rgba(14, 31, 56, 0.22);
+    --nv-ease: cubic-bezier(.22, .8, .2, 1);
+    --nv-radius: 22px;
+    --nv-shadow: 0 22px 50px rgba(14, 31, 56, 0.12);
+    --nv-shadow-sm: 0 6px 20px rgba(14, 31, 56, 0.07);
+    --nv-sh: url('../images/convene-shemagh.jpg');
+    --nv-body: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --nv-disp: 'Unbounded', 'Alexandria', sans-serif;
+    --nv-serif: 'Playfair Display', 'Amiri', Georgia, serif;
+
+    /* legacy palette → navy */
+    --color-navy: var(--nv-navy);
+    --color-cream: var(--nv-cream);
+    --color-warm: var(--nv-gold);
+    --color-white: #F7F5F0;
+    --color-sage: var(--nv-navy3);
+
+    --dar-brass-ink: var(--nv-navy);
+    --dar-brass-ivory: var(--nv-cream);
+    --dar-brass-surface: #F7F5F0;
+    --dar-brass-accent: var(--nv-wine);
+    --dar-brass-muted: var(--nv-ink2);
+    --dar-brass-border: #DBDBDA;
+    --dar-brass-highlight: var(--nv-sand);
+    --dar-brass-heading: var(--nv-serif);
+    --dar-brass-body: var(--nv-body);
+
+    --home-ink: var(--nv-navy); --home-ink-soft: var(--nv-ink2); --home-accent: var(--nv-wine);
+    --home-brass: var(--nv-gold); --home-paper: var(--nv-cream); --home-surface-low: var(--nv-sand); --home-line: #DBDBDA;
+
+    --places-ink: var(--nv-navy); --places-muted: var(--nv-mute); --places-line: #E2E1DF;
+    --places-cream: var(--nv-cream); --places-sage: var(--nv-navy); --places-warm: var(--nv-wine);
+
+    --bc-primary: var(--nv-navy); --bc-primary-hover: var(--nv-wine); --bc-accent: var(--nv-wine);
+    --bc-brass: var(--nv-gold); --bc-bg: var(--nv-cream); --bc-low: var(--nv-sand); --bc-container: #E2E2E0;
+    --bc-text: var(--nv-navy); --bc-muted: var(--nv-ink2); --bc-outline: var(--nv-mute); --bc-line: #DBDBDA;
+    --bc-display: var(--nv-serif); --bc-body: var(--nv-body);
+
+    --ia-ink: var(--nv-navy); --ia-ink-hover: var(--nv-wine); --ia-accent: var(--nv-wine);
+    --ia-bg: var(--nv-cream); --ia-low: var(--nv-sand); --ia-container: #E2E2E0; --ia-text: var(--nv-navy);
+    --ia-muted: var(--nv-ink2); --ia-outline: var(--nv-mute); --ia-line: #DBDBDA;
+    --ia-display: var(--nv-serif); --ia-body: var(--nv-body);
+}
+
+html[lang="ar"] {
+    --nv-disp: 'Alexandria', 'Unbounded', sans-serif;
+    --nv-serif: 'Amiri', 'Playfair Display', Georgia, serif;
+}
+
+/* Scoped palettes defined on components need the same scope to be replaced */
+:is(.site-header--dar, .site-footer--dar) {
+    --dar-ivory: var(--nv-cream);
+    --dar-brass: var(--nv-wine);
+    --dar-brass-light: var(--nv-gold);
+    --dar-border: var(--nv-line);
+    --dar-body: var(--nv-body);
+    --dar-display: var(--nv-serif);
+    --dar-ink: var(--nv-navy);
+}
+
+.convene-site.convene-site :is(.site-bookings, .account-page, .favourites-page) {
+    --booking-ink: var(--nv-navy);
+    --booking-ivory: var(--nv-cream);
+    --booking-stone: var(--nv-sand);
+    --booking-brass: var(--nv-wine);
+    --booking-border: #DBDBDA;
+    --booking-muted: var(--nv-ink2);
+}
+
+.convene-admin,
+.convene-admin.convene-dar-management,
+.bookings-standalone,
+.bookings-page {
+    --convene-navy: var(--nv-navy);
+    --convene-cream: var(--nv-sand);
+    --convene-warm: var(--nv-gold);
+    --convene-white: #F7F5F0;
+    --convene-sage: var(--nv-navy3);
+    --dar-ivory: var(--nv-cream);
+    --dar-stone: var(--nv-sand);
+    --dar-brass: var(--nv-wine);
+    --dar-brass-wash: #F0E6E3;
+    --admin-ui-border: #DBDBDA;
+    --admin-ui-hover: var(--nv-sand);
+    --admin-ui-radius: 16px;
+    --admin-ui-body: var(--nv-body);
+    --admin-ui-heading: var(--nv-serif);
+    --admin-ui-shadow: var(--nv-shadow-sm);
+}
+
+#admin-content :is(.admin-bookings, .owner-bookings) {
+    --ob-ink: var(--nv-navy);
+    --ob-ink-soft: var(--nv-navy2);
+    --ob-ivory: var(--nv-cream);
+    --ob-stone: var(--nv-sand);
+    --ob-stone-2: #E2E2E0;
+    --ob-line: #DBDBDA;
+    --ob-outline: var(--nv-mute);
+    --ob-muted: var(--nv-ink2);
+    --ob-secondary: var(--nv-mute);
+    --ob-brass: var(--nv-wine);
+    --ob-brass-wash: #F0E6E3;
+    --ob-body: var(--nv-body);
+    --ob-heading: var(--nv-serif);
+}
+
+/* ---------- Base type ---------- */
+body.convene-site,
+body.convene-admin {
+    background: var(--nv-cream);
+    color: var(--nv-navy);
+    font-family: var(--nv-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+body:is(.convene-site, .convene-admin) :is(p, a, li, span, label, input, select, textarea, button, td, th, dt, dd, small, strong, legend, summary, div):not(.nv-keep-font, .nvh *) {
+    font-family: var(--nv-body);
+}
+
+body:is(.convene-site, .convene-admin) :is(h1, h2, h3):not(.nvh *) {
+    font-family: var(--nv-serif);
+    font-weight: 500;
+    color: inherit;
+    letter-spacing: 0;
+}
+
+body:is(.convene-site, .convene-admin) :is(h4, h5, h6) { font-family: var(--nv-body); }
+body:is(.convene-site, .convene-admin) :is(h1, h2, h3) :is(a, span, strong, small, em):not(.nvh *) { font-family: inherit; }
+
+.convene-site:where(:has(> .site-footer--dar)) > .site-main,
+.convene-site > .site-main { background: var(--nv-cream); }
+.convene-site:has(> .site-footer--dar) { background-color: var(--nv-navy); }
+
+.convene-site :focus-visible,
+.convene-admin :focus-visible { outline: 2px solid var(--nv-navy3); outline-offset: 3px; }
+
+::selection { background: var(--nv-navy3); color: #F7F5F0; }
+
+/* ---------- Brand mark (shemagh) ---------- */
+.site-brand,
+.auth-brand,
+.dar-sidebar-wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.nv-mark {
+    flex: none;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--nv-sh) center / 170%;
+    box-shadow: 0 0 0 2px #F7F5F0, 0 4px 14px rgba(138, 31, 44, 0.35);
+}
+.nv-word { font-family: 'Unbounded', var(--nv-body); font-weight: 300; letter-spacing: .06em; }
+.nv-word b { font-weight: 500; }
+
+:is(.site-header--dar, .site-footer--dar) .site-brand {
+    font: 300 18px/1 'Unbounded', var(--nv-body) !important;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+/* ---------- Header ---------- */
+.site-header--dar {
+    background: rgba(247, 245, 240, 0.86);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--nv-line);
+    color: var(--nv-navy);
+}
+
+.site-header--dar :is(.site-link, .site-button, .site-menu-toggle) {
+    font: 500 14px/1.4 var(--nv-body) !important;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--nv-ink2);
+}
+
+.site-header--dar .site-link { position: relative; }
+.site-header--dar .site-link:is(:hover, [aria-current="page"]) {
+    color: var(--nv-navy);
+    text-decoration: none;
+}
+.site-header--dar .site-nav-links .site-link::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 6px;
+    height: 1px;
+    background: var(--nv-wine);
+    transform: scaleX(0);
+    transition: transform .35s var(--nv-ease);
+}
+.site-header--dar .site-nav-links .site-link:is(:hover, [aria-current="page"])::after { transform: scaleX(1); }
+
+.site-header--dar .site-button,
+.site-header--dar .site-account-link {
+    min-height: 40px;
+    padding: 8px 18px;
+    border: 1px solid var(--nv-line-strong);
+    border-radius: 999px;
+    background: rgba(247, 245, 240, 0.5);
+    color: var(--nv-navy);
+    transition: background .3s, color .3s, border-color .3s;
+}
+.site-header--dar .site-account-link { border-color: var(--nv-line); }
+.site-header--dar .site-account-link::after { display: none; }
+.site-header--dar .site-button {
+    background: var(--nv-navy);
+    border-color: var(--nv-navy);
+    color: #F7F5F0;
+}
+.site-header--dar .site-button:hover { background: var(--nv-wine); border-color: var(--nv-wine); color: #F7F5F0; }
+.site-header--dar .site-account-link:hover { background: #F7F5F0; }
+.site-header--dar .site-menu-toggle { border: 1px solid var(--nv-line-strong); border-radius: 999px; padding-inline: 14px; }
+
+/* ---------- Footer ---------- */
+.site-footer--dar {
+    background: var(--nv-navy);
+    color: #CACBCC;
+    border-top: 0;
+    position: relative;
+}
+.site-footer--dar::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 6px;
+    background: var(--nv-sh) center / 220px repeat;
+    opacity: .9;
+}
+.site-footer--dar .site-brand { color: #F7F5F0; }
+.site-footer--dar .site-footer-group h2 { color: var(--nv-gold); font: 600 12px/1.5 var(--nv-body) !important; letter-spacing: .12em; }
+.site-footer--dar :is(.site-footer-brand p, .site-footer-group a, .site-footer-legal) { color: #CACBCC; }
+.site-footer--dar .site-footer-group a:hover { color: #F7F5F0; }
+.site-footer--dar .site-footer-legal { border-top-color: rgba(247, 245, 240, 0.12); }
+
+/* ---------- Buttons ---------- */
+:is(.convene-site, .convene-admin) :is(
+    .places-button, .auth-submit, .space-booking-options__submit,
+    .admin-button--primary, .bc-button--primary, .site-button
+) {
+    border-radius: 999px !important;
+    background: var(--nv-navy) !important;
+    border-color: var(--nv-navy) !important;
+    color: #F7F5F0 !important;
+    transition: background .3s, transform .3s var(--nv-ease);
+}
+:is(.convene-site, .convene-admin) :is(
+    .places-button, .auth-submit, .space-booking-options__submit,
+    .admin-button--primary, .bc-button--primary, .site-button
+):hover {
+    background: var(--nv-wine) !important;
+    border-color: var(--nv-wine) !important;
+}
+
+.convene-site #site-content button[type="submit"]:not([class*="favorite"]):not(.site-link):not([class*="icon"]):not([class*="arrow"]),
+.convene-site #site-content a[class*="button"]:not([class*="--secondary"]):not([class*="--ghost"]):not([class*="--link"]) {
+    border-radius: 999px;
+}
+
+/* ---------- Inputs ---------- */
+.convene-site #site-content :is(input:not([type="hidden"], [type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="submit"], [type="button"]), select, textarea),
+.convene-admin #admin-content :is(input:not([type="hidden"], [type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="submit"], [type="button"]), select, textarea) {
+    border: 1px solid #DBDBDA;
+    border-radius: 14px;
+    background-color: #F7F5F0;
+    color: var(--nv-navy);
+    transition: border-color .2s, box-shadow .2s;
+}
+.convene-site #site-content :is(input, select, textarea):focus,
+.convene-admin #admin-content :is(input, select, textarea):focus {
+    border-color: var(--nv-navy3);
+    box-shadow: 0 0 0 4px rgba(56, 69, 89, 0.14);
+    outline: none;
+}
+.convene-site #site-content :is(input, select, textarea)::placeholder { color: var(--nv-mute); }
+.convene-site :is(input[type="checkbox"], input[type="radio"]),
+.convene-admin :is(input[type="checkbox"], input[type="radio"]) { accent-color: var(--nv-navy); }
+
+/* ---------- Search page ---------- */
+.places-page { background: var(--nv-cream); color: var(--nv-navy); font-family: var(--nv-body); }
+.places-heading h1 { font-weight: 500; }
+.places-eyebrow { color: var(--nv-wine); }
+.places-filters {
+    border: 1px solid rgba(247, 245, 240, 0.7) !important;
+    border-radius: var(--nv-radius) !important;
+    background: rgba(247, 245, 240, 0.92) !important;
+    box-shadow: 0 30px 80px rgba(14, 31, 56, 0.12) !important;
+}
+.places-filter-field label { color: var(--nv-ink2) !important; }
+.places-filter-field :is(input, select) { border-radius: 14px !important; border-color: #DBDBDA !important; }
+.places-voice-summary { border-inline-start: 4px solid var(--nv-wine); border-left-width: 0; border-radius: 16px; background: var(--nv-sand); }
+
+.place-card {
+    border: 0;
+    border-radius: var(--nv-radius);
+    background: #F7F5F0;
+    box-shadow: var(--nv-shadow-sm);
+    transition: transform .5s var(--nv-ease), box-shadow .5s var(--nv-ease);
+}
+.place-card:hover { transform: translateY(-4px); box-shadow: var(--nv-shadow); }
+.place-card__photo-link,
+.place-card__media { background: #CCCECE; }
+.place-card:hover .place-card__image { transform: scale(1.06); transition-duration: 1.2s; }
+.place-card__price {
+    border-radius: 999px;
+    background: rgba(247, 245, 240, 0.94);
+    color: var(--nv-navy);
+    padding: 6px 12px;
+}
+.place-card__price small { color: var(--nv-mute); }
+.place-card__favorite {
+    background: rgba(247, 245, 240, 0.9);
+    color: var(--nv-navy);
+    box-shadow: 0 6px 18px rgba(14, 31, 56, 0.2);
+}
+.place-card__favorite:hover,
+.place-card__favorite.is-active { color: var(--nv-wine); }
+.place-card__favorite.is-active svg { fill: currentColor; }
+.place-card__image-arrow { border-radius: 50%; width: 40px; height: 40px; font-size: 26px; background: rgba(14, 31, 56, 0.5); }
+
+/* ---------- Space details & booking ---------- */
+.space-details-page { background: var(--nv-cream); }
+.space-gallery, .space-gallery__photo { border-radius: var(--nv-radius); overflow: hidden; }
+:is(.layout-option__card, .package-option, .no-package-option, .space-booking-options) { border-radius: 18px; }
+.space-details__eyebrow { color: var(--nv-wine); }
+
+/* ---------- Auth ---------- */
+.auth-page { background: var(--nv-cream); color: var(--nv-navy); font-family: var(--nv-body); }
+.auth-visual {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(60% 50% at 70% 30%, rgba(118, 126, 138, 0.45), transparent 70%),
+        radial-gradient(40% 40% at 15% 20%, rgba(138, 31, 44, 0.28), transparent 70%),
+        linear-gradient(180deg, rgba(14, 31, 56, 0.82), rgba(24, 41, 64, 0.7) 45%, rgba(59, 73, 92, 0.78)),
+        var(--nv-navy) url("../images/convene-hero.jpg") center / cover no-repeat;
+}
+.auth-visual::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 8px;
+    background: var(--nv-sh) center / 220px repeat;
+}
+.auth-visual p { font-family: var(--nv-serif) !important; font-size: clamp(1.75rem, 3vw, 2.6rem); }
+.auth-brand { font: 300 1.3rem 'Unbounded', var(--nv-body) !important; letter-spacing: .06em; }
+.auth-card label { color: var(--nv-ink2); letter-spacing: .06em; }
+.auth-card a { color: var(--nv-navy3); }
+.auth-card a:hover { color: var(--nv-wine); }
+
+/* ---------- Account / bookings / favourites ---------- */
+.account-nav a { border-radius: 999px; }
+.account-nav a[aria-current="page"] { background: var(--nv-navy); color: #F7F5F0; }
+:is(.site-booking-card, .site-bookings-empty, .favourites-list > *, .account-content > section) { border-radius: 18px; }
+.site-booking-card, .site-bookings-empty { background: #F7F5F0; border-color: #E2E1DF; box-shadow: var(--nv-shadow-sm); }
+.site-booking-status { border-radius: 999px; background: var(--nv-sand); color: var(--nv-navy); }
+.site-booking-status--pending { background: #F1E9E5; color: #94333E; }
+.site-booking-status--completed, .site-booking-status--confirmed { background: var(--nv-navy3); color: #F7F5F0; }
+:is(.site-booking-status--cancelled, .site-booking-status--rejected) { background: #F0E6E3; color: var(--nv-wine); }
+
+/* ---------- Admin / owner chrome ---------- */
+.convene-dar-management .admin-sidebar,
+.convene-dar-management .admin-sidebar--owner {
+    --rail-bg: var(--nv-navy);
+    --rail-ink: #EEECE9;
+    --rail-muted: var(--nv-gold);
+    --rail-active: var(--nv-navy2);
+    --rail-current: var(--nv-gold);
+    --rail-border: rgba(247, 245, 240, 0.1);
+}
+.convene-dar-management .admin-sidebar { position: relative; }
+.convene-dar-management .admin-sidebar::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 4px;
+    background: var(--nv-sh) center / 160px repeat;
+    opacity: .85;
+    pointer-events: none;
+}
+.convene-dar-management .admin-sidebar a[aria-current="page"] { border-radius: 12px; }
+#admin-content { background: var(--nv-cream); }
+#admin-content > h1 { font-weight: 500; }
+#admin-content :is(table) { border-radius: 16px; }
+#admin-content :is(.admin-panel, .admin-card, .admin-stat, .dar-owner-dashboard-grid > *) { border-radius: 18px; }
+
+/* ---------- Pagination & toasts ---------- */
+.places-pagination :is(a, span) { border-radius: 999px; }
+.places-pagination [aria-current="page"] :is(span), .places-pagination .is-active { background: var(--nv-navy); color: #F7F5F0; }
+.convene-toast { border-radius: 16px; }
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .convene-site *, .convene-admin * { transition-duration: .01s !important; animation: none !important; }
+}
+
+/* ---------- Targeted overrides for hard-coded legacy colours ---------- */
+.places-page,
+.convene-site .site-main:has(> .site-bookings),
+.favourites-page { background: var(--nv-cream); }
+
+.places-pagination { border-top-color: #E2E1DF; }
+.places-pagination :is(a, span) { border-color: #DBDBDA; color: var(--nv-navy); }
+.places-pagination a:hover { border-color: var(--nv-navy3); background: #F7F5F0; }
+.places-pagination .is-current { border-color: var(--nv-navy); background: var(--nv-navy); color: #F7F5F0; }
+.places-pagination :is(.places-pagination__previous, .places-pagination__next) { color: var(--nv-wine); }
+.places-pagination :is(.places-pagination__previous, .places-pagination__next):hover { color: var(--nv-navy); }
+.places-pagination__summary { color: var(--nv-mute); }
+
+.place-card__content h3 { font-family: var(--nv-serif) !important; font-weight: 500; }
+.place-card__content h3 a { color: var(--nv-navy); }
+.place-card__content h3 a:hover,
+.place-card__venue,
+.place-card__action { color: var(--nv-wine); }
+.place-card__footer { border-top-color: #E8E7E4; }
+.place-card__footer-details strong { color: var(--nv-navy); }
+:is(.place-card__event-summary, .place-card__footer-details, .place-card__capacity) { color: var(--nv-ink2); }
+.place-card__action:hover { background: var(--nv-sand); }
+.places-empty { border-radius: 18px; background: #F7F5F0; }
+
+.site-bookings .site-booking-status { background: var(--nv-sand); color: var(--nv-navy); border-radius: 999px; }
+.site-bookings :is(.site-booking-status--pending, .site-booking-status--confirmed) { background: #E8E7E4; color: var(--nv-navy3); }
+.site-bookings .site-booking-status--pending { background: #F2EBE7; color: #94333E; }
+.site-bookings .site-booking-status--rejected { background: #F0E6E3; color: var(--nv-wine); }
+.site-bookings :is(details, .site-booking-actions summary) { border-radius: 14px; }
+.site-bookings .site-button:hover,
+.convene-admin-ui #admin-content .bookings-page :is(a.button, button.button):hover,
+.convene-dar-management #admin-content .admin-button--primary:hover,
+.management-dialog :is(.admin-button--primary, button[type="submit"]):hover { background: var(--nv-wine); border-color: var(--nv-wine); }
+.site-header--dar .site-button:hover { background: var(--nv-wine); }

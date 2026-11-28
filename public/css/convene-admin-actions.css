@@ -59,9 +59,9 @@
 .convene-admin-ui #admin-content .admin-button--outline { --button-border: var(--convene-sage); }
 .convene-admin-ui #admin-content .admin-button--text { --button-border: transparent; --button-bg: transparent; }
 .convene-admin-ui #admin-content .admin-button--danger {
-    --button-ink: #981d1d;
-    --button-border: #981d1d;
-    --button-hover: #fbeaec;
+    --button-ink: #8B212D;
+    --button-border: #8B212D;
+    --button-hover: #F4EEEA;
 }
 .convene-admin-ui #admin-content .admin-button svg {
     flex: 0 0 16px;

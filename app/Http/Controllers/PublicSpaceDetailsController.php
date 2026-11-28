@@ -56,7 +56,7 @@ $packages = Package::query()
     ->orderByDesc('id')
     ->get(['id', 'booking_id', 'rating', 'comment']);
 
-return view('public.spaces.show', compact(
+return view('public.spaces.show-navy', compact(
     'space', 'venue', 'images', 'layouts', 'packages', 'reviews','eventTypes'
 ));
     }

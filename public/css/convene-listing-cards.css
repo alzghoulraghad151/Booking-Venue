@@ -16,10 +16,10 @@
     justify-content: flex-end;
     overflow: hidden;
     border-radius: 7px;
-    background: #9a9a9a;
+    background: #959BA3;
     background-position: 50%;
     background-size: cover;
-    color: #fff;
+    color: #F7F5F0;
     text-decoration: none;
     text-align: center;
     transition: transform .18s ease, box-shadow .18s ease;
@@ -30,16 +30,16 @@
     z-index: 1;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(0deg, rgb(23 43 58 / 86%), rgb(23 43 58 / 4%) 78%);
+    background: linear-gradient(0deg, rgba(25, 41, 64, 0.86), rgba(25, 41, 64, 0.04) 78%);
     content: '';
 }
 
 a.listing-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 14px 28px rgb(23 43 58 / 12%);
+    box-shadow: 0 14px 28px rgba(25, 41, 64, 0.12);
 }
 
-.listing-card--empty { background-image: linear-gradient(135deg, #e8e4dd, #d7e0dc); }
+.listing-card--empty { background-image: linear-gradient(135deg, #E5E5E2, #DDDDDB); }
 
 .listing-card__body {
     position: relative;
@@ -54,16 +54,16 @@ a.listing-card:hover {
 
 .listing-card__title {
     margin: 0 0 10px;
-    color: #fff;
+    color: #F7F5F0;
     font-size: 24px;
     font-weight: 700;
     line-height: 1.2;
-    text-shadow: 0 2px 20px rgb(0 0 0 / 50%);
+    text-shadow: 0 2px 20px rgba(14, 31, 56, 0.5);
 }
 
-.listing-card__location { margin: 0; color: rgb(255 255 255 / 94%); font-size: 14px; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
-.listing-card__description { margin: 8px 0 0; color: rgb(255 255 255 / 94%); font-size: 14px; line-height: 1.4; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
-.listing-card__meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; margin-top: 14px; color: rgb(255 255 255 / 90%); font-size: 14px; font-weight: 400; text-shadow: 0 2px 12px rgb(0 0 0 / 50%); }
+.listing-card__location { margin: 0; color: rgba(247, 245, 240, 0.94); font-size: 14px; text-shadow: 0 2px 12px rgba(14, 31, 56, 0.5); }
+.listing-card__description { margin: 8px 0 0; color: rgba(247, 245, 240, 0.94); font-size: 14px; line-height: 1.4; text-shadow: 0 2px 12px rgba(14, 31, 56, 0.5); }
+.listing-card__meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; margin-top: 14px; color: rgba(247, 245, 240, 0.9); font-size: 14px; font-weight: 400; text-shadow: 0 2px 12px rgba(14, 31, 56, 0.5); }
 
 @media (max-width: 380px) {
     .listing-card-grid { grid-template-columns: minmax(0, 1fr); }

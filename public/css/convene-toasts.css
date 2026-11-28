@@ -14,16 +14,16 @@
     justify-content: space-between;
     gap: .75rem;
     padding: .8rem 1rem;
-    border-inline-start: 4px solid #526c68;
+    border-inline-start: 4px solid #5A6574;
     border-radius: .65rem;
-    background: #172b3a;
-    color: #fff;
-    box-shadow: 0 6px 22px #172b3a35;
+    background: #192940;
+    color: #F7F5F0;
+    box-shadow: 0 6px 22px rgba(25, 41, 64, 0.208);
     font: 500 .9rem/1.45 system-ui, sans-serif;
 }
 
-.convene-toast--warning { border-inline-start-color: #e5a66a; }
-.convene-toast--error { border-inline-start-color: #ef8b8b; }
+.convene-toast--warning { border-inline-start-color: #CFA6A7; }
+.convene-toast--error { border-inline-start-color: #C99B9D; }
 
 .convene-toast button {
     background: transparent;

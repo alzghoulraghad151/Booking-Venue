@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Raleway:wght@400;500;600;700&display=swap');
 
 .convene-site:has(> .site-footer--dar) {
-    --dar-ink: #1e1b19;
+    --dar-ink: #0E1F38;
     background-color: var(--dar-ink);
 }
 
@@ -10,10 +10,10 @@
 }
 
 :is(.site-header--dar, .site-footer--dar) {
-    --dar-ivory: #fdf8f7;
-    --dar-brass: #77592e;
-    --dar-brass-light: #e8c08c;
-    --dar-border: #d0c4be;
+    --dar-ivory: #F7F5F0;
+    --dar-brass: #9B414B;
+    --dar-brass-light: #DBBDBD;
+    --dar-border: #C5C7C9;
     --dar-body: 'Raleway', system-ui, sans-serif;
     --dar-display: 'Playfair Display', Georgia, serif;
     font-family: var(--dar-body);
@@ -67,12 +67,12 @@
     color: var(--dar-ivory);
 }
 
-.site-header--dar .site-button:hover { background: #33302d; }
+.site-header--dar .site-button:hover { background: #233349; }
 .site-header--dar :focus-visible { outline-color: var(--dar-brass); }
 
 .site-footer--dar {
     padding: 48px 0 20px;
-    border-top: 1px solid #4d4540;
+    border-top: 1px solid #3B495C;
     background: var(--dar-ink);
     color: var(--dar-ivory);
 }
@@ -87,7 +87,7 @@
 }
 
 .site-footer--dar :is(.site-footer-brand p, .site-footer-group a, .site-footer-legal) {
-    color: #e7e1df;
+    color: #E3E3E0;
 }
 .site-footer--dar .site-footer-group a:hover { color: var(--dar-brass-light); }
 .site-footer--dar :focus-visible { outline-color: var(--dar-brass-light); }

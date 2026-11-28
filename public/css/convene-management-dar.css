@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Raleway:wght@400;500;600;700&display=swap');
 
 .convene-admin.convene-dar-management {
-    --convene-navy: #1e1b19;
-    --convene-cream: #f1edec;
-    --convene-warm: #e8c08c;
-    --convene-sage: #615e5c;
-    --dar-ivory: #fdf8f7;
-    --dar-stone: #f7f3f1;
-    --dar-brass: #77592e;
-    --dar-brass-wash: #ffeedc;
-    --admin-ui-border: #d0c4be;
+    --convene-navy: #0E1F38;
+    --convene-cream: #F0EEEA;
+    --convene-warm: #DBBDBD;
+    --convene-sage: #556070;
+    --dar-ivory: #F7F5F0;
+    --dar-stone: #F6F4EF;
+    --dar-brass: #9B414B;
+    --dar-brass-wash: #F5F0EC;
+    --admin-ui-border: #C5C7C9;
     --admin-ui-hover: var(--dar-stone);
     --admin-ui-radius: 6px;
     --admin-ui-gap: 20px;
@@ -34,9 +34,9 @@
     --rail-bg: var(--convene-navy);
     --rail-ink: var(--dar-ivory);
     --rail-muted: var(--convene-warm);
-    --rail-active: #33302d;
+    --rail-active: #233349;
     --rail-current: var(--convene-warm);
-    --rail-border: #4d4540;
+    --rail-border: #3B495C;
     padding: 24px 20px 20px;
     background: var(--rail-bg);
     color: var(--rail-ink);
@@ -182,7 +182,7 @@
     font-family: var(--admin-ui-body);
 }
 
-.convene-dar-management #admin-content :is(input, select, textarea)[aria-invalid="true"] { border-color: #ba1a1a; }
+.convene-dar-management #admin-content :is(input, select, textarea)[aria-invalid="true"] { border-color: #902A36; }
 
 .convene-dar-management:has(> :is(.admin-sidebar--admin, .admin-sidebar--owner)) #admin-content
     :is(input:not([type="checkbox"], [type="radio"], [type="hidden"], [type="button"], [type="submit"], [type="reset"]), select, textarea):focus-visible {
@@ -192,7 +192,7 @@
 
 .convene-dar-management #admin-content .admin-button--primary {
     --button-bg: var(--convene-navy);
-    --button-hover: #33302d;
+    --button-hover: #233349;
     --button-ink: var(--dar-ivory);
 }
 
@@ -203,8 +203,8 @@
 }
 
 .convene-admin-ui.convene-dar-management #admin-content :is(.admin-button--primary, .admin-filter-submit, .admin-button--navy, .dashboard-panel-action, .calendar-controls button):hover {
-    background: #33302d;
-    border-color: #33302d;
+    background: #233349;
+    border-color: #233349;
 }
 
 .convene-dar-management #admin-content .admin-table-icon {
@@ -252,7 +252,7 @@
 
 .convene-dar-management #admin-content :is(.status-badge--pending, .calendar-status--pending, .venue-status--pending) {
     background: var(--dar-brass-wash);
-    color: #604521;
+    color: #8F2935;
 }
 
 @media (max-width: 1200px) {

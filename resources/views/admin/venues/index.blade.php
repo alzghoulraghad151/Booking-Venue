@@ -13,10 +13,10 @@
         font-weight: 600;
     }
 
-    .venue-status--pending  { background: #fef3c7; color: #78350f; }
-    .venue-status--approved { background: #dcfce7; color: #14532d; }
-    .venue-status--rejected { background: #fee2e2; color: #7f1d1d; }
-    .venue-status--inactive { background: #e5e7eb; color: #374151; }
+    .venue-status--pending  { background: #EEE4E0; color: #8A1F2C; }
+    .venue-status--approved { background: #0E1F38; color: #F7F5F0; }
+    .venue-status--rejected { background: #8A1F2C; color: #F7F5F0; }
+    .venue-status--inactive { background: rgba(14, 31, 56, .08); color: #0E1F38; }
 </style>
 @endpush
 

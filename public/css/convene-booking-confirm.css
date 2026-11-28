@@ -2,21 +2,21 @@
    Loaded only by public/bookings/create.blade.php, so the --bc-* tokens below stay local to this page.
    Fonts (Playfair Display, Raleway) are linked from the Blade file, with safe fallbacks here. */
 :root {
-    --bc-primary: #1E1B19;
-    --bc-primary-hover: #33302D;
-    --bc-on-primary: #FFFFFF;
-    --bc-accent: #77592E;
-    --bc-brass: #E8C08C;
-    --bc-bg: #FDF8F7;
-    --bc-card: #FFFFFF;
-    --bc-low: #F7F3F1;
-    --bc-container: #F1EDEC;
-    --bc-text: #1C1B1B;
-    --bc-muted: #4D4540;
-    --bc-outline: #7E7570;
-    --bc-line: #D0C4BE;
-    --bc-error: #BA1A1A;
-    --bc-success: #2D5A3C;
+    --bc-primary: #0E1F38;
+    --bc-primary-hover: #233349;
+    --bc-on-primary: #F7F5F0;
+    --bc-accent: #9B414B;
+    --bc-brass: #DBBDBD;
+    --bc-bg: #F7F5F0;
+    --bc-card: #F7F5F0;
+    --bc-low: #F6F4EF;
+    --bc-container: #F0EEEA;
+    --bc-text: #0E1F38;
+    --bc-muted: #3B495C;
+    --bc-outline: #6F7885;
+    --bc-line: #C5C7C9;
+    --bc-error: #902A36;
+    --bc-success: #3E4B5E;
     --bc-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
     --bc-body: 'Raleway', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
@@ -39,8 +39,8 @@
 
 .bc-alert { padding: 12px 16px; border-radius: 6px; border: 1px solid; font-size: 14px; }
 .bc-alert ul { padding-left: 18px; }
-.bc-alert--success { background: #EAF3EC; border-color: #A9C8B1; color: var(--bc-success); }
-.bc-alert--error { background: #FFEDEA; border-color: #F0B4AD; color: var(--bc-error); }
+.bc-alert--success { background: #F1F0EB; border-color: #BABDC0; color: var(--bc-success); }
+.bc-alert--error { background: #F4F2ED; border-color: #DABCBC; color: var(--bc-error); }
 
 /* Two columns: form left, selected space + price right */
 .bc-layout { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: start; }

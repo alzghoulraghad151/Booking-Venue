@@ -21,8 +21,7 @@ class PublicBookingController extends Controller
         $selection = $request->resolved();
         $space = $selection['space']->loadMissing(['venue.images', 'images']);
 
-        // Same order as the space details page (primary first), then the venue's photos as a fallback.
-        // The first image that resolves to a usable URL wins; null shows a neutral placeholder.
+    
         $imageUrl = $space->images
             ->sortBy([['is_primary', 'desc'], ['id', 'asc']])
             ->concat($space->venue?->images->sortBy([['is_primary', 'desc'], ['id', 'asc']]) ?? [])
@@ -49,16 +48,16 @@ class PublicBookingController extends Controller
         $layout = $selection['layout'];
         $eventType = $selection['eventType'];
         $package = $selection['package'];
-        $guestCount = $selection['guestCount']; // capacity of the selected layout
+        $guestCount = $selection['guestCount'];
 
-        // Stored in the app timezone (UTC), like the rest of the project.
+      
         $start = $selection['start']->setTimezone('UTC');
         $end = $selection['end']->setTimezone('UTC');
 
-        // The price is ALWAYS recalculated here, never taken from the form.
+     
         $price = $calculator->calculate($space, $package, $start, $end);
 
-        // Non-blocking: the owner takes the final decision when confirming.
+       
         $overlapsConfirmed = BookingDetail::query()
             ->where('space_id', $space->getKey())
             ->where('start_at', '<', $end)
@@ -89,7 +88,7 @@ class PublicBookingController extends Controller
             ]);
         });
 
-        // No Payment row here: payment happens at checkout, after the owner confirms.
+       
         $redirect = redirect()->route('my-bookings.index')
             ->with('success', 'Your booking request was sent. The venue owner will review it.');
 
@@ -100,10 +99,8 @@ class PublicBookingController extends Controller
         return $redirect;
     }
 
-    /**
-     * Absolute URLs (Cloudinary) are used as stored. Relative paths are checked on disk first,
-     * and built with asset() so the host and port follow the current request, not APP_URL.
-     */
+   
+    
     private function resolveImageUrl(?string $value): ?string
     {
         $path = trim((string) $value);

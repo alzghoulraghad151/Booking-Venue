@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 
 class StripeBookingCheckout
@@ -24,7 +25,7 @@ class StripeBookingCheckout
 
         $stripe = new StripeClient($key);
 
-        // Persist the attempt before calling Stripe so a retry can reuse its idempotency key.
+       
         $payment = DB::transaction(function () use ($booking, $customerId): Payment {
             $booking = Booking::query()->lockForUpdate()->findOrFail($booking->getKey());
             abort_unless((int) $booking->customer_id === $customerId, 404);
@@ -73,7 +74,7 @@ class StripeBookingCheckout
                     return null;
                 }
             } else {
-                // After Stripe's idempotency retention window, reconcile an unknown session before retrying.
+                
                 if ($payment->created_at->lt(now()->subHours(23))) {
                     return null;
                 }
@@ -105,6 +106,34 @@ class StripeBookingCheckout
         }
 
         return $url;
+    }
+
+    public function reconcileReturnedPayments(int $customerId): void
+    {
+        $key = (string) config('services.stripe.secret');
+        if (! str_starts_with($key, 'sk_test_')) {
+            return;
+        }
+
+        $stripe = new StripeClient($key);
+        $payments = Payment::query()
+            ->where('status', 'pending')
+            ->whereNotNull('stripe_usd_cents')
+            ->where('transaction_reference', 'like', 'cs_test_%')
+            ->whereHas('booking', fn ($booking) => $booking->where('customer_id', $customerId))
+            ->lazyById();
+
+        foreach ($payments as $payment) {
+            try {
+                $session = $stripe->checkout->sessions->retrieve($payment->transaction_reference);
+            } catch (ApiErrorException $exception) {
+                report($exception);
+
+                continue;
+            }
+
+            $this->recordPaid($session);
+        }
     }
 
     public function recordPaid(Session $session): void

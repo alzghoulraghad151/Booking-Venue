@@ -12,7 +12,7 @@
 }
 
 .management-dialog[open] { display: flex; flex-direction: column; }
-.management-dialog::backdrop { background: rgb(23 43 58 / 40%); }
+.management-dialog::backdrop { background: rgba(25, 41, 64, 0.4); }
 body:has(.management-dialog[open]) { overflow: hidden; }
 .management-dialog--delete { width: min(480px, calc(100% - 32px)); }
 
@@ -131,7 +131,7 @@ body:has(.management-dialog[open]) { overflow: hidden; }
 
 
 /* ---- Confirmation dialog: match the Dar admin theme (works with or without convene-admin-actions.css) ---- */
-.management-dialog::backdrop { background: rgb(30 27 25 / 45%); }
+.management-dialog::backdrop { background: rgba(14, 31, 56, 0.45); }
 
 .convene-admin-ui #admin-content .management-dialog-header h2 {
     font-family: var(--admin-ui-heading);
@@ -177,26 +177,26 @@ body:has(.management-dialog[open]) { overflow: hidden; }
 
 /* Destructive confirm button */
 .convene-admin-ui #admin-content .management-dialog-footer .admin-button--danger {
-    border-color: #881c24;
-    background: #881c24;
-    color: var(--dar-ivory, #fff);
+    border-color: #8A1F2C;
+    background: #8A1F2C;
+    color: var(--dar-ivory, #F7F5F0);
 }
 
 .convene-admin-ui #admin-content .management-dialog-footer .admin-button--danger:hover {
-    border-color: #6d161d;
-    background: #6d161d;
+    border-color: #8A1F2C;
+    background: #8A1F2C;
 }
 
 /* Non-destructive confirm (e.g. activate / deactivate) */
 .convene-admin-ui #admin-content .management-dialog-footer .admin-button--primary {
     border-color: var(--convene-navy);
     background: var(--convene-navy);
-    color: var(--dar-ivory, #fff);
+    color: var(--dar-ivory, #F7F5F0);
 }
 
 .convene-admin-ui #admin-content .management-dialog-footer .admin-button--primary:hover {
-    border-color: #33302d;
-    background: #33302d;
+    border-color: #233349;
+    background: #233349;
 }
 
 .convene-admin-ui #admin-content .management-dialog-footer .admin-button:focus-visible {

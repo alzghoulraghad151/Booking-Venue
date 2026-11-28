@@ -127,7 +127,7 @@
 .admin-management-list td form { display: inline-block; margin-block: 2px; }
 .admin-management-list .event-types-delete { display: inline-block; margin: 2px 0; vertical-align: top; }
 .admin-management-list .event-types-delete form { display: block; margin-top: 6px; }
-.admin-management-list .event-types-delete button { color: #981d1d; }
+.admin-management-list .event-types-delete button { color: #8B212D; }
 .admin-management-list .venue-status,
 .admin-management-list .dashboard-badge { padding: 5px 9px; font-size: 12px; line-height: 1.4; }
 .admin-management-list #reviews .dashboard-pagination { margin-top: 16px; }
